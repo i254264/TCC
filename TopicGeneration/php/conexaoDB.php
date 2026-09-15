@@ -1,26 +1,15 @@
 <?php
-    $serverName = "localhost";
-    $username = "root";
-    $password = "";
-    $DBName = "topicgeneration";
+$host = 'localhost';
+$db   = 'topicgeneration';
+$user = 'root';
+$pass = '';
+$charset = 'utf8mb4';
 
-    if(!isset($conn)) {
-        try {
-            $conn = new PDO("mysql:host=$serverName;dbname=$DBName", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            function sanitize($string){
-                global $conn;
-                $string = preg_replace('/[^A-Za-z\s]/', '', $string);
-                $string = htmlentities($string);
-                $string = str_replace('%EF%BF%BD', '', $string);
-                $string = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $string);
-                $string = filter_var($string, FILTER_SANITIZE_STRING);
-                $string = $conn->quote($string);
-                return $string;
-            }
-        } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
-        }
-    }
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+try {
+     $conn = new PDO($dsn, $user, $pass);
+     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (\PDOException $e) {
+     throw new \PDOException($e->getMessage(), (int)$e->getCode());
+}
 ?>

@@ -1,18 +1,12 @@
 <?php
-header('Content-Type: application/json');
 include_once('conexaoDB.php');
-
-$tableName = 'tabela_topicgeneration';
+header('Content-Type: application/json');
 
 try {
-    // Busca apenas os campos necessários para a visualização
-    $stmt = $conn->prepare("SELECT title, year, abstract FROM $tableName ORDER BY id DESC");
-    $stmt->execute();
-    
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($result);
-
-} catch (PDOException $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+    $stmt = $conn->query("SELECT title, year, abstract FROM tabela_topicgeneration ORDER BY id DESC");
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($results);
+} catch (Exception $e) {
+    echo json_encode(["error" => $e->getMessage()]);
 }
 ?>
