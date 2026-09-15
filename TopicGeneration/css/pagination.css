@@ -26,7 +26,7 @@ ul {
     justify-self: end;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: min-content auto min-content;
+    grid-template-rows: min-content 1fr min-content;
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 10px;
@@ -127,6 +127,9 @@ ul {
     grid-area: list-files;
     align-self: baseline;
     padding:0; margin: 0;
+    overflow-y: auto;
+    scrollbar-width: thin; /* largura da barra de rolagem */
+    scrollbar-color: #ccc #f4f4f4; /* cor da barra de rolagem e do polegar */
 }
 .list li{
     background-color: rgb(214, 212, 212);

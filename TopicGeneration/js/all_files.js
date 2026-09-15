@@ -38,22 +38,25 @@ document.addEventListener("DOMContentLoaded", function () {
             // Lógica para mostrar o texto completo ao clicar no item (conforme seu HTML)
             listContainer.addEventListener("click", function(e) {
                 const card = e.target.closest(".list-item-card");
-                if (card) {
-                    // Feedback visual de seleção (igual ao antigo list_values)
-                    document.querySelectorAll(".list-item-card").forEach(el => el.style.backgroundColor = "transparent");
-                    card.style.backgroundColor = "#5279c04d";
+                if (!card) return;
 
-                    const fullText = card.querySelector(".abstract").innerText;
-                    const fullFileDiv = document.querySelector("#full-file");
-                    const alertInfo = document.querySelector(".alert--info");
+                // Feedback visual de seleção (estilo list_values)
+                document.querySelectorAll(".list-item-card").forEach(el => el.style.backgroundColor = "#d6d4d4");
+                card.style.backgroundColor = "#5279c04d";
 
-                    if (alertInfo) alertInfo.style.display = "none";
-                    
-                    // Garante que o container apareça e receba o texto
-                    fullFileDiv.style.display = "flex";
-                    fullFileDiv.classList.add("is-open");
-                    fullFileDiv.querySelector("p").innerText = fullText;
-                }
+                const fullText = card.querySelector(".abstract").innerText;
+
+                // Reimplementação da lógica de transição do list_values usando jQuery
+                $('.alert').fadeOut(200, function() {
+                    setTimeout(function () {
+                        $("#full-file").css("display", "flex").addClass("is-open");
+                        $('#full-file p').text(fullText);
+                    }, 350);
+                });
+
+                setTimeout(function () {
+                    $('#full-file p').text(fullText);
+                }, 100);
             });
         })
         .catch(err => {
