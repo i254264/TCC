@@ -4,7 +4,8 @@ include_once('conexaoDB.php');
 if (!function_exists('extractField')) {
     function extractField($field, $text) {
         // Procura por campo = {valor} ou campo = "valor" ou campo = valor
-        $pattern = '/' . $field . '\s*=\s*[\{"]?\s*(.*?)\s*[\}"]?\s*[,}]/i';
+        // O modificador 's' permite que o (.*?) capture quebras de linha (comum em abstracts)
+        $pattern = '/' . $field . '\s*=\s*[\{"]?\s*(.*?)\s*[\}"]?\s*[,}]/is';
         if (preg_match($pattern, $text, $match)) {
             $value = $match[1];
             // Limpeza básica de chaves do BibTeX
