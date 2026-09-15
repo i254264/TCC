@@ -52,11 +52,16 @@ padding: 0;
 
 .navbar__item img:nth-child(1){
     width: 30px;
+    height: 30px;
+    object-fit: contain;
+    display: block;
+    transition: 250ms ease all;
 }
 .navbar_active{
-    padding: 1rem;
+    padding: 0.8rem;
     border-radius: 10px;
     background-color: rgba(77, 182, 172, 0.7);
+    box-sizing: content-box !important; /* Permite que o padding seja somado aos 30px da imagem */
 }
 #help_button{
     position: fixed;
