@@ -22,12 +22,12 @@ try {
         $messages[] = "Colunas auxiliar dropadas com sucesso!";
     }
     catch (PDOException $e) {
-        $messageError[] = "Failed to drop columns: " . $e->getMessage();
+        $messagesError[] = "Failed to drop columns: " . $e->getMessage();
         $respostaAjax = 0;
     }
 }
 catch (PDOException $e) {
-    $messageError[] = "Connection failed: " . $e->getMessage();
+    $messagesError[] = "Connection failed: " . $e->getMessage();
     $respostaAjax = 0;
 }
 ?>

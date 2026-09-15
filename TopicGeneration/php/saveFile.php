@@ -11,7 +11,7 @@ $respostaAjax = 0;
 //BDjaCriado = 1: existe BD e vai fazer pergunta
 //BDjaCriado = 2: existe BD e vai adicionar mais dados ao que já tem
 //BDjaCriado = 3: existe BD e vai excluir dados que já existam antes
-$BDjaCriado = isset($_POST['BDjaCriado']) ? $_POST['BDjaCriado'] : 0;
+$BDjaCriado = isset($_POST['BDjaCriado']) ? (string)$_POST['BDjaCriado'] : '0';
 $columnDrop = isset($_POST['columnDrop']) ? $_POST['columnDrop'] : null;
 $header = NULL;
 
@@ -45,7 +45,8 @@ if($BDjaCriado === '2' || $BDjaCriado === '3') {
             if (move_uploaded_file($tmp_name, $destinoArquivo . $nomeArquivo)) {
                 $extensao = pathinfo($nomeArquivo, PATHINFO_EXTENSION);
                 if ($extensao === 'bib') {
-                    include('processBib.php'); 
+                    $fileToProcess = $destinoArquivo . $nomeArquivo;
+                    include('processBib.php');
                     $messages[] = "Arquivo BibTeX processado: $nomeArquivo";
                     $respostaAjax = 1; 
                 } else {
@@ -54,12 +55,12 @@ if($BDjaCriado === '2' || $BDjaCriado === '3') {
                     include_once('test.php');
                 }
             } else {
-                $messageError[] = "Error when saving files";
+                $messagesError[] = "Error when saving files";
                 $respostaAjax = 0;
             }
         }
     } else {
-        $messageError[] = "No files sent";
+        $messagesError[] = "No files sent";
         $respostaAjax = 0;
     }
 }

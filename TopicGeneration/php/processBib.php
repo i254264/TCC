@@ -1,8 +1,15 @@
 <?php
 include_once('conexaoDB.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['bib_file'])) {
+// Verifica se o arquivo foi passado pelo saveFile.php ou enviado diretamente
+$fileContent = '';
+if (isset($fileToProcess) && file_exists($fileToProcess)) {
+    $fileContent = file_get_contents($fileToProcess);
+} elseif (isset($_FILES['bib_file'])) {
     $fileContent = file_get_contents($_FILES['bib_file']['tmp_name']);
+}
+
+if ($fileContent) {
     
     // Regex para separar cada entrada @tipo{...}
     preg_match_all('/@\w+\s*\{[^@]+/s', $fileContent, $entries);
@@ -25,15 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['bib_file'])) {
     $messages[] = "$count registros importados do arquivo BibTeX.";
 }
 
-function extractField($field, $text) {
-    // Procura por campo = {valor} ou campo = "valor" ou campo = valor
-    $pattern = '/' . $field . '\s*=\s*[\{"]?\s*(.*?)\s*[\}"]?\s*[,}]/i';
-    if (preg_match($pattern, $text, $match)) {
-        $value = $match[1];
-        // Limpeza básica de chaves do BibTeX
-        $value = str_replace(['{', '}', '\\'], '', $value);
-        return trim($value);
+if (!function_exists('extractField')) {
+    function extractField($field, $text) {
+        // Procura por campo = {valor} ou campo = "valor" ou campo = valor
+        $pattern = '/' . $field . '\s*=\s*[\{"]?\s*(.*?)\s*[\}"]?\s*[,}]/i';
+        if (preg_match($pattern, $text, $match)) {
+            $value = $match[1];
+            // Limpeza básica de chaves do BibTeX
+            $value = str_replace(['{', '}', '\\'], '', $value);
+            return trim($value);
+        }
+        return null;
     }
-    return null;
 }
 ?>
