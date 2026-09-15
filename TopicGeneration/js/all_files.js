@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Mapeia os dados e substitui o conteúdo estático do container
             listContainer.innerHTML = data.map(item => `
-                <li class="list-item-card" style="cursor:pointer; border-bottom: 1px solid #eee; padding: 15px 0;">
+                <li class="list-item-card" style="cursor:pointer; border-bottom: 1px solid #eee; padding: 15px 10px; transition: background-color 0.2s;">
                     <div class="item-header">
                         <strong class="name">${item.title || 'Untitled'}</strong>
                         <span class="year">(${item.year || 'N/A'})</span>
                     </div>
-                    <p class="abstract" style="margin-top: 10px; color: #666;">${item.abstract || 'No abstract available.'}</p>
+                    <p class="abstract" style="display: none;">${item.abstract || 'No abstract available.'}</p>
                 </li>
             `).join("");
 
@@ -39,10 +39,20 @@ document.addEventListener("DOMContentLoaded", function () {
             listContainer.addEventListener("click", function(e) {
                 const card = e.target.closest(".list-item-card");
                 if (card) {
+                    // Feedback visual de seleção (igual ao antigo list_values)
+                    document.querySelectorAll(".list-item-card").forEach(el => el.style.backgroundColor = "transparent");
+                    card.style.backgroundColor = "#5279c04d";
+
                     const fullText = card.querySelector(".abstract").innerText;
-                    document.querySelector("#full-file p").innerText = fullText;
+                    const fullFileDiv = document.querySelector("#full-file");
                     const alertInfo = document.querySelector(".alert--info");
+
                     if (alertInfo) alertInfo.style.display = "none";
+                    
+                    // Garante que o container apareça e receba o texto
+                    fullFileDiv.style.display = "flex";
+                    fullFileDiv.classList.add("is-open");
+                    fullFileDiv.querySelector("p").innerText = fullText;
                 }
             });
         })
