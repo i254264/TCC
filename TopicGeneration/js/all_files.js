@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Inicializa o List.js (habilita a busca e ordenação do seu HTML)
             new List('all-files', {
                 valueNames: ['name', 'year', 'abstract'],
-                page: 10,
+                page: 5,
                 pagination: true
             });
 
