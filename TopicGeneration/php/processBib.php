@@ -22,8 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['bib_file'])) {
             $count++;
         }
     }
-    
-    echo json_encode(["status" => "success", "message" => "$count registros importados."]);
+    $messages[] = "$count registros importados do arquivo BibTeX.";
 }
 
 function extractField($field, $text) {

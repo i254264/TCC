@@ -1,4 +1,6 @@
 <?php
+include_once('conexaoDB.php');
+$DBName = $db; // Define para compatibilidade com scripts incluídos
 $messages = array();
 $messagesError = array();
 //respostaAjax = 0: Erro
@@ -43,7 +45,8 @@ if($BDjaCriado === '2' || $BDjaCriado === '3') {
             if (move_uploaded_file($tmp_name, $destinoArquivo . $nomeArquivo)) {
                 $extensao = pathinfo($nomeArquivo, PATHINFO_EXTENSION);
                 if ($extensao === 'bib') {
-                    include_once('processBib.php'); // Novo arquivo para processar BibTeX
+                    include('processBib.php'); 
+                    $messages[] = "Arquivo BibTeX processado: $nomeArquivo";
                     $respostaAjax = 1; 
                 } else {
                     $messages[] = "SUCESSO ao salvar os arquivos";

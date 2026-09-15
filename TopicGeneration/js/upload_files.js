@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			formdata.append('BDjaCriado', valueBDjaCriado);
 			formdata.append('columnDrop', columnDrop);
-			ajax.open('POST', 'http://localhost/IC-2024/site/php/saveFile.php');
+			ajax.open('POST', 'php/saveFile.php');
 			ajax.send(formdata);
 
 			document.querySelectorAll(".buttons-upload button").forEach(bnt => {
