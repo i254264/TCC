@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const listContainer = document.querySelector("#list-values");
+    const listContainer = document.querySelector("#all-files .list");
 
     if (!listContainer) return;
 
@@ -19,16 +19,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Mapeia os dados e substitui o conteúdo estático do container
             listContainer.innerHTML = data.map(item => `
-                <div class="list-item-card" style="border-bottom: 1px solid #eee; padding: 15px 0;">
+                <li class="list-item-card" style="cursor:pointer; border-bottom: 1px solid #eee; padding: 15px 0;">
                     <div class="item-header">
-                        <span class="item-title"><strong>Title:</strong> ${item.title || 'Untitled'}</span>
-                        <span class="item-year">(${item.year || 'N/A'})</span>
+                        <strong class="name">${item.title || 'Untitled'}</strong>
+                        <span class="year">(${item.year || 'N/A'})</span>
                     </div>
-                    <div class="item-abstract" style="margin-top: 10px; color: #666;">
-                        <p><strong>Abstract:</strong> ${item.abstract || 'No abstract available.'}</p>
-                    </div>
-                </div>
+                    <p class="abstract" style="margin-top: 10px; color: #666;">${item.abstract || 'No abstract available.'}</p>
+                </li>
             `).join("");
+
+            // Inicializa o List.js (habilita a busca e ordenação do seu HTML)
+            new List('all-files', {
+                valueNames: ['name', 'year', 'abstract'],
+                page: 10,
+                pagination: true
+            });
+
+            // Lógica para mostrar o texto completo ao clicar no item (conforme seu HTML)
+            listContainer.addEventListener("click", function(e) {
+                const card = e.target.closest(".list-item-card");
+                if (card) {
+                    const fullText = card.querySelector(".abstract").innerText;
+                    document.querySelector("#full-file p").innerText = fullText;
+                    const alertInfo = document.querySelector(".alert--info");
+                    if (alertInfo) alertInfo.style.display = "none";
+                }
+            });
         })
         .catch(err => {
             console.error("Failed to fetch files:", err);
