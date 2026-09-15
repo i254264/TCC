@@ -86,12 +86,23 @@ if ($BDjaCriado === '0' && $columnDrop != 'null' && $columnDrop !== null) {
     include_once('copyColumns.php');
 }
 
+// Busca o total de registros atualizado para retornar ao frontend
+$totalRegistros = 0;
+try {
+    $sqlTotal = "SELECT COUNT(*) FROM tabela_topicgeneration";
+    $stmtTotal = $conn->query($sqlTotal);
+    $totalRegistros = $stmtTotal->fetchColumn();
+} catch (PDOException $e) {
+    $totalRegistros = 0;
+}
+
 echo json_encode(array(
     'BD' => $BDjaCriado,
     'columnsName' => $header,
     'response' => $respostaAjax,
     '$columnDrop' => $columnDrop,
     'messages' => $messages,
-    'messagesError' => $messagesError
+    'messagesError' => $messagesError,
+    'totalCount' => $totalRegistros
 ));
 ?>
