@@ -20,6 +20,19 @@ if($BDjaCriado != '2' && $BDjaCriado != '3'){
     include_once('BDexist.php');
 }
 
+// Se o banco já possui dados e não recebemos instrução de Continuar(2) ou Deletar(3),
+// paramos aqui para o frontend mostrar o aviso.
+if ($BDjaCriado === '1') {
+    echo json_encode(array(
+        'BD' => $BDjaCriado,
+        'columnsName' => $header ? $header : array(),
+        'response' => 2, // Código neutro para o aviso
+        'messages' => $messages,
+        'messagesError' => $messagesError
+    ));
+    exit;
+}
+
 if($BDjaCriado === '2' || $BDjaCriado === '3') {
     //clicou continue então vai adicionar mais dados os dados que já existem
     include_once('dropColumns.php');

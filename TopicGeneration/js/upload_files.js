@@ -118,7 +118,10 @@ document.addEventListener("DOMContentLoaded", function () {
 									}
 								});	
 							} else{
-								//CASO HAJA SÓ UMA COLUNA
+								// Caso de BibTeX ou apenas 1 coluna
+								if (respostaAjax.BD === '1') {
+									htmlBDExist(null);
+								}
 							}
 						}
 					}
