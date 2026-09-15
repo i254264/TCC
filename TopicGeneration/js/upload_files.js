@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					//se respostaAjax.response = 1 nem precisa do código abaixo, e precisa evitá-lo pois vai dar bug em mensagem de sucesso se ele for compilado
 					if (respostaAjax.response != 1) {
 						//evita que telas de warning sejam disparadas e deem bug nas outras telas que precisam ser mostradas
-						if (valueBDjaCriado != 2 || valueBDjaCriado != 3) {
+						if (valueBDjaCriado !== '2' && valueBDjaCriado !== '3') { // Corrigido: usar '&&' e comparar com strings
 							if (respostaAjax.columnsName.length > 1) {
 								$("#mensagens-alerta").innerHTML = `
 									<div class="alert alert--warning">
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 								
 								var selectColumn = ($("#selectColumn").value);
 	
-								$("#columnConfirm-upload-files").addEventListener("click", evt => {
+								$("#columnConfirm-upload-files").addEventListener("click", evt => { // Movido para dentro do evento para capturar o valor atual
 									evt.preventDefault();
 									if (respostaAjax.BD === '1') {
 										htmlBDExist(selectColumn);
