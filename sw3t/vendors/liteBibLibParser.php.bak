@@ -1,0 +1,170 @@
+<?php
+
+
+
+function parseBib ($bibFile){
+	$bibLines = readBib($bibFile);
+	$bib = bibLinesToArray ($bibLines);
+	return $bib;
+}
+
+function readBib ($bib){
+	//parse the bib file;
+	
+	$bibFile = fopen($bib, "r") or die("Unable to open file!");
+	$i=0;
+		while(! feof($bibFile))  {
+		$bibLines[$i] = fgets($bibFile);
+		$i++;
+		}
+	fclose($bibFile);
+	if($i==0){die("bib file doesnt have any line");}
+	return $bibLines;
+	
+}
+
+
+function bibLinesToArray ($bibLines){
+	$isInItem = false;
+	$bibs=array();
+	$bibCount=0;
+	$tempBibBackup="";
+	// $bibLines = str_replace(" = ","=",$bibLines);
+
+	
+	foreach($bibLines as $line){
+		
+		$line = str_replace("   "," ",$line);
+		$line = str_replace("  "," ",$line);
+		
+		if(!$isInItem){
+			//verify if it starts with @
+			if($line[0] != "@"){
+				continue;
+				}else{
+					$isInItem =true;
+					$tempBibBackup = $line;
+					$itemType = explode("{",$line);
+					$itemType = str_replace("@","",$itemType[0]);
+					$bibs[$bibCount]["type"]=$itemType;
+					$multiLineItem =false;
+				}
+				
+		}else{
+			$tempBibBackup .= $line;
+			if($line[0] == "}"){
+				//finished reading 
+				if($multiLineItem){$errors[]=$tmpItem;}
+				$bibs[$bibCount]["BACKUP"]=$tempBibBackup;
+				$bibCount ++; 
+				$isInItem = false;
+				continue;
+			}
+			
+			$line = str_replace("={"," = {",$line);
+			$line = str_replace("
+",PHP_EOL,$line); // gambiarra
+			
+			if($multiLineItem){
+				
+				if(strpos($line,"},".PHP_EOL)===false){
+					
+					$tmpItem .= $line;
+					$multiLineItem =true;
+					continue;
+				}else{
+					$line = $keyItem . " = {". $tmpItem . $line;
+					// echo $line;die;
+					$multiLineItem =false;
+				}
+				
+			
+			}
+			
+			// if(strpos($line," = ")===false){
+				// $line = str_replace("="," = ",$line);
+			// }
+			
+			$keyItem = explode(" = ",$line);
+			// print_r($keyItem);die;
+			if(empty($keyItem[1])){continue;}
+			$keyItem = alfaNum($keyItem[0]);
+			if($keyItem == "month"){continue;}
+		
+			
+			
+			
+			
+			
+			if($keyItem == "title"){$line = str_replace("{{","{",$line);$line = str_replace("}}","}",$line);}
+			if($keyItem == "year"){$line = str_replace("}".PHP_EOL,"},".PHP_EOL,$line);}
+
+			
+			$line = str_replace("textcopyright},","textcopyright} ,",$line);
+			// $line = str_replace("}},","}} ,",$line);
+
+
+			if((strpos($line,"},".PHP_EOL)===false)){
+				$tmpItem = str_replace($keyItem." = {","",$line);
+				$multiLineItem =true;
+			// echo "a";die;
+				continue;
+			}
+			
+			
+			$contentKeyItem =  get_string_between($line,'= {', '},'.PHP_EOL);
+			// echo $contentKeyItem;die;
+			$contentKeyItem = clean($contentKeyItem);
+	
+        
+			// $contentKeyItem =  get_string_between($line,"{", "}");
+			$bibs[$bibCount][$keyItem]=$contentKeyItem;
+			
+			
+		}
+	}
+return $bibs;
+	}
+
+function get_string_between($string, $start, $end){
+	//http://www.justin-cook.com/2006/03/31/php-parse-a-string-between-two-strings/
+	$string = " ".$string;
+	$ini = strpos($string,$start);
+	if ($ini == 0) return "";
+	$ini += strlen($start);   
+	$len = strpos($string,$end,$ini) - $ini;
+	return substr($string,$ini,$len);
+}
+
+function clean($string){
+		$string = str_replace("\\backslashbackslash","",$string);
+			$string = str_replace("\\backslash","",$string);
+			$string = str_replace("\\textcopyright","©",$string);
+			$string = str_replace("{\\$}{\\{}{\\$}{\\}}n"," ",$string);
+			$string = str_replace("{\\$}{\\{}{\\$}{\\}}r"," ",$string);
+			$string = str_replace("{\\$}{\\$}n"," ",$string);
+			$string = str_replace("{\\$}{\\$}r"," ",$string);
+			$string = str_replace("{\\$}n{\\$}"," ",$string);
+			$string = str_replace("{\\$}r{\\$}"," ",$string);
+			$string = str_replace("{\\$}{\\{\\$}{\\}n"," ",$string);
+			$string = str_replace("{\\$}{\\{\\$}{\\}r"," ",$string);
+			$string = str_replace("{\\%}","%",$string);
+			$string = str_replace("{\\{\\$}{\\}}","{\\$}",$string);
+			$string = str_replace("{\\$}\\theta{\\$}","theta",$string);
+			$string = str_replace("{\\$}\\alpha{\\$}","alpha",$string);
+			$string = str_replace("{\\$}\\beta{\\$}","beta",$string);
+			$string = str_replace("{\\$}\\kappa{\\$}","kappa",$string);
+			$string = str_replace("{}","",$string);
+			$string = str_replace("{\\","",$string);
+			$string = str_replace("{\\}}","",$string);
+			$string = str_replace("\\","",$string);
+			$string = str_replace('$',"",$string);
+			$string = str_replace("}","",$string);
+			$string = str_replace("{","",$string);	
+			return $string;
+}
+function alfaNum($string){
+	$string = preg_replace("/[^a-zA-Z0-9]+/", "", $string);
+	return $string;
+}
+?>
