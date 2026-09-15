@@ -33,27 +33,30 @@ if ($BDjaCriado === '1') {
     exit;
 }
 
-if($BDjaCriado === '2' || $BDjaCriado === '3') {
-    //clicou continue então vai adicionar mais dados os dados que já existem
+if($BDjaCriado === '3') {
+    // Se clicou em Delete (3), limpamos os dados existentes antes de processar o novo upload
     include_once('dropColumns.php');
     include_once('copyColumns.php');
+    $respostaAjax = 1;
+}
 
-}else{
+// Se não estamos no estado de "Aviso" (1), processamos os arquivos para os casos 0 (novo), 2 (continue) e 3 (delete)
+if ($BDjaCriado !== '1') {
     if (!empty($_FILES['files']['name'])) {
         $files = $_FILES['files'];
-    
+
         // Diretório onde os arquivos serão salvos
         $destinoArquivo = "filesSent/";
-    
+
         // Verifica se o diretório de destino existe; se não, cria-o
         if (!file_exists($destinoArquivo) && !is_dir($destinoArquivo)) {
             mkdir($destinoArquivo, 0777, true);
         }
-    
+
         // Loop através de cada arquivo enviado
         foreach ($files['tmp_name'] as $key => $tmp_name) {
             $nomeArquivo = $files['name'][$key];
-    
+
             // Move o arquivo para o diretório de destino
             if (move_uploaded_file($tmp_name, $destinoArquivo . $nomeArquivo)) {
                 $extensao = pathinfo($nomeArquivo, PATHINFO_EXTENSION);
@@ -74,11 +77,11 @@ if($BDjaCriado === '2' || $BDjaCriado === '3') {
         }
     } else {
         $messagesError[] = "No files sent";
-        $respostaAjax = 0;
+        if ($BDjaCriado === '0') $respostaAjax = 0;
     }
 }
 
-if ($BDjaCriado === '0' && $columnDrop != 'null') {
+if ($BDjaCriado === '0' && $columnDrop != 'null' && $columnDrop !== null) {
     include_once('dropColumns.php');
     include_once('copyColumns.php');
 }
