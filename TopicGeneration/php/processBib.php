@@ -1,6 +1,20 @@
 <?php
 include_once('conexaoDB.php');
 
+if (!function_exists('extractField')) {
+    function extractField($field, $text) {
+        // Procura por campo = {valor} ou campo = "valor" ou campo = valor
+        $pattern = '/' . $field . '\s*=\s*[\{"]?\s*(.*?)\s*[\}"]?\s*[,}]/i';
+        if (preg_match($pattern, $text, $match)) {
+            $value = $match[1];
+            // Limpeza básica de chaves do BibTeX
+            $value = str_replace(['{', '}', '\\'], '', $value);
+            return trim($value);
+        }
+        return null;
+    }
+}
+
 // Verifica se o arquivo foi passado pelo saveFile.php ou enviado diretamente
 $fileContent = '';
 if (isset($fileToProcess) && file_exists($fileToProcess)) {
@@ -30,19 +44,5 @@ if ($fileContent) {
         }
     }
     $messages[] = "$count registros importados do arquivo BibTeX.";
-}
-
-if (!function_exists('extractField')) {
-    function extractField($field, $text) {
-        // Procura por campo = {valor} ou campo = "valor" ou campo = valor
-        $pattern = '/' . $field . '\s*=\s*[\{"]?\s*(.*?)\s*[\}"]?\s*[,}]/i';
-        if (preg_match($pattern, $text, $match)) {
-            $value = $match[1];
-            // Limpeza básica de chaves do BibTeX
-            $value = str_replace(['{', '}', '\\'], '', $value);
-            return trim($value);
-        }
-        return null;
-    }
 }
 ?>
