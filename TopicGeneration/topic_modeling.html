@@ -176,6 +176,21 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
+        // Função para buscar o total de registros do banco e atualizar os badges
+        function atualizarContagemArquivos() {
+            fetch("php/get_files.php")
+                .then(response => response.json())
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        const total = data.length;
+                        document.querySelectorAll('.badge').forEach(badge => {
+                            badge.textContent = total;
+                        });
+                    }
+                })
+                .catch(error => console.error('Erro ao buscar contagem:', error));
+        }
+
         const cards = document.querySelectorAll('.flip-card');
 
         cards.forEach((card) => {
@@ -221,6 +236,9 @@
             $(this).toggleClass("hovered");
             toggleButton(this);
         });
+
+        // Executa a busca assim que a página carrega
+        atualizarContagemArquivos();
     </script>
 
 </html>
