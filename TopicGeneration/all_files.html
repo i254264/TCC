@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="#">
+    <meta name="author" content="Isabella">
+    <meta name="description" content="topic modeling">
+    <meta name="keywords" content="topic modeling">
+    <!-------------------------------------->
+    <link rel="stylesheet" href="css/estilo_esqueleto.css">
+    <link rel="stylesheet" href="css/pageAdd.css">
+    <link rel="stylesheet" href="css/pagination.css">
+    <link rel="stylesheet" href="css/button_alert.css">
+    <link rel="stylesheet" href="css/sidebar-nav.css">
+    <link rel="stylesheet" href="css/overrides.css">
+    <!-------------------------------------->
+    <script src="js/list.pagination.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script> 
+    <script src="js/list-150.min.js"></script>
+</head>
+<body>
+    <header>
+        <p class="typewriter"><b>Topic</b><b>Generation</b></p>
+    </header>
+    <div id="main">
+        <nav class="navbar">
+            <ul class="navbar__menu">
+                <li class="navbar__item">
+                    <a href="index.html" class="navbar__link"><img src="img/home.png" alt="add files"><span>Home</span></a>
+                  </li>
+              <li class="navbar__item">
+                <a href="upload_files.html" class="navbar__link"><img src="img/add.png" alt="add files"><span>Add files</span></a>
+              </li>
+              <li class="navbar__item">
+                <a href="#" class="navbar__link"><img src="img/all-documents2.png" class="navbar_active" alt="all files"></i><span>All files</span></a>        
+              </li>
+              <li class="navbar__item">
+                <a href="topic_modeling.html" class="navbar__link"><img src="img/deep-learning2.png" alt="all files"><span>Topic modeling</span></a>        
+              </li>
+            </ul>
+        </nav>
+        <div class="center-list">
+            <div id="all-files">
+                <div class="search-wrapper">
+                    <input class="search" placeholder="Search" />
+                    <svg id="search-icon" x="0px" y="0px" viewBox="0 0 24 24">
+                        <g stroke-linecap="square" stroke-linejoin="miter" stroke="currentColor">
+                            <line fill="none" stroke-miterlimit="10" x1="22" y1="22" x2="16.4" y2="16.4"/>
+                            <circle fill="none" stroke="currentColor" stroke-miterlimit="10" cx="10" cy="10" r="9"/>
+                        </g>
+                    </svg>
+                    <button class="sort" data-sort="name">Sort by data</button>
+                </div>
+                <ul class="list"></ul>
+                
+                <div class="pagination-wrap">
+                    <a class="prev" href="#">
+                        <svg aria-hidden="true" data-prefix="fas" data-icon="angle-left" class="svg-inline--fa fa-angle-left fa-w-8" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="#23adad" d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"></path></svg>
+                    </a>
+                    <ul class="pagination"></ul>
+                    <a class="next" href="#">
+                        <svg aria-hidden="true" data-prefix="fas" data-icon="angle-right" class="svg-inline--fa fa-angle-right fa-w-8" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="#23adad" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="alert alert--info">
+                <p> <strong>Warning!</strong> Please select a file to see is full text.</p>
+            </div>
+            <div id="full-file">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/list_values.js"></script>
+</html>

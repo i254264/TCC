@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="#">
+    <meta name="author" content="Isabella">
+    <meta name="description" content="topic modeling">
+    <meta name="keywords" content="topic modeling">
+    <!-------------------------------------->
+    <link rel="stylesheet" href="css/estilo_esqueleto.css">
+    <link rel="stylesheet" href="css/welcome.css">
+    <link rel="stylesheet" href="css/tutorialModel.css">
+    <!-------------------------------------->
+    <script type="text/javascript" src="js/cards_model.js"></script>
+    <script type="text/javascript" src="js/transition_pages.js"></script>
+    <title>Home</title>
+</head>
+
+<body>
+    <div id="main">
+        <div id="painel-welcome">
+            <div id="tit-welcome">
+                <p id="first-paragraph">Welcome to
+                <p class="typewriter"><b>Topic</b><b>Generation</b></p>
+                </p>
+                <p id="buttons"><a class="btn-welcome" href="upload_files.html" role="button">START</a><a id="btnTutorial"
+                        class="btn-welcome" href="#" role="button">TUTORIAL</a></p>
+            </div>
+            <div id="tutorialModel">
+                <div>
+                    <p class="titleTutorial">
+                        What is <br>
+                        <spam style="font-family: 'Roboto', sans-serif; font-size: 4rem;">Topic Modeling?</spam>
+                    </p>
+                    <div class="textsTutorial">
+                        <p>
+                            Nowadays, when majorities of literature in every sphere of life, become digitized and stored
+                            electronically in the databases, through digital libraries or social networking databases.
+                            Researcher needs powerful automatic tools to read this data and understand underlying themes
+                            of data like human beings. Topic modeling is a technique comes with group of algorithms that
+                            reveal, discover and annotate thematic structure in collection of documents.
+                            <br>Topic modeling is a popular statistical tool for extracting latent variables from large
+                            datasets. It is particularly well suited for use with text data; however, it has also been
+                            used for analyzing bioinformatics data, social data, and environmental data. This analysis
+                            can help with organization of large-scale datasets for more convenient access; a few
+                            examples of these applications is structuring databases of journals and articles into groups
+                            based on similar focus and social media users by similar post content.
+                        </p>
+                        <div class="buttonsTutorial">
+                            <a href="upload_files.html" class="watchVideo">
+                                <span class="textWatchVideo">get started</span>
+                            </a>
+                            <button class="watchVideo">
+                                <span class="textWatchVideo">Watch the tutorial</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" xml:space="preserve">
+                        <circle cx="50" cy="50" r="10" fill="transparent" stroke="#4db66d" stroke-width="3" />
+                        <line id="line-path-vert" class="path-vert" fill="#4db66d" x1="50" y1="60" x2="50" y2="100%"
+                            stroke="#4db66d" stroke-width="2" />
+
+                    </svg>
+                    <button id="lineToCards" class="learn-more">
+                        <span class="circle" aria-hidden="true">
+                            <span class="icon arrow"></span>
+                        </span>
+                        <span class="button-text">choose your model</span>
+                    </button>
+                </div>
+                <div id="videoTutorial">
+                    <video class="video" controls>
+                        <source src="https://res.cloudinary.com/ifeomaimoh/video/upload/v1650567487/speech_ofvfzq.mp4"
+                            type="video/webm" />
+                        <p>Your browser doesn't support HTML5 video.</p>
+                    </video>
+                </div>
+            </div>
+            <div id="cards-models">
+                <div id="card-models-wrapper">
+                    <div class="card-models-header">
+                        <button id="btnCloseTutorial" class="btn btn-close">
+                            <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="m10.939 12-3.9697 3.9697 1.0607 1.0607 3.9697-3.9697 3.9697 3.9697 1.0607-1.0607-3.9697-3.9697 3.9696-3.9696-1.0607-1.0607-3.9696 3.9696-3.9696-3.9696-1.0607 1.0607 3.9696 3.9696z"
+                                    clip-rule="evenodd" fill="#fff" fill-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="card-models-body"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

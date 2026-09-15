@@ -1,0 +1,75 @@
+/* Variáveis */
+:root {
+  --lineheight: 20px;
+  --alertsuccess: #ddf0d7;
+  --alertsuccessborder: #a4cd98;
+  --alertsuccesstext: #1c652c;
+  --alertwarning: #ffefc6;
+  --alertwarningborder: #e5c073;
+  --alertwarningtext: #795d27;
+  --alerterror: #f6ddde;
+  --alerterrorborder: #d4aaac;
+  --alerterrortext: #972a3d;
+  --alertinfo: #d4edf7;
+  --alertinfoborder: #93c7da;
+  --alertinfotext: #114a59;
+}
+
+/* Estilos */
+.alert {
+  padding: 10px 35px 10px 14px;
+  background-color: #ffffff;
+  border: 0.3px solid rgb(158, 158, 158);
+  border-radius: 4px;
+  position: relative;
+  margin: 10px 0;
+  height: fit-content;
+}
+
+.alert .close {
+  position: absolute;
+  border: 0;
+  top: 2px;
+  right: 2px;
+  background: none;
+  color: inherit;
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+}
+
+.alert .close:active,
+.alert .close:focus {
+  outline: 0;
+}
+
+.alert p {
+  margin: 0;
+}
+
+.alert--success {
+  background: var(--alertsuccess);
+  border-color: var(--alertsuccessborder);
+  color: var(--alertsuccesstext);
+}
+
+.alert--warning {
+  background: var(--alertwarning);
+  border-color: var(--alertwarningborder);
+  color: var(--alertwarningtext);
+}
+
+.alert--info {
+  background: var(--alertinfo);
+  border-color: var(--alertinfoborder);
+  color: var(--alertinfotext);
+}
+
+.alert--error {
+  background: var(--alerterror);
+  border-color: var(--alerterrorborder);
+  color: var(--alerterrortext);
+}

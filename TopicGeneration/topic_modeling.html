@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="#">
+    <meta name="author" content="Isabella">
+    <meta name="description" content="topic modeling">
+    <meta name="keywords" content="topic modeling">
+    <!-------------------------------------->
+    <link rel="stylesheet" href="css/estilo_esqueleto.css">
+    <link rel="stylesheet" href="css/input_bar.css">
+    <link rel="stylesheet" href="css/pageAdd.css">
+    <link rel="stylesheet" href="css/topic-modeling.css">
+    <link rel="stylesheet" href="css/button_alert.css">
+    <!-------------------------------------->
+</head>
+
+<body>
+    <header>
+        <p class="typewriter"><b>Topic</b><b>Generation</b></p>
+    </header>
+    <div id="main">
+        <nav class="navbar">
+            <ul class="navbar__menu">
+                <li class="navbar__item">
+                    <a href="index.html" class="navbar__link"><img src="img/home.png"
+                            alt="add files"><span>Home</span></a>
+                </li>
+                <li class="navbar__item">
+                    <a href="upload_files.html" class="navbar__link"><img src="img/add.png" alt="add files"><span>Add
+                            files</span></a>
+                </li>
+                <li class="navbar__item">
+                    <a href="all_files.html" class="navbar__link"><img src="img/all-documents.png"
+                            alt="all files"></i><span>All files</span></a>
+                </li>
+                <li class="navbar__item">
+                    <a href="#" class="navbar__link"><img src="img/deep-learning3.png" class="navbar_active"
+                            alt="all files"><span>Topic modeling</span></a>
+                </li>
+            </ul>
+        </nav>
+        <div class="cards-row">
+            <article class="flip-card" data-type="lsa">
+                <div class="flip-card-inner">
+                    <div class="flip-card-face front face-lsa">
+                        <div class="front-label">LSA</div>
+                    </div>
+
+                    <div class="flip-card-face back">
+                        <button class="close-card" aria-label="Fechar">×</button>
+                        <div class="panel-inner panel-lsa">
+                            <h2>Please enter the fields below to<br />use <span>LSA</span> model</h2>
+
+                            <div class="total-box">
+                                <span>Total of files in</span>
+                                <span class="badge">5000</span>
+                            </div>
+
+                            <div class="buttons">
+                                <button type="button" class="cleanCorpus" value="0">
+                                    <span>clean corpus</span>
+                                </button>
+                                <button type="button" class="lemmaCorpus" value="0">
+                                    <span>lemmatize corpus</span>
+                                </button>
+                            </div>
+
+                            <div class="form-area">
+                                <div class="form-group">
+                                    <label for="lsa-topics">topics</label>
+                                    <input id="lsa-topics" type="text" value="3" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lsa-words">words </label>
+                                    <input id="lsa-words" type="text" required/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lsa-interaction">interaction </label>
+                                    <input id="lsa-interaction" type="text" required/>
+                                </div>
+
+                                <input id="generateTopics" type="submit" value="generate topics" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="flip-card is-flipped" data-type="lda">
+                <div class="flip-card-inner">
+                    <div class="flip-card-face front face-lda">
+                        <div class="front-label">LDA</div>
+                    </div>
+
+                    <div class="flip-card-face back">
+                        <button class="close-card" aria-label="Fechar">×</button>
+                        <div class="panel-inner panel-lda">
+                            <h2>Please enter the fields below to<br />use <span>LDA</span> model</h2>
+
+                            <div class="total-box">
+                                <span>Total of files in</span>
+                                <span class="badge">0</span>
+                            </div>
+
+                            <div class="buttons">
+                                <button type="button" class="cleanCorpus" value="0">
+                                    <span>clean corpus</span>
+                                </button>
+                                <button type="button" class="lemmaCorpus" value="0">
+                                    <span>lemmatize corpus</span>
+                                </button>
+                            </div>
+
+                            <div class="form-area">
+                                <div class="form-group">
+                                    <label for="lda-topics">topics </label>
+                                    <input id="lda-topics" type="text" required/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lda-words">words </label>
+                                    <input id="lda-words" type="text" required/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lda-interaction">interaction </label>
+                                    <input id="lda-interaction" type="text"/>
+                                </div>
+
+                                <input id="generateTopics" type="submit" value="generate topics" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="flip-card" data-type="w2v">
+                <div class="flip-card-inner">
+                    <div class="flip-card-face front face-w2v">
+                        <div class="front-label">W2V</div>
+                    </div>
+
+                    <div class="flip-card-face back">
+                        <button class="close-card" aria-label="Fechar">×</button>
+                        <div class="panel-inner panel-w2v">
+                            <h2>Please enter the fields below to<br />use <span>Word2Vec</span> model</h2>
+
+                            <div class="total-box">
+                                <span>Total of files in</span>
+                                <span class="badge">5000</span>
+                            </div>
+
+                            <div class="info-text">
+                                Before using the Word2Vec model,<br />
+                                make sure that one of the topic<br />
+                                modeling templates has been<br />
+                                processed.
+                            </div>
+
+                            <div class="toggle-row">
+                                <label class="segmented active">LSA</label>
+                                <label class="segmented">LDA</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const cards = document.querySelectorAll('.flip-card');
+
+        cards.forEach((card) => {
+            card.addEventListener('click', (event) => {
+                const isFlipped = card.classList.contains('is-flipped');
+                const isCloseBtn = event.target.closest('.close-card');
+
+                // Se o card já está virado (aberto/traseira)
+                if (isFlipped) {
+                    // Só fecha se o clique foi especificamente no botão "x" (.close-card)
+                    if (isCloseBtn) {
+                        card.classList.remove('is-flipped');
+                    }
+                    // Ignora cliques nos inputs, botões ou no fundo da parte traseira
+                    return;
+                }
+
+                // Se o card estiver fechado (frente), fecha os outros e abre este
+                cards.forEach((item) => item.classList.remove('is-flipped'));
+                card.classList.add('is-flipped');
+            });
+        });
+
+        function toggleButton(button) {
+        if (button.value === "0") {
+            button.style.backgroundColor = "#fff";
+            button.style.borderColor = "#fff";
+            $(button).find("span").css("font-family", "mukta");
+            $(button).find("span").css("font-weight", "bold");
+            $(button).find("span").css("color", "#5279c0");
+            button.value = "1";
+        } else {
+            button.style.backgroundColor = "transparent";
+            button.style.borderColor = "#abc1e7";
+            $(button).find("span").css("font-family", "mukta-medium");
+            $(button).find("span").css("font-weight", "unset");
+            $(button).find("span").css("color", "#abc1e7");
+            button.value = "0";
+        }
+        }
+        $(".cleanCorpus, .lemmaCorpus").on("click", function () {
+            event.stopPropagation();
+            $(this).toggleClass("hovered");
+            toggleButton(this);
+        });
+    </script>
+
+</html>

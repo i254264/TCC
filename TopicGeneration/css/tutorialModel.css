@@ -1,0 +1,353 @@
+#tutorialModel{
+    transition: transform .8s cubic-bezier(0.77, 0, 0.175, 1);
+    transform: translateY(100%);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #5279c0;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 60% 40%;
+    grid-template-areas: 'whatIs whatIs' 'nextSection videoTutorial';
+}
+#tutorialModel a{
+    text-decoration: none;
+}
+#tutorialModel div:nth-child(1){
+    grid-area: whatIs;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1.5% 3%;
+    background-color: #fff;
+}
+#tutorialModel div:nth-child(2){
+    grid-area: nextSection;
+    margin-top: 2rem;
+}
+#videoTutorial{
+    grid-area: videoTutorial;
+    display: flex;
+    justify-content: center;
+}
+#tutorialModel div:nth-child(1) p{
+    width: fit-content;
+    height: fit-content;
+}
+#tutorialModel .titleTutorial{
+    color: #5279c0;
+    font-size: 3.8rem;
+    text-transform: uppercase;
+    margin-bottom: 2%;
+    font-weight: bolder;
+}
+#tutorialModel .textsTutorial{
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    width: 50%;
+}
+#tutorialModel .textsTutorial p{
+    text-align: justify;
+    font-size: 1.2rem;
+    line-height: 1.3;
+    font-family: roboto-light;
+}
+#tutorialModel .buttonsTutorial{
+    display: flex;
+    justify-content: space-evenly;
+    width: 50%;
+}
+#tutorialModel .watchVideo{
+    transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
+    width: fit-content;
+    padding: .5rem 1rem;
+    border: 1px solid #5279c0;
+    border-radius: 2rem;
+}
+#tutorialModel .watchVideo span{
+    transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
+    color: #5279c0;
+    font-size: 1rem;
+    font-family: mukta;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+}
+#tutorialModel .watchVideo:hover{
+    background-color: #5279c0;
+}
+#tutorialModel .watchVideo:hover .textWatchVideo{
+    color: #fff;
+}
+/* ----------------------------------------------- */
+#tutorialModel svg{
+    position: absolute;
+}
+.path-vert {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+}  
+.animate-path-vert {
+    animation: draw1 8s linear alternate both;
+}
+@keyframes draw1 {
+    from {
+        stroke-dashoffset: 1000;
+    }
+    to {    
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 0;
+    }
+}
+#painel-welcome button{
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+}
+.learn-more {
+    width: 15rem;
+    height: auto;
+    position: absolute;
+    left: 1.5rem;
+    margin-top: 1.3rem;
+}
+.learn-more .circle {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: relative;
+    display: block;
+    margin: 0;
+    width: 3rem;
+    height: 3rem;
+    background: #4db66d;
+    border-radius: 1.625rem;
+}
+.learn-more .circle .icon {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #fff;
+}
+.learn-more .circle .icon.arrow {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    left: 0.67rem;
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
+}
+.learn-more .circle .icon.arrow::before {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    content: '';
+    top: -0.30rem;
+    right: 0.0625rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-top: 0.25rem solid #5279c0;
+    border-right: 0.25rem solid #5279c0;
+    transform: rotate(45deg);
+}
+
+.learn-more:hover .circle {
+    width: 100%;
+  } 
+.learn-more:hover .circle .icon.arrow {
+    transform: translate(1rem, 0);
+    border-top-color:#fff;
+    border-right-color:#fff;
+}
+.learn-more:hover .icon.arrow::before{
+    border-top-color:#fff;
+    border-right-color:#fff;
+}
+.learn-more:hover .button-text {
+    color: #fff;
+}  
+.button-text {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.75rem 0;
+    margin: 0 0 0 1.9rem;
+    color: #56cc79;
+    font-family: mukta;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+}
+#videoTutorial video{
+    margin-top: 2rem;
+    width: 55%;
+    height: 70%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+/* ----------------------------------------------- */
+/* --------------CARDS OF TUTORIAL---------------- */
+#cards-models {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #4db66d;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    transition: transform .8s cubic-bezier(0.77, 0, 0.175, 1);
+    transform: translateY(100%);
+    overflow-y: auto;
+}
+
+#card-models-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#card-models-body {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    padding: 90px 20px 90px 20px;
+}
+
+.card-models-header {
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    z-index: 2;
+}
+
+.card-models-header .btn-close {
+    -webkit-appearance: none;
+    -moz-appearance:  none;
+    -o-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    border: 0;
+    background-color: transparent;
+    box-shadow: unset important;
+    outline: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    cursor: pointer;
+}
+
+.card-models-header .btn-close svg {
+    width: 50px;
+    height: 50px;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.10), 0 15px 12px rgba(0, 0, 0, 0.02);
+    max-width: 95vw;
+    background-color: #f0db4f;
+    width: 22.5%;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 2.5%;
+    height: auto;
+    padding: 2rem;
+    min-height: 400px;
+}
+
+.card:last-child {
+    margin-right: 0;
+}
+
+.text-card {
+    color: #323330;
+    text-align: justify;
+    margin: 0 0 2rem 0;
+    letter-spacing: .01em;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.tit-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.tit-card h2 {
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bolder;
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1;
+}
+
+.tit-card img {
+    width: 3rem;
+    height: auto;
+    line-height: 1;
+    margin-right: 3%;
+}
+
+.btn-card {
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 150px;
+    height: 30px;
+    font-size: 1rem;
+    border: solid .5px #000000;
+    margin-top: auto;
+}
+
+@media (max-width: 1366px) {
+    .tit-card h2 {
+        font-size: 2rem;
+    }
+
+    .tit-card img {
+        width: 2rem;
+    }
+
+    .text-card {
+        font-size: .8rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    #card-models-body {
+        flex-wrap: wrap;
+    }
+
+    .card {
+        width: 40%;
+        min-width: 300px;
+        margin-bottom: 2rem;
+        min-height: 200px;
+    }
+    .card:last-child {
+        margin-right: 2.5%;
+    }
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="#">
+    <meta name="author" content="Isabella">
+    <meta name="description" content="topic modeling">
+    <meta name="keywords" content="topic modeling">
+    <!-------------------------------------->
+    <link rel="stylesheet" href="css/estilo_esqueleto.css">
+    <link rel="stylesheet" href="css/input_bar.css">
+    <link rel="stylesheet" href="css/pageAdd.css">
+    <link rel="stylesheet" href="css/button_alert.css">
+    <!-------------------------------------->
+    <script type="text/javascript" src="js/upload_files.js"></script>
+    <script type="text/javascript" src="js/popUp.js"></script>
+</head>
+<body>
+    <header>
+        <p class="typewriter"><b>Topic</b><b>Generation</b></p>
+    </header>
+    <div id="main">
+        <nav class="navbar">
+            <ul class="navbar__menu">
+                <li class="navbar__item">
+                    <a href="index.html" class="navbar__link"><img src="img/home.png" alt="add files"><span>Home</span></a>
+                  </li>
+              <li class="navbar__item">
+                <a href="#" class="navbar__link"><img src="img/add2.png" class="navbar_active" alt="add files"><span>Add files</span></a>
+              </li>
+              <li class="navbar__item">
+                <a href="all_files.html" class="navbar__link"><img src="img/all-documents.png" alt="all files"></i><span>All files</span></a>        
+              </li>
+              <li class="navbar__item">
+                <a href="topic_modeling.html" class="navbar__link"><img src="img/deep-learning2.png" alt="all files"><span>Topic modeling</span></a>        
+              </li>
+            </ul>
+        </nav>
+        <div class="center-list">
+            <div id="mensagens-alerta"></div>
+            <div id="upload-files">
+                <div class="titUpLoad">
+                    <p>
+                        <span class="up">up</span>
+                        <span>load</span>
+                    </p>
+                </div>
+                <div id="drop">
+                    <img id="icon-upload-file" src="img/icon-upload-file.svg" alt="upload files">
+                    <p class="pointer-none"><b style="color: #4db6ac;">Drag and drop</b> files here <br /> or 
+                        <a id="triggerFile" style="color: #4db6ac;">browse</a> to begin the upload</p>
+                    <input type="file" multiple="multiple"/>
+                </div>
+                <div id="files-active" class="file hidden">
+                    <p class="titles-file">FILES</p>
+                    <div class="lines-update">
+                    </div>
+                    <div class="buttons-upload">
+                        <button class="bnt1">
+                            <span id="cancel-upload-files">cancel</span>
+                            <span id="delete-upload-files" class="hidden">delete</span>
+                        </button>
+                        <button class="bnt2">
+                            <span id="confirm-upload-files">confirm</span>
+                            <span id="columnConfirm-upload-files" class="hidden">confirm</span>
+                            <span id="continue-upload-files" class="hidden">continue</span>
+                            <span id="return-upload-files" class="hidden">return</span>
+                        </button>
+                    </div>
+               </div>
+            </div>
+        </div>
+        
+        <img id="help_button" src="img/help5_2.png" alt="all files">
+    </div>
+</body>
+<div class="pop-up">
+    <div class="box-popUp">
+        <button>x</button>
+        <div>Como usar?</div>
+        <p>Watch the following video to understand how to use Topic Generation.</p>
+    </div>
+</div>
+</html>

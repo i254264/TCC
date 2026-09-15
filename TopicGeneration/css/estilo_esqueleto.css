@@ -1,0 +1,67 @@
+@font-face {
+    font-family: roboto-light;
+    src: url(../fonts/Roboto-Light.ttf);
+}
+@font-face {
+    font-family: mukta;
+    src: url(../fonts/Mukta/Mukta-Regular.ttf);
+}
+@font-face {
+    font-family: mukta-medium;
+    src: url(../fonts/Mukta/Mukta-Medium.ttf);
+}
+@font-face {
+    font-family: mukta-bold;
+    src: url(../fonts/Mukta/Mukta-ExtraBold.ttf);
+}
+html,
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
+p {
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    cursor: default;
+}
+
+li{
+    font-style: none;
+    list-style: none;
+}
+
+* {
+    font-family: roboto-light;
+    font-size: 12pt;
+}
+
+/****************************************/
+body {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: min-content auto;
+    grid-template-areas: 'header' 'main';
+}
+
+header {
+    grid-area: header;
+    background-color: #eaeef6;
+}
+
+#main {
+    grid-area: main;
+    background-color: #eaeef6;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}

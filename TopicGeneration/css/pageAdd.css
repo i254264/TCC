@@ -1,0 +1,218 @@
+.navbar {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem 0;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.03);
+    height: calc(100vh - 4rem);
+}
+
+.navbar__link {
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 5.5rem;
+width: 5.5rem;
+color: #6a778e;
+transition: 250ms ease all;
+}
+
+.navbar__link span {
+position: absolute;
+text-wrap: nowrap;
+left: 100%;
+transform: translate(-3rem);
+margin-left: 1rem;
+opacity: 0;
+pointer-events: none;
+color: #000000;
+background: #fff;
+padding: 0.75rem;
+transition: 250ms ease all;
+border-radius: 17.5px;
+}
+
+.navbar__link:hover {
+color: #fff;
+}
+
+.navbar:not(:hover) .navbar__link:focus,
+.navbar__link:hover span {
+opacity: 1;
+transform: translate(0);
+}
+
+.navbar__menu {
+position: relative;
+padding: 0;
+}
+
+.navbar__item img:nth-child(1){
+    width: 30px;
+}
+.navbar_active{
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: rgba(77, 182, 172, 0.7);
+}
+#help_button{
+    position: fixed;
+    width: 70px;
+    bottom: 2rem;
+    right: 4rem;
+    transform: scale(1);
+    transform-origin: center;
+    will-change: opacity, transform, top;
+    transition: opacity .2s ease, transform .2s ease, top .2s ease;
+    cursor:pointer;
+}
+#help_button:hover{
+    transform: scale(1.1);
+}
+
+.typewriter{
+    height: fit-content;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .15em; /* Adjust as needed */
+    background-color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+.typewriter b:nth-child(1){
+    color: #2e4946;
+    font-size: 1.5rem;
+    font-weight: 100;
+}
+.typewriter b:nth-child(2){
+    color: #4db6ac;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bolder;
+    font-size: 2.5rem;
+}
+
+/* ---------------------------------------------------------------------- */
+.div-blur {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    margin: 0; padding: 0;
+    top: 0;
+    display: none;
+}
+.pop-up {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    margin: 0; padding: 0;
+    top: 0;
+    display: none;
+}
+.box-popUp{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    height: 50%;
+    background-color: whitesmoke;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    position: relative;
+    -webkit-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+}
+.pop-up button{
+    position: absolute;
+    left: 0;
+    transition: all 0.5s ease;
+    background-color: rgb(122, 163, 160);
+    box-shadow: unset important;
+    outline: none !important;
+    font-family: roboto-light;
+    font-size: 1.6rem;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .3rem .9rem .45rem .9rem;
+    margin-left: -10px;
+    margin-top: -9px;
+    border-radius: 50%;    
+    border: 2px solid #fff;
+    box-shadow: -3px 1px 6px 0px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+.pop-up button:hover {
+    background-color: rgb(68, 182, 170);
+    -webkit-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.1);
+}
+.box-popUp div{
+    width: 100%;
+    color: #fff;
+    font-family: roboto-light;
+    padding: 1rem 0 1rem 0;
+    padding-bottom: 15px;
+    margin: 0 0 1.5rem 0; 
+    font-size: 3.4rem;
+    background-color: #4db6ac;
+}
+.blur-in {
+    -webkit-animation: blur 1.5s forwards;
+    -moz-animation: blur 1.5s forwards;
+    -o-animation: blur 1.5s forwards;
+    animation: blur 1.5s forwards;
+}
+
+.blur-out {
+    -webkit-animation: blur-out 1.5s forwards;
+    -moz-animation: blur-out 1.5s forwards;
+    -o-animation: blur-out 1.5s forwards;
+    animation: blur-out 1.5s forwards;
+}
+@keyframes blur {
+    0% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+
+    100% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+}
+@keyframes blur-out {
+    0% {
+        -webkit-filter: blur(4px);
+        -moz-filter: blur(4px);
+        -o-filter: blur(4px);
+        -ms-filter: blur(4px);
+        filter: blur(4px);
+    }
+
+    100% {
+        -webkit-filter: blur(0px);
+        -moz-filter: blur(0px);
+        -o-filter: blur(0px);
+        -ms-filter: blur(0px);
+        filter: blur(0px);
+    }
+}

@@ -1,0 +1,199 @@
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+  }
+
+ul {
+    list-style-type: none;
+}
+.center-list{
+    padding: 0; margin: 0;
+    display: grid;
+    width: 80%;
+    height: 80%;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    justify-items: center;
+    align-items: center;
+    grid-template-areas: 'all-files full-file';
+}
+#all-files{
+    grid-area: all-files;
+    justify-self: end;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: min-content auto min-content;
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    grid-template-areas: 'search_files' 'list-files' 'pagination';
+    width: 55%;
+    height: 100%;
+    margin-right: 2rem;
+}
+#full-file{
+    grid-area: full-file;
+    justify-self: first baseline;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 80%;
+    height: 100%;
+    padding: 2rem 0;
+    margin-left: 3rem;
+    overflow-y: auto;
+    scrollbar-width: thin; /* largura da barra de rolagem */
+    scrollbar-color: #ccc #f4f4f4; /* cor da barra de rolagem e do polegar */
+    transform: scale(0);
+    display: none;
+}
+.is-open{
+    animation: is-open .45s ease both;
+}
+@keyframes is-open{
+    to {
+        transform: scale(1);
+    }
+}
+.is-open{
+    
+    transform: scale(1);
+}
+#full-file p{
+    width: 85%;
+    text-align: justify;
+}
+.search-wrapper{
+    grid-area: search_files;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+.search{
+    width: 100%;
+    padding: 0.3rem 0 0.3rem .8rem;
+    margin-bottom: .5rem;
+    border: 1px solid #D0CFCE;
+    border-radius: 15px;
+    outline: none;
+}
+.search:focus{
+    border: 1px solid #5279c0;
+    transition: 0.35s ease;
+    color: rgb(59, 59, 59);
+}
+
+.search:-webkit-input-placeholder{
+    transition: opacity 0.45s ease; 
+    opacity: 0;
+}
+.search-wrapper svg{
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    transform: rotate(90deg);
+    position: absolute;
+    right: 0;
+    margin-top: 7px;
+    margin-right: 10px;
+    color:#707070;
+}
+.sort{
+    transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
+    font-size: .9rem;
+    font-family: mukta;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    width: fit-content;
+    padding: .1rem .8rem;
+    border: 1px solid #5279c0;
+    border-radius: 2rem;
+    background-color: #5279c0;
+    color: #fff;
+    cursor: pointer;
+}
+.sort:hover{
+    background-color: #fff;
+    color: #5279c0;
+}
+.list{
+    grid-area: list-files;
+    align-self: baseline;
+    padding:0; margin: 0;
+}
+.list li{
+    background-color: rgb(214, 212, 212);
+    margin-top: .3rem; padding: .3rem;
+    cursor: pointer;
+}
+.list li p{
+    cursor: pointer;
+}
+.list li:first-child{
+    margin-top: 1rem;
+}
+.list li:hover{
+    animation: change-color .35s ease both;
+}
+@keyframes change-color{
+    to {
+        background-color: rgb(82, 121, 192,.3);
+        font-weight: 400;
+    }
+}
+.list li .fulltext{
+    display: none;
+}
+.pagination-wrap{
+    grid-area: pagination;
+    align-self: end;
+    display: flex;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0;
+    border-radius: 0.6rem;
+    background: #ffffff;
+    box-shadow: 0 0.8rem 2rem rgba(#5a6181, 0.05);  
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+.pagination li {
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5rem 0;
+    font-size: 1.4rem;
+    cursor: pointer;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 0.4rem;
+}
+.pagination li a{
+    color: black;
+}
+.pagination li.active{
+    background-color: #23adade1;
+}
+.pagination li.active a{
+    color: #ffffff;
+    font-weight: 600;
+}
+.pagination-wrap svg{
+    width: 1.3rem;
+    height: 1.3rem;
+    margin: 0 1rem;
+}
