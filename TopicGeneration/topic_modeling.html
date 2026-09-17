@@ -198,17 +198,23 @@
         const cards = document.querySelectorAll('.flip-card');
 
         cards.forEach((card) => {
+            // Escuta diretamente o clique no botão de fechar para contornar o bug de clique no espaço 3D
+            const closeBtn = card.querySelector('.close-card');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Evita conflitos com o clique do card pai
+                    card.classList.remove('is-flipped');
+                    setTimeout(() => {
+                        $(card).find('.mensagens-alerta').html(''); // Remove o alerta após a animação de fade-out
+                    }, 400);
+                });
+            }
+
             card.addEventListener('click', (event) => {
                 const isFlipped = card.classList.contains('is-flipped');
-                const isCloseBtn = event.target.closest('.close-card');
 
                 // Se o card já está virado (aberto/traseira)
                 if (isFlipped) {
-                    // Só fecha se o clique foi especificamente no botão "x" (.close-card)
-                    if (isCloseBtn) {
-                        card.classList.remove('is-flipped');
-                    }
-                    // Ignora cliques nos inputs, botões ou no fundo da parte traseira
                     return;
                 }
 
