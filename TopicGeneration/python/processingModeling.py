@@ -1,39 +1,6 @@
-import subprocess
 import sys
 import os
-
-def install_dependencies():
-    """Tenta instalar as dependências básicas caso não existam."""
-    packages = [
-        "spacy", "pandas", "gensim", "pyLDAvis", 
-        "mysql-connector-python", "openpyxl", "nltk"
-    ]
-    for package in packages:
-        try:
-            __import__(package.replace('-', '_'))
-        except ImportError:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-    # Garante o modelo do spaCy
-    try:
-        import spacy
-        spacy.load("en_core_web_sm")
-    except (ImportError, OSError):
-        subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
-
-install_dependencies()
 import nltk
-
-def download_nltk_resources():
-    resources = ['stopwords', 'punkt', 'averaged_perceptron_tagger', 'wordnet', 'omw-1.4']
-    for res in resources:
-        try:
-            nltk.data.find(res)
-        except LookupError:
-            nltk.download(res, quiet=True)
-
-download_nltk_resources()
-
 from nltk.corpus import stopwords
 import pandas as pd
 import re
@@ -132,23 +99,29 @@ if(clean == '1'):
 df['tokenized'] = df['text_content'].apply(nltk.word_tokenize)
 array_df = df['tokenized'].tolist()
 
-def lemmatization(texts, allowed_postags=["NOUN", "ADJ", "VERB", "ADV"]):
-    # Carrega o modelo do spaCy uma única vez para economizar tempo
-    try:
-        nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
-    except OSError:
-        print("Erro: O modelo 'en_core_web_sm' do spacy nao foi encontrado.")
-        print("Tente: python -m spacy download en_core_web_sm")
-        sys.exit(1)
+def get_wordnet_pos(treebank_tag):
+    """Converte as tags do NLTK para o formato que o Lemmatizer entende."""
+    if treebank_tag.startswith('J'):
+        return wordnet.ADJ
+    elif treebank_tag.startswith('V'):
+        return wordnet.VERB
+    elif treebank_tag.startswith('N'):
+        return wordnet.NOUN
+    elif treebank_tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return wordnet.NOUN
 
+def lemmatization(texts):
+    """Lematização robusta usando NLTK e Part-of-Speech tagging."""
+    lemmatizer = WordNetLemmatizer()
     output = []
     for text in texts:
-        doc = nlp(" ".join(text))  # Converte a lista de tokens em uma string para processamento
-        lemma_abs = []  # Redefine lemma_abs para cada documento
-        for token in doc:
-            if token.pos_ in allowed_postags:
-                lemma_abs.append(token.lemma_)
-        output.append(lemma_abs)
+        # Identifica a categoria gramatical de cada palavra (verbo, substantivo...)
+        tagged_tokens = nltk.pos_tag(text)
+        # Lematiza baseando-se na categoria (ex: 'running' vira 'run' se for verbo)
+        lemmatized_doc = [lemmatizer.lemmatize(word, get_wordnet_pos(tag)) for word, tag in tagged_tokens]
+        output.append(lemmatized_doc)
     return output
 
 if(lemma == '1'):
