@@ -45,6 +45,11 @@
         </nav>
         <div class="cards-row">
             <article class="flip-card" data-type="lsa">
+                <div class="mensagens-alerta">
+                    <div class="alert alert--info">
+                        <!-- <p> <strong>Warning!</strong> Please fill in all the fields.</p> -->
+                    </div>
+                </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-lsa">
                         <div class="front-label">LSA</div>
@@ -52,7 +57,7 @@
 
                     <div class="flip-card-face back">
                         <button class="close-card" aria-label="Fechar">×</button>
-                        <div class="panel-inner panel-lsa">
+                        <form class="panel-inner panel-lsa">
                             <h2>Please enter the fields below to<br />use <span>LSA</span> model</h2>
 
                             <div class="total-box">
@@ -82,7 +87,7 @@
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </article>
@@ -90,7 +95,7 @@
             <article class="flip-card is-flipped" data-type="lda">
                 <div class="mensagens-alerta">
                     <div class="alert alert--info">
-                        <p> <strong>Warning!</strong> Please fill in all the fields.</p>
+                        <!-- <p> <strong>Warning!</strong> Please fill in all the fields.</p> -->
                     </div>
                 </div>
                 <div class="flip-card-inner">
@@ -100,7 +105,7 @@
 
                     <div class="flip-card-face back">
                         <button class="close-card" aria-label="Fechar">×</button>
-                        <div class="panel-inner panel-lda">
+                        <form class="panel-inner panel-lda">
                             <h2>Please enter the fields below to<br />use <span>LDA</span> model</h2>
 
                             <div class="total-box">
@@ -135,12 +140,17 @@
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </article>
 
             <article class="flip-card" data-type="w2v">
+                <div class="mensagens-alerta">
+                    <div class="alert alert--info">
+                        <!-- <p> <strong>Warning!</strong> Please fill in all the fields.</p> -->
+                    </div>
+                </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-w2v">
                         <div class="front-label">W2V</div>
