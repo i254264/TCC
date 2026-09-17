@@ -45,11 +45,6 @@
         </nav>
         <div class="cards-row">
             <article class="flip-card" data-type="lsa">
-                <div class="mensagens-alerta">
-                    <!-- <div class="alert alert--info">
-                        <p> <strong>Warning!</strong> Please fill in all the fields.</p>
-                    </div> -->
-                </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-lsa">
                         <div class="front-label">LSA</div>
@@ -65,30 +60,28 @@
                                 <span class="badge">0</span>
                             </div>
 
-                            <form class="modeling-form">
-                                <div class="buttons">
-                                    <button type="button" class="cleanCorpus" value="0">
-                                        <span>clean corpus</span>
-                                    </button>
-                                    <button type="button" class="lemmaCorpus" value="0">
-                                        <span>lemmatize corpus</span>
-                                    </button>
+                            <div class="buttons">
+                                <button type="button" class="cleanCorpus" value="0">
+                                    <span>clean corpus</span>
+                                </button>
+                                <button type="button" class="lemmaCorpus" value="0">
+                                    <span>lemmatize corpus</span>
+                                </button>
+                            </div>
+
+                            <div class="form-area">
+                                <div class="form-group">
+                                    <label for="lsa-topics">topics</label>
+                                    <input id="lsa-topics" type="text" required/>
                                 </div>
 
-                                <div class="form-area">
-                                    <div class="form-group">
-                                        <label for="lsa-topics">topics</label>
-                                        <input id="lsa-topics" name="topics" type="number" required/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="lsa-words">words </label>
-                                        <input id="lsa-words" name="words" type="number" required/>
-                                    </div>
-
-                                    <input class="generateTopics" type="submit" value="generate topics" />
+                                <div class="form-group">
+                                    <label for="lsa-words">words </label>
+                                    <input id="lsa-words" type="text" required/>
                                 </div>
-                            </form>
+
+                                <input class="generateTopics" type="submit" value="generate topics" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,9 +89,9 @@
 
             <article class="flip-card is-flipped" data-type="lda">
                 <div class="mensagens-alerta">
-                    <!-- <div class="alert alert--info">
+                    <div class="alert alert--info">
                         <p> <strong>Warning!</strong> Please fill in all the fields.</p>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-lda">
@@ -115,46 +108,39 @@
                                 <span class="badge">0</span>
                             </div>
 
-                            <form class="modeling-form">
-                                <div class="buttons">
-                                    <button type="button" class="cleanCorpus" value="0">
-                                        <span>clean corpus</span>
-                                    </button>
-                                    <button type="button" class="lemmaCorpus" value="0">
-                                        <span>lemmatize corpus</span>
-                                    </button>
+                            <div class="buttons">
+                                <button type="button" class="cleanCorpus" value="0">
+                                    <span>clean corpus</span>
+                                </button>
+                                <button type="button" class="lemmaCorpus" value="0">
+                                    <span>lemmatize corpus</span>
+                                </button>
+                            </div>
+
+                            <div class="form-area">
+                                <div class="form-group">
+                                    <label for="lda-topics">topics </label>
+                                    <input id="lda-topics" type="text" required/>
                                 </div>
 
-                                <div class="form-area">
-                                    <div class="form-group">
-                                        <label for="lda-topics">topics </label>
-                                        <input id="lda-topics" name="topics" type="number" required/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="lda-words">words </label>
-                                        <input id="lda-words" name="words" type="number" required/>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="lda-interaction">interaction </label>
-                                        <input id="lda-interaction" name="interaction" type="number" required/>
-                                    </div>
-
-                                    <input class="generateTopics" type="submit" value="generate topics" />
+                                <div class="form-group">
+                                    <label for="lda-words">words </label>
+                                    <input id="lda-words" type="text" required/>
                                 </div>
-                            </form>
+
+                                <div class="form-group">
+                                    <label for="lda-interaction">interaction </label>
+                                    <input id="lda-interaction" type="text" required/>
+                                </div>
+
+                                <input class="generateTopics" type="submit" value="generate topics" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </article>
 
             <article class="flip-card" data-type="w2v">
-                <div class="mensagens-alerta">
-                    <!-- <div class="alert alert--info">
-                        <p> <strong>Warning!</strong> Please fill in all the fields.</p>
-                    </div> -->
-                </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-w2v">
                         <div class="front-label">W2V</div>
@@ -212,15 +198,13 @@
                 const isFlipped = card.classList.contains('is-flipped');
                 const isCloseBtn = event.target.closest('.close-card');
 
-                // Limpa os alertas de todos os cards ao interagir (abrir ou fechar)
-                document.querySelectorAll('.mensagens-alerta').forEach(el => el.innerHTML = '');
-
                 // Se o card já está virado (aberto/traseira)
                 if (isFlipped) {
                     // Só fecha se o clique foi especificamente no botão "x" (.close-card)
                     if (isCloseBtn) {
                         card.classList.remove('is-flipped');
                     }
+                    // Ignora cliques nos inputs, botões ou no fundo da parte traseira
                     return;
                 }
 
@@ -247,33 +231,10 @@
             button.value = "0";
         }
         }
-        $(".cleanCorpus, .lemmaCorpus").on("click", function (event) {
+        $(".cleanCorpus, .lemmaCorpus").on("click", function () {
             event.stopPropagation();
             $(this).toggleClass("hovered");
             toggleButton(this);
-        });
-
-        // Lógica de submissão do formulário
-        $(".modeling-form").on("submit", function(event) {
-            event.preventDefault();
-            const form = this;
-            const $card = $(this).closest('.flip-card');
-            const $alerta = $card.find('.mensagens-alerta');
-
-            // Validação simples usando a API nativa do HTML5 (required)
-            if (!form.checkValidity()) {
-                $alerta.html(`
-                    <div class="alert alert--warning">
-                        <p> <strong>Warning!</strong> Please fill in all the fields.</p>
-                    </div>
-                `);
-            } else {
-                $alerta.html(`
-                    <div class="alert alert--success">
-                        <p> <strong>Success!</strong> Form submitted correctly.</p>
-                    </div>
-                `);
-            }
         });
 
         // Executa a busca assim que a página carrega
