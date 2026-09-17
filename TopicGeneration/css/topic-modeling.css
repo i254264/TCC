@@ -329,15 +329,31 @@
 }
 
 .mensagens-alerta{
-    box-sizing: relative;
     position: absolute;
-    top: 0;
+    bottom: 100%;
     left: 0;
-    z-index: 1;
+    z-index: 10;
     width: 100%;
+    margin-bottom: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
+    /* Animação de entrada e saída */
+    transition: opacity 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), 
+                transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+                visibility 0.4s;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Esconde o alerta quando o card estiver virado (is-flipped) */
+.flip-card.is-flipped .mensagens-alerta {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px); /* O alerta desce um pouco enquanto some */
+    pointer-events: none;
 }
 
 .mensagens-alerta .alert{
