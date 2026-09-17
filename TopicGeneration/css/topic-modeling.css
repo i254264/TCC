@@ -348,14 +348,6 @@
     transform: translateY(0);
 }
 
-/* Esconde o alerta quando o card estiver virado (is-flipped) */
-.flip-card.is-flipped .mensagens-alerta {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px); /* O alerta desce um pouco enquanto some */
-    pointer-events: none;
-}
-
 .mensagens-alerta .alert{
     margin: 0%;
     width:fit-content;
