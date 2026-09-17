@@ -9,10 +9,6 @@ import gensim
 from gensim import corpora
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
-#vis
-import pyLDAvis
-import pyLDAvis.gensim_models
-import spacy
 import mysql.connector
 from mysql.connector import Error
 
