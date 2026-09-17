@@ -1,17 +1,41 @@
-#!pip install pyLDAvis
-#!pip install mysql-connector-python
-#!pip install openpyxl 
-import nltk
-#nltk.download('stopwords')
-#nltk.download('punkt')
-#nltk.download('averaged_perceptron_tagger')
-#nltk.download('wordnet')
-#nltk.download('stopwords')
-from nltk.corpus import stopwords
-stop_words = stopwords.words('english')
-import pandas as pd
-import os
+import subprocess
 import sys
+import os
+
+def install_dependencies():
+    """Tenta instalar as dependências básicas caso não existam."""
+    packages = [
+        "spacy", "pandas", "gensim", "pyLDAvis", 
+        "mysql-connector-python", "openpyxl", "nltk"
+    ]
+    for package in packages:
+        try:
+            __import__(package.replace('-', '_'))
+        except ImportError:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+    # Garante o modelo do spaCy
+    try:
+        import spacy
+        spacy.load("en_core_web_sm")
+    except (ImportError, OSError):
+        subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+
+install_dependencies()
+import nltk
+
+def download_nltk_resources():
+    resources = ['stopwords', 'punkt', 'averaged_perceptron_tagger', 'wordnet', 'omw-1.4']
+    for res in resources:
+        try:
+            nltk.data.find(res)
+        except LookupError:
+            nltk.download(res, quiet=True)
+
+download_nltk_resources()
+
+from nltk.corpus import stopwords
+import pandas as pd
 import re
 #Gensim
 import gensim
@@ -21,14 +45,11 @@ from nltk.stem import WordNetLemmatizer
 #vis
 import pyLDAvis
 import pyLDAvis.gensim_models
-#spacy
 import spacy
 import mysql.connector
 from mysql.connector import Error
 
-import mysql.connector
-from mysql.connector import Error
-
+stop_words = stopwords.words('english')
 clean = sys.argv[1]
 clean = re.sub("[^0-9]", "", clean)
 lemma = sys.argv[2]
@@ -41,9 +62,6 @@ interaction = sys.argv[5]
 interaction = re.sub("[^0-9]", "", interaction)
 typeModeling = sys.argv[6]
 typeModeling = re.sub("[^0-9]", "", typeModeling)
-
-import mysql.connector
-from mysql.connector import Error
 
 try:
     connection = mysql.connector.connect(host='localhost',
@@ -64,14 +82,22 @@ connection.autocommit = True
 if connection.is_connected():
     # Executar a consulta SQL para selecionar os dados da coluna desejada
     cursor = connection.cursor()
-    cursor.execute("SELECT col FROM tabela_topicgeneration")
+    
+    # Identifica dinamicamente a primeira coluna que não seja 'id'
+    cursor.execute("SHOW COLUMNS FROM tabela_topicgeneration")
+    columns = [row[0] for row in cursor.fetchall() if row[0].lower() != 'id']
+    
+    if not columns:
+        print("Erro: Nenhuma coluna de dados encontrada.")
+        sys.exit(1)
+    
+    target_col = columns[0] # Assume a primeira coluna de dados como alvo
+    cursor.execute(f"SELECT `{target_col}` FROM tabela_topicgeneration")
     
     # Obter todos os resultados da consulta
     results = cursor.fetchall()
-    
-    # Criar um DataFrame pandas com os resultados
-    df = pd.DataFrame(results, columns=['col'])
-    
+    df = pd.DataFrame(results, columns=['text_content'])
+
     # Fechar o cursor e a conexão
     cursor.close()
     connection.close()
@@ -101,14 +127,19 @@ def Document_Cleansing(Document):
     return Document
 
 if(clean == '1'):
-    df['col'] = df['col'].apply(Document_Cleansing)
+    df['text_content'] = df['text_content'].apply(Document_Cleansing)
 
-df['tokenized'] = df['col'].apply(nltk.word_tokenize)
+df['tokenized'] = df['text_content'].apply(nltk.word_tokenize)
 array_df = df['tokenized'].tolist()
 
 def lemmatization(texts, allowed_postags=["NOUN", "ADJ", "VERB", "ADV"]):
     # Carrega o modelo do spaCy uma única vez para economizar tempo
-    nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+    try:
+        nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+    except OSError:
+        print("Erro: O modelo 'en_core_web_sm' do spacy nao foi encontrado.")
+        print("Tente: python -m spacy download en_core_web_sm")
+        sys.exit(1)
 
     output = []
     for text in texts:

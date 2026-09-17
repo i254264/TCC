@@ -9,8 +9,8 @@ $interaction = isset($_POST['interaction']) ? $_POST['interaction'] : '100';
 $typeModeling = isset($_POST['typeModeling']) ? $_POST['typeModeling'] : '1'; // 1 para LDA
 
 // Caminho para o executável python e para o script
-// Ajuste o caminho do 'python3' conforme o seu ambiente
-$pythonPath = "python3"; 
+// No Windows/XAMPP geralmente usa-se 'python'. No Linux 'python3'.
+$pythonPath = "python"; 
 $scriptPath = "../python/processingModeling.py";
 
 // Escapa os argumentos para segurança
