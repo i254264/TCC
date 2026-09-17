@@ -357,7 +357,6 @@
 }
 
 .mensagens-alerta .alert{
-    visibility: hidden;
     margin: 0%;
     width:fit-content;
 }

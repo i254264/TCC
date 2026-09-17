@@ -46,9 +46,7 @@
         <div class="cards-row">
             <article class="flip-card" data-type="lsa">
                 <div class="mensagens-alerta">
-                    <div class="alert alert--info">
-                        <!-- <p> <strong>Warning!</strong> Please fill in all the fields.</p> -->
-                    </div>
+                    <!-- O alerta será injetado aqui via JS -->
                 </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-lsa">
@@ -77,12 +75,12 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="lsa-topics">topics</label>
-                                    <input id="lsa-topics" type="text" required/>
+                                    <input id="lsa-topics" name="topics" type="number" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lsa-words">words </label>
-                                    <input id="lsa-words" type="text" required/>
+                                    <input id="lsa-words" name="words" type="number" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
@@ -94,9 +92,7 @@
 
             <article class="flip-card is-flipped" data-type="lda">
                 <div class="mensagens-alerta">
-                    <div class="alert alert--info">
-                        <!-- <p> <strong>Warning!</strong> Please fill in all the fields.</p> -->
-                    </div>
+                    <!-- O alerta será injetado aqui via JS -->
                 </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-lda">
@@ -125,17 +121,17 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="lda-topics">topics </label>
-                                    <input id="lda-topics" type="text" required/>
+                                    <input id="lda-topics" name="topics" type="number" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lda-words">words </label>
-                                    <input id="lda-words" type="text" required/>
+                                    <input id="lda-words" name="words" type="number" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lda-interaction">interaction </label>
-                                    <input id="lda-interaction" type="text" required/>
+                                    <input id="lda-interaction" name="interaction" type="number" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
@@ -147,9 +143,7 @@
 
             <article class="flip-card" data-type="w2v">
                 <div class="mensagens-alerta">
-                    <div class="alert alert--info">
-                        <!-- <p> <strong>Warning!</strong> Please fill in all the fields.</p> -->
-                    </div>
+                    <!-- O alerta será injetado aqui via JS -->
                 </div>
                 <div class="flip-card-inner">
                     <div class="flip-card-face front face-w2v">
@@ -241,10 +235,33 @@
             button.value = "0";
         }
         }
-        $(".cleanCorpus, .lemmaCorpus").on("click", function () {
+        $(".cleanCorpus, .lemmaCorpus").on("click", function (event) {
             event.stopPropagation();
             $(this).toggleClass("hovered");
             toggleButton(this);
+        });
+
+        // Lógica para os formulários LSA e LDA
+        $(".panel-inner").on("submit", function(event) {
+            event.preventDefault();
+            
+            const $card = $(this).closest('.flip-card');
+            const $container = $card.find('.mensagens-alerta');
+            
+            // Se o formulário é válido (o 'required' do HTML já ajuda aqui)
+            if (this.checkValidity()) {
+                $container.html(`
+                    <div class="alert alert--success">
+                        <p> <strong>Success!</strong> Processing your request...</p>
+                    </div>
+                `);
+            } else {
+                $container.html(`
+                    <div class="alert alert--warning">
+                        <p> <strong>Warning!</strong> Please fill in all the fields.</p>
+                    </div>
+                `);
+            }
         });
 
         // Executa a busca assim que a página carrega
