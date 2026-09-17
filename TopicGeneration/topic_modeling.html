@@ -251,23 +251,63 @@
         $(".panel-inner").on("submit", function(event) {
             event.preventDefault();
             
-            const $card = $(this).closest('.flip-card');
+            const $form = $(this);
+            const $card = $form.closest('.flip-card');
             const $container = $card.find('.mensagens-alerta');
-            
-            // Se o formulário é válido (o 'required' do HTML já ajuda aqui)
-            if (this.checkValidity()) {
-                $container.html(`
-                    <div class="alert alert--success">
-                        <p> <strong>Success!</strong> Processing your request...</p>
-                    </div>
-                `);
-            } else {
-                $container.html(`
-                    <div class="alert alert--warning">
-                        <p> <strong>Warning!</strong> Please fill in all the fields.</p>
-                    </div>
-                `);
-            }
+            const $btn = $form.find('.generateTopics');
+            const type = $card.data('type'); // 'lsa' ou 'lda'
+
+            // Desabilita o botão para evitar cliques duplos
+            $btn.prop("disabled", true).css("opacity", "0.5");
+
+            let formData = new FormData(this);
+            formData.append("cleanCorpus", $form.find(".cleanCorpus").val());
+            formData.append("lemmaCorpus", $form.find(".lemmaCorpus").val());
+            // Define o tipo para o Python: LDA = 1, LSA = 2 (ou conforme sua lógica no processingModeling.py)
+            formData.append("typeModeling", type === 'lda' ? "1" : "2");
+
+            $container.html(`
+                <div class="alert alert--info">
+                    <p> <strong>Wait!</strong> Processing model, this may take a moment...</p>
+                </div>
+            `);
+
+            $.ajax({
+                type: 'POST',
+                url: 'php/modeling.php',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    const data = JSON.parse(response);
+                    $btn.prop("disabled", false).css("opacity", "1");
+                    $container.html(`
+                        <div class="alert alert--success">
+                            <p> <strong>Success!</strong> Process completed. Downloading Excel...</p>
+                        </div>
+                    `);
+
+                    if (data.status === "success") {
+                        // O Python retorna o caminho absoluto, aqui convertemos para download
+                        // Se o Python retornar o nome do arquivo, aponte para a pasta exportExcel
+                        let link = document.createElement('a');
+                        link.href = "exportExcel/lda.xlsx"; // Ou a lógica dinâmica baseada em data.file
+                        link.download = type + '_results.xlsx';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                },
+                error: function (xhr) {
+                    $btn.prop("disabled", false).css("opacity", "1");
+                    $container.html(`
+                        <div class="alert alert--error">
+                            <p> <strong>Error!</strong> Something went wrong in processing.</p>
+                        </div>
+                    `);
+                    console.error(xhr.responseText);
+                }
+            });
         });
 
         // Executa a busca assim que a página carrega
