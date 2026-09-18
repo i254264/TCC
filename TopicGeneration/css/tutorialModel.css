@@ -10,7 +10,6 @@
     background-color: #5279c0;
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: 45% 55%;
     grid-template-rows: 35% 65%;
     grid-template-areas: 'whatIs whatIs' 'panelsArea panelsArea';
 }
@@ -29,7 +28,6 @@
     grid-area: panelsArea;
     display: flex;
     align-items: stretch;
-    justify-content: center;
     justify-content: flex-start;
     padding: 0;
     background-color: #fff;
@@ -176,17 +174,14 @@
     border-radius: 0;
     color: #fff;
     cursor: pointer;
-    flex: 0.5;
     flex: 1 1 0;
     min-width: 0;
     margin: 0;
     position: relative;
-    transition: flex 700ms ease-in;
     transition: flex 0.7s cubic-bezier(0.05, 0.61, 0.41, 0.95);
     display: flex;
     align-items: flex-end;
     padding: 20px;
-    border: 2px solid rgba(255,255,255,0.1);
     border: none;
     overflow: hidden;
 }
