@@ -1,11 +1,15 @@
 window.addEventListener("DOMContentLoaded", function(){
     let panel = document.getElementById('tutorialModel');
     let panelCards = document.getElementById('cards-models');
+    let welcomeTit = document.getElementById('tit-welcome');
     
     let btnTutorial = document.getElementById('btnTutorial');
     
     btnTutorial.onclick = (e) => {
         e.preventDefault();
+        // Faz o título de boas-vindas sumir para não ficar "por cima"
+        welcomeTit.style.opacity = '0';
+        welcomeTit.style.transform = 'translateY(-50px)';
         panel.style.transform = `translateY(0)`;
     }
 
