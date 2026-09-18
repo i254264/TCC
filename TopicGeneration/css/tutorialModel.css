@@ -58,28 +58,6 @@
     justify-content: space-evenly;
     width: 50%;
 }
-#tutorialModel .watchVideo{
-    transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
-    width: fit-content;
-    padding: .5rem 1rem;
-    border: 1px solid #5279c0;
-    border-radius: 2rem;
-}
-#tutorialModel .watchVideo span{
-    transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
-    color: #5279c0;
-    font-size: 1rem;
-    font-family: mukta;
-    font-weight: 700;
-    text-align: center;
-    text-transform: uppercase;
-}
-#tutorialModel .watchVideo:hover{
-    background-color: #5279c0;
-}
-#tutorialModel .watchVideo:hover .textWatchVideo{
-    color: #fff;
-}
 /* ----------------------------------------------- */
 #tutorialModel svg{
     position: absolute;
@@ -113,7 +91,7 @@
     font-family: inherit;
 }
 .learn-more {
-    width: 15rem;
+    width: 17rem; /* Aumentado ligeiramente */
     height: auto;
     position: absolute;
     left: 1.5rem;
@@ -152,8 +130,8 @@
     right: 0.0625rem;
     width: 0.625rem;
     height: 0.625rem;
-    border-top: 0.25rem solid #5279c0;
-    border-right: 0.25rem solid #5279c0;
+    border-top: 0.25rem solid #4db66d; /* Mudado de azul para verde */
+    border-right: 0.25rem solid #4db66d; /* Mudado de azul para verde */
     transform: rotate(45deg);
 }
 
@@ -181,9 +159,10 @@
     bottom: 0;
     padding: 0.75rem 0;
     margin: 0 0 0 1.9rem;
-    color: #56cc79;
+    color: #4db66d; /* Cor verde consistente */
     font-family: mukta;
     font-weight: 700;
+    font-size: 1.1rem; /* Texto levemente maior */
     text-align: center;
     text-transform: uppercase;
 }
