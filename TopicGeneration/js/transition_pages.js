@@ -4,7 +4,8 @@ window.addEventListener("DOMContentLoaded", function(){
     
     let btnTutorial = document.getElementById('btnTutorial');
     
-    btnTutorial.onclick = () => {
+    btnTutorial.onclick = (e) => {
+        e.preventDefault();
         panel.style.transform = `translateY(0)`;
     }
 
