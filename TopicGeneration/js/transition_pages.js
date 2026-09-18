@@ -1,21 +1,32 @@
 window.addEventListener("DOMContentLoaded", function(){
     let panel = document.getElementById('tutorialModel');
     let panelCards = document.getElementById('cards-models');
-    let lineAnimated = document.getElementById('line-path-vert');
     
-    let transitionToCards = document.getElementById('lineToCards');
     let btnTutorial = document.getElementById('btnTutorial');
     
-    transitionToCards.onclick = () => {
-        panelCards.style.transform = `translateY(0)`;
-    };
     btnTutorial.onclick = () => {
         panel.style.transform = `translateY(0)`;
+    }
 
-        //adiciona a classe que vai animar a linha
-        setTimeout(() => {
-            lineAnimated.classList.add('animate-path-vert');
-        }, 1000);
+    // Lógica para os cards expansíveis
+    const cardsTutorial = document.querySelectorAll('.panel');
+
+    cardsTutorial.forEach(card => {
+        card.addEventListener('click', () => {
+            if (card.classList.contains('active')) {
+                // Se clicar no card que já está aberto, ele abre a próxima seção
+                panelCards.style.transform = `translateY(0)`;
+            } else {
+                removeActiveClasses();
+                card.classList.add('active');
+            }
+        });
+    });
+
+    function removeActiveClasses() {
+        cardsTutorial.forEach(card => {
+            card.classList.remove('active');
+        });
     }
 
     let btnCloseTutorial = document.getElementById('btnCloseTutorial');
