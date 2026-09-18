@@ -201,10 +201,15 @@
         </div>
 
         <!-- Container para o gráfico de dispersão (Scatter Plot) -->
-        <div id="w2v-viz-container" style="display:none; margin: 50px auto; max-width: 1000px; padding: 25px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        <div id="w2v-viz-container" style="display:none; margin: 50px auto; max-width: 1200px; padding: 25px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
             <h2 style="color: #5279c0; text-align: center; font-family: mukta; margin-bottom: 20px;">Word2Vec Semantic Clusters (t-SNE)</h2>
-            <div style="position: relative; height: 600px; width: 100%;">
-                <canvas id="w2vChart"></canvas>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                <div style="flex: 2; min-width: 300px; position: relative; height: 600px;">
+                    <canvas id="w2vChart"></canvas>
+                </div>
+                <div id="w2v-clusters-list" style="flex: 1; min-width: 250px; max-height: 600px; overflow-y: auto; padding: 10px; background: #fcfcfc; border-radius: 8px; border: 1px solid #eee; font-family: mukta;">
+                    <!-- A lista de palavras por grupo será injetada aqui -->
+                </div>
             </div>
             <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 15px;">
                 Hover over the points to see the keywords. Proximity represents semantic similarity.
@@ -370,10 +375,25 @@
                         '#FF9F40', '#8AC926', '#1982C4', '#6A4C93', '#F15BB5'
                     ];
 
+                    // Limpa e prepara a lista lateral
+                    const $listContainer = $("#w2v-clusters-list");
+                    $listContainer.html('<h3 style="margin-top:0; border-bottom: 2px solid #5279c0; padding-bottom: 5px;">Group Keywords</h3>');
+
                     // Agrupa os pontos por cluster para criar a legenda
                     const datasets = [];
+                    const wordsByCluster = {};
+
                     data.forEach(item => {
-                        let ds = datasets.find(d => d.label === 'Group ' + item.cluster);
+                        const clusterId = item.cluster;
+                        
+                        // Agrupa palavras para a lista lateral
+                        if (!wordsByCluster[clusterId]) {
+                            wordsByCluster[clusterId] = [];
+                        }
+                        wordsByCluster[clusterId].push(item.word);
+
+                        // Prepara dados para o gráfico
+                        let ds = datasets.find(d => d.label === 'Group ' + clusterId);
                         if (!ds) {
                             ds = {
                                 label: 'Group ' + item.cluster,
@@ -389,6 +409,21 @@
                             y: item.y,
                             word: item.word
                         });
+                    });
+
+                    // Injeta as palavras na lista lateral
+                    Object.keys(wordsByCluster).sort().forEach(clusterId => {
+                        const color = clusterColors[clusterId % clusterColors.length];
+                        const wordsList = wordsByCluster[clusterId].join(', ');
+                        
+                        $listContainer.append(`
+                            <div style="margin-bottom: 15px; padding: 8px; border-left: 4px solid ${color}; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <strong style="color: ${color}; display: block; margin-bottom: 4px;">Group ${clusterId}</strong>
+                                <span style="font-size: 0.85rem; color: #444; line-height: 1.4;">
+                                    ${wordsList}
+                                </span>
+                            </div>
+                        `);
                     });
 
                     w2vChartInstance = new Chart(ctx, {
