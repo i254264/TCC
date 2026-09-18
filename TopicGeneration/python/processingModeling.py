@@ -28,25 +28,16 @@ typeModeling = re.sub("[^0-9]", "", typeModeling)
 
 def Document_Cleansing(Document):
     # Verificar se Document é um valor nulo
-    if pd.isna(Document):
+    if not Document or pd.isna(Document):
         return ''  # Retorna uma string vazia para valores nulos
-    Document = " ".join([word for word in Document.split() if word not in stop_words])
-    Document = " ".join([word for word in Document.split() if len(word) > 2 ])
 
-    # This will make all the words in the documents lower-case:
-    Document = Document.lower()
-
-    # removing ambiguous characters
-    Document = re.sub(r'[^\w\s]', '', Document)
-
-    # removing numbers which contain commas:
-    Document = re.sub(r'(\d+),(\d+),?(\d*)', '',  Document)
-
-    # removing \n terms:
-    Document = re.sub(r'(\\n)', '', Document)
-
-    # removing numbers which contain commas:
+    Document = Document.lower() # Lowercase primeiro
+    Document = re.sub(r'(\\n)', ' ', Document) # Remove quebras de linha
+    # Remove e-mails ou URLs se necessário (opcional)
+    # Remove números complexos/pontuação, mas mantém espaço para o tokenizador
     Document = re.sub(r'(\d+),(\d+),?(\d*)', " ", Document)
+    # Remove caracteres especiais exceto letras
+    Document = re.sub(r'[^a-zA-Z\s]', ' ', Document)
 
     return Document
 
@@ -81,11 +72,17 @@ if connection.is_connected():
     # Iterar sobre o cursor economiza memória, pois não carrega tudo de uma vez
     for (text_content,) in cursor:
         if text_content:
-            # Processamento imediato enquanto lê do banco
+            # Limpeza básica de caracteres (ainda em String)
             if clean == '1':
                 text_content = Document_Cleansing(text_content)
             
+            # Tokenização (Transforma em lista)
             tokens = nltk.word_tokenize(text_content)
+            
+            # Filtragem de Stopwords e palavras curtas (Já em tokens)
+            if clean == '1':
+                tokens = [w for w in tokens if w not in stop_words and len(w) > 2]
+
             array_df.append(tokens)
 
     cursor.close()
