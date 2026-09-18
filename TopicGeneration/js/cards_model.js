@@ -9,17 +9,14 @@ function literalString(){
             'texto': "Latent Dirichlet Allocation (LDA) is a statistical model for uncovering hidden topics within a collection of documents. It's ideal for analyzing large text datasets where topics are not explicitly labeled, helping to organize and understand thematic structures in articles, blogs, or research papers."
         },
         {
+            'titulo': 'LSA',
+            'texto': "Latent Dirichlet Allocation (LDA) is a statistical model for uncovering hidden topics within a collection of documents. It's ideal for analyzing large text datasets where topics are not explicitly labeled, helping to organize and understand thematic structures in articles, blogs, or research papers."
+        },
+        {
             'titulo': 'Word2Vec',
             'texto': "Latent Dirichlet Allocation (LDA) is a statistical model for uncovering hidden topics within a collection of documents. It's ideal for analyzing large text datasets where topics are not explicitly labeled, helping to organize and understand thematic structures in articles, blogs, or research papers."
         },
-        {
-            'titulo': 'pLSA',
-            'texto': "Latent Dirichlet Allocation (LDA) is a statistical model for uncovering hidden topics within a collection of documents. It's ideal for analyzing large text datasets where topics are not explicitly labeled, helping to organize and understand thematic structures in articles, blogs, or research papers."
-        },
-        {
-            'titulo': 'LSA',
-            'texto': "Latent Dirichlet Allocation (LDA) is a statistical model for uncovering hidden topics within a collection of documents. It's ideal for analyzing large text datasets where topics are not explicitly labeled, helping to organize and understand thematic structures in articles, blogs, or research papers."
-        }
+        
     ];
 
     function cardsHTML(model){
