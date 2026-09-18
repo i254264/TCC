@@ -10,7 +10,7 @@
     background-color: #5279c0;
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: 60% 40%;
+    grid-template-rows: 45% 55%;
     grid-template-areas: 'whatIs whatIs' 'panelsArea panelsArea';
 }
 #tutorialModel a{
@@ -27,9 +27,10 @@
 #tutorialModel div:nth-child(2){
     grid-area: panelsArea;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    padding: 20px;
+    padding: 0;
+    background-color: #fff;
 }
 #videoTutorial{
     grid-area: videoTutorial;
@@ -164,17 +165,17 @@
 /* Estilos para os Cards Expansíveis */
 .panels-container {
     display: flex;
-    width: 90%;
+    width: 100%;
     height: 100%;
 }
 
 .panel {
-    height: 80%;
-    border-radius: 20px;
+    height: 100%;
+    border-radius: 0;
     color: #fff;
     cursor: pointer;
     flex: 0.5;
-    margin: 10px;
+    margin: 0;
     position: relative;
     transition: flex 700ms ease-in;
     display: flex;
