@@ -26,45 +26,6 @@ interaction = re.sub("[^0-9]", "", interaction)
 typeModeling = sys.argv[6]
 typeModeling = re.sub("[^0-9]", "", typeModeling)
 
-try:
-    connection = mysql.connector.connect(host='localhost',
-                                         database='topicgeneration',
-                                         user='root',
-                                         password='')
-    if connection.is_connected():
-        db_Info = connection.get_server_info()
-        cursor = connection.cursor()
-        cursor.execute("select database();")
-        record = cursor.fetchone()
-except Error as e:
-    print("Erro SQL")
-    exit()
-
-connection.autocommit = True
-
-if connection.is_connected():
-    # Executar a consulta SQL para selecionar os dados da coluna desejada
-    cursor = connection.cursor()
-    
-    # Identifica dinamicamente a primeira coluna que não seja 'id'
-    cursor.execute("SHOW COLUMNS FROM tabela_topicgeneration")
-    columns = [row[0] for row in cursor.fetchall() if row[0].lower() != 'id']
-    
-    if not columns:
-        print("Erro: Nenhuma coluna de dados encontrada.")
-        sys.exit(1)
-    
-    target_col = columns[0] # Assume a primeira coluna de dados como alvo
-    cursor.execute(f"SELECT `{target_col}` FROM tabela_topicgeneration")
-    
-    # Obter todos os resultados da consulta
-    results = cursor.fetchall()
-    df = pd.DataFrame(results, columns=['text_content'])
-
-    # Fechar o cursor e a conexão
-    cursor.close()
-    connection.close()
-
 def Document_Cleansing(Document):
     # Verificar se Document é um valor nulo
     if pd.isna(Document):
@@ -89,11 +50,46 @@ def Document_Cleansing(Document):
 
     return Document
 
-if(clean == '1'):
-    df['text_content'] = df['text_content'].apply(Document_Cleansing)
+try:
+    connection = mysql.connector.connect(host='localhost',
+                                         database='topicgeneration',
+                                         user='root',
+                                         password='')
+    connection.autocommit = True
+except Error as e:
+    print("Erro SQL")
+    exit()
 
-df['tokenized'] = df['text_content'].apply(nltk.word_tokenize)
-array_df = df['tokenized'].tolist()
+array_df = []
+
+if connection.is_connected():
+    cursor = connection.cursor()
+    
+    # Identifica dinamicamente a primeira coluna que não seja 'id'
+    cursor.execute("SHOW COLUMNS FROM tabela_topicgeneration")
+    columns = [row[0] for row in cursor.fetchall() if row[0].lower() != 'id']
+    
+    if not columns:
+        print("Erro: Nenhuma coluna de dados encontrada.")
+        sys.exit(1)
+    
+    target_col = columns[0] 
+    
+    # EXECUTAR A QUERY SEM FETCHALL (Streaming)
+    cursor.execute(f"SELECT `{target_col}` FROM tabela_topicgeneration")
+    
+    # Iterar sobre o cursor economiza memória, pois não carrega tudo de uma vez
+    for (text_content,) in cursor:
+        if text_content:
+            # Processamento imediato enquanto lê do banco
+            if clean == '1':
+                text_content = Document_Cleansing(text_content)
+            
+            tokens = nltk.word_tokenize(text_content)
+            array_df.append(tokens)
+
+    cursor.close()
+    connection.close()
 
 def get_wordnet_pos(treebank_tag):
     """Converte as tags do NLTK para o formato que o Lemmatizer entende."""
@@ -128,43 +124,51 @@ dictionary = corpora.Dictionary(array_df)
 # doc2bow é um método do Dictionary que converte uma lista em  BoW
 corpus = [dictionary.doc2bow(doc) for doc in array_df]
 
-# Tipo LDA
-if(typeModeling == '1'):
-    try:
-        lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus,
-                                            id2word=dictionary,
-                                            num_topics= int(topics),
-                                            random_state=100, #semente
-                                            update_every=1, #frequência que o modelo é atualizado ao ver cada documento
-                                            chunksize=10, #número de documentos a serem usados em cada iteração
-                                            passes=int(interaction), #número de vezes que o modelo percorrerá o corpus inteiro durante o treinamento
-                                            alpha="auto" #distribuição de tópicos por documento
-                                            )
-        # Visualizar os tópicos gerados pelo modelo LDA
-        topics = lda_model.show_topics(num_topics=int(topics), num_words=int(words), formatted=False)
+model = None
+excel_file = ""
 
-        # Criar um DataFrame
+try:
+    if(typeModeling == '1'):
+        excel_file = "lda.xlsx"
+        model = gensim.models.ldamodel.LdaModel(corpus=corpus,
+                                                id2word=dictionary,
+                                                num_topics=int(topics),
+                                                random_state=100,
+                                                update_every=1,
+                                                chunksize=10,
+                                                passes=int(interaction),
+                                                alpha="auto"
+                                                )
+    elif(typeModeling == '2'):
+        # Tipo LSA (LSI)
+        excel_file = "lsa.xlsx"
+        # No LSI, 'interaction' (passes no LDA) pode ser mapeado para 'power_iters'
+        model = gensim.models.lsimodel.LsiModel(corpus=corpus,
+                                                id2word=dictionary,
+                                                num_topics=int(topics),
+                                                power_iters=int(interaction)
+                                                )
+
+    if model:
+        # show_topics retorna o mesmo formato para ambos os modelos
+        topics_extracted = model.show_topics(num_topics=int(topics), num_words=int(words), formatted=False)
+
         data = []
-        for topic_id, topic_words in topics:
+        for topic_id, topic_words in topics_extracted:
             for word, weight in topic_words:
                 data.append([topic_id, word, weight])
 
         df_export = pd.DataFrame(data, columns=["topic", "word", "weight"])
-        excel_file = "lda.xlsx"
         # Ajuste para caminho relativo ao script
         base_dir = os.path.dirname(os.path.abspath(__file__))
         dir = os.path.join(base_dir, "..", "exportExcel")
         if not os.path.exists(dir): os.makedirs(dir)
         output_path = os.path.join(dir, excel_file)
-        try:
-            df_export.to_excel(output_path, index=False)
+        
+        df_export.to_excel(output_path, index=False)
+        # Retorna o caminho para o PHP
+        print(output_path)
 
-            #se tudo der certo, retorna caminho do arquivo
-            print(output_path)
-        except Error as e:
-            print("Erro EXCEL")
-            exit()
-
-    except Error as e:
-        print("Erro LDA")
-        exit()
+except Exception as e:
+    print(f"Erro no processamento {excel_file}: {str(e)}")
+    exit()

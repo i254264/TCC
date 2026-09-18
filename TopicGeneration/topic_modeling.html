@@ -83,6 +83,11 @@
                                     <input id="lsa-words" name="words" type="number" required/>
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="lsa-interaction">interaction </label>
+                                    <input id="lsa-interaction" name="interaction" type="number" required/>
+                                </div>
+
                                 <input class="generateTopics" type="submit" value="generate topics" />
                             </div>
                         </form>
@@ -288,10 +293,10 @@
                     `);
 
                     if (data.status === "success") {
-                        // O Python retorna o caminho absoluto, aqui convertemos para download
-                        // Se o Python retornar o nome do arquivo, aponte para a pasta exportExcel
+                        // Extrai apenas o nome do arquivo do caminho absoluto retornado pelo Python
+                        const fileName = data.file.split(/[\\/]/).pop();
                         let link = document.createElement('a');
-                        link.href = "exportExcel/lda.xlsx"; // Ou a lógica dinâmica baseada em data.file
+                        link.href = "exportExcel/" + fileName;
                         link.download = type + '_results.xlsx';
                         document.body.appendChild(link);
                         link.click();
