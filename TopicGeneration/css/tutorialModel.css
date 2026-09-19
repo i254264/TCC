@@ -146,9 +146,10 @@
 
 #chooseModel{
     position: absolute;
-    left: 0;
     bottom: 58%;
     left: 2%;
+    width: 100px;
+    height: 300px;
 }
 /* ----------------------------------------------- */
 #tutorialModel svg{

@@ -6,20 +6,28 @@ window.addEventListener("DOMContentLoaded", function(){
     let transitionToCards = document.getElementById('lineToCards');
     let btnTutorial = document.getElementById('btnTutorial');
     
-    transitionToCards.onclick = () => {
-        panelCards.style.transform = `translateY(0)`;
-    };
-    btnTutorial.onclick = () => {
-        panel.style.transform = `translateY(0)`;
+    if (transitionToCards && panelCards) {
+        transitionToCards.onclick = () => {
+            panelCards.style.transform = `translateY(0)`;
+        };
+    }
+    if (btnTutorial && panel) {
+        btnTutorial.onclick = () => {
+            panel.style.transform = `translateY(0)`;
 
-        //adiciona a classe que vai animar a linha
-        setTimeout(() => {
-            lineAnimated.classList.add('animate-path-vert');
-        }, 1000);
+            //adiciona a classe que vai animar a linha
+            if (lineAnimated) {
+                setTimeout(() => {
+                    lineAnimated.classList.add('animate-path-vert');
+                }, 1000);
+            }
+        }
     }
 
     let btnCloseTutorial = document.getElementById('btnCloseTutorial');
-    btnCloseTutorial.onclick = () => {
-        panelCards.style.transform = `translateY(100%)`;
+    if (btnCloseTutorial && panelCards) {
+        btnCloseTutorial.onclick = () => {
+            panelCards.style.transform = `translateY(100%)`;
+        }
     }
 });
