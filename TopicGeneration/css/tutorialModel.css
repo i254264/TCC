@@ -1,14 +1,14 @@
 #tutorialModel{
     transition: transform .8s cubic-bezier(0.77, 0, 0.175, 1);
-    transform: translateY(100%);
+    /* transform: translateY(100%); */
     position: absolute;
     width: 100%;
     height: 100%;
     background-color: #5279c0;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
     grid-template-rows: 60% 40%;
-    grid-template-areas: 'whatIs whatIs' 'nextSection videoTutorial';
+    grid-template-areas: 'whatIs' 'modelsCards';
 }
 #tutorialModel a{
     text-decoration: none;
@@ -21,9 +21,14 @@
     padding: 1.5% 3%;
     background-color: #fff;
 }
-#tutorialModel div:nth-child(2){
-    grid-area: nextSection;
-    margin-top: 2rem;
+#modelsCards{
+    grid-area: modelsCards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+     background-color: #5279c0;
+    margin: 0;
 }
 #videoTutorial{
     grid-area: videoTutorial;
@@ -57,6 +62,7 @@
     display: flex;
     justify-content: space-evenly;
     width: 50%;
+    margin-top: 2rem;
 }
 #tutorialModel .watchVideo{
     transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
