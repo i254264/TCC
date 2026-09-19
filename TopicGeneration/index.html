@@ -30,7 +30,7 @@
                         class="btn-welcome" href="#" role="button">TUTORIAL</a></p>
             </div>
             <div id="tutorialModel">
-                <div>
+                <div id="textInformation">
                     <p class="titleTutorial">
                         What is <br>
                         <spam style="font-family: 'Roboto', sans-serif; font-size: 4rem;">Topic Modeling?</spam>
@@ -61,17 +61,15 @@
                 </div>
                 <div id="modelsCards">
                     <div class="container">
-                        <div class="panel active" style="background-color: #FFCD4B;">
-                            <h3>One</h3>
+                        <div class="panel active">
+                            <h3 class="panel-title">LSA</h3>
+                            <!-- <p>Latent Semantic Analysis (LSA) is a technique in natural language processing that uses singular value decomposition (SVD) to identify patterns in the relationships between terms and documents. It helps in understanding the underlying semantic structure of a corpus by reducing the dimensionality of the term-document matrix.</p> -->
                         </div>
-                        <div class="panel" style="background-color: #FF7676;">
-                            <h3>Two</h3>
+                        <div class="panel" >
+                            <h3 class="panel-title">LDA</h3>
                         </div>
-                        <div class="panel" style="background-color: #FF4B91;">
-                            <h3>Three</h3>
-                        </div>
-                        <div class="panel" style="background-color: #0802A3;">
-                            <h3>Four</h3>
+                        <div class="panel">
+                            <h3 class="panel-title">W2C</h3>
                         </div>
                     </div>
                 </div>
@@ -93,4 +91,21 @@
         </div>
     </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const panels = document.querySelectorAll('.panel');
+
+        panels.forEach(panel => {
+            panel.addEventListener('click', () => {
+                removeActiveClasses();
+                panel.classList.add('active');
+            });
+        });
+
+        function removeActiveClasses () {
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+            })
+        }
+    </script>
 </html>

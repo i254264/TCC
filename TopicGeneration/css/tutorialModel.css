@@ -4,38 +4,25 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: #5279c0;
+    background-color: #fff;
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: 60% 40%;
+    grid-template-rows: 50% 50%;
     grid-template-areas: 'whatIs' 'modelsCards';
 }
 #tutorialModel a{
     text-decoration: none;
 }
-#tutorialModel div:nth-child(1){
+#textInformation{
     grid-area: whatIs;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     padding: 1.5% 3%;
-    background-color: #fff;
+    margin-top: 3%;
+    height: fit-content;
 }
-#modelsCards{
-    grid-area: modelsCards;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-     background-color: #5279c0;
-    margin: 0;
-}
-#videoTutorial{
-    grid-area: videoTutorial;
-    display: flex;
-    justify-content: center;
-}
-#tutorialModel div:nth-child(1) p{
+#textInformation p{
     width: fit-content;
     height: fit-content;
 }
@@ -85,6 +72,76 @@
 }
 #tutorialModel .watchVideo:hover .textWatchVideo{
     color: #fff;
+}
+
+#modelsCards{
+    grid-area: modelsCards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    background-color: #fff;
+    /* background-color: #5279c0; */
+}
+.container {
+    display: flex;
+    width: 90vw;
+    height:90%;
+}
+
+.panel {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    border-radius: 25px;
+    color: #2e4946;
+    cursor: pointer;
+    flex: 0.5;
+    margin: 0px 10px;
+    position: relative;
+    transition: flex 700ms ease-in;
+    background-color: #f8f8f8c5;
+    box-shadow: inset 0 -5px 45px rgba(100,100,100,0.2), 0 1px 1px rgba(255,255,255,0.2);
+
+}
+
+.panel .panel-title{
+    font-size: 24px;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    margin: 0;
+}
+
+.panel p{
+    opacity: 0;
+}
+
+.panel.active {
+    left: 0;
+    flex: 5;
+    background-color: #4db66d;
+    transition: all 0.65s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+.panel.active .panel-title {
+    opacity: 0;
+}
+
+.panel.active p {
+    opacity: 1;
+    transition: opacity 300ms ease-in 400ms;
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 100vw;
+    }
+    .panel:nth-of-type(4), .panel:nth-of-type(4) {
+        display: none;
+    }
 }
 /* ----------------------------------------------- */
 #tutorialModel svg{
@@ -198,162 +255,4 @@
     width: 55%;
     height: 70%;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-}
-/* ----------------------------------------------- */
-/* --------------CARDS OF TUTORIAL---------------- */
-#cards-models {
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #4db66d;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    transition: transform .8s cubic-bezier(0.77, 0, 0.175, 1);
-    transform: translateY(100%);
-    overflow-y: auto;
-}
-
-#card-models-wrapper {
-    display: flex;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
-
-#card-models-body {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    position: relative;
-    padding: 90px 20px 90px 20px;
-}
-
-.card-models-header {
-    position: absolute;
-    top: 40px;
-    right: 20px;
-    z-index: 2;
-}
-
-.card-models-header .btn-close {
-    -webkit-appearance: none;
-    -moz-appearance:  none;
-    -o-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
-    border: 0;
-    background-color: transparent;
-    box-shadow: unset important;
-    outline: none !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    cursor: pointer;
-}
-
-.card-models-header .btn-close svg {
-    width: 50px;
-    height: 50px;
-    margin: 0 !important;
-    padding: 0;
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.10), 0 15px 12px rgba(0, 0, 0, 0.02);
-    max-width: 95vw;
-    background-color: #f0db4f;
-    width: 22.5%;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-right: 2.5%;
-    height: auto;
-    padding: 2rem;
-    min-height: 400px;
-}
-
-.card:last-child {
-    margin-right: 0;
-}
-
-.text-card {
-    color: #323330;
-    text-align: justify;
-    margin: 0 0 2rem 0;
-    letter-spacing: .01em;
-    line-height: 1.5;
-    font-size: 1rem;
-}
-
-.tit-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    margin-bottom: 1.5rem;
-}
-
-.tit-card h2 {
-    color: #000;
-    font-family: 'Roboto', sans-serif;
-    font-weight: bolder;
-    font-size: 3rem;
-    margin: 0;
-    line-height: 1;
-}
-
-.tit-card img {
-    width: 3rem;
-    height: auto;
-    line-height: 1;
-    margin-right: 3%;
-}
-
-.btn-card {
-    color: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    width: 150px;
-    height: 30px;
-    font-size: 1rem;
-    border: solid .5px #000000;
-    margin-top: auto;
-}
-
-@media (max-width: 1366px) {
-    .tit-card h2 {
-        font-size: 2rem;
-    }
-
-    .tit-card img {
-        width: 2rem;
-    }
-
-    .text-card {
-        font-size: .8rem;
-    }
-}
-
-@media (max-width: 1200px) {
-    #card-models-body {
-        flex-wrap: wrap;
-    }
-
-    .card {
-        width: 40%;
-        min-width: 300px;
-        margin-bottom: 2rem;
-        min-height: 200px;
-    }
-    .card:last-child {
-        margin-right: 2.5%;
-    }
 }
