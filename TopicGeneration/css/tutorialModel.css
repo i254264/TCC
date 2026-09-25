@@ -21,6 +21,7 @@
     padding: 1.5% 3%;
     margin-top: 3%;
     height: fit-content;
+    position: relative;
 }
 #textInformation p{
     width: fit-content;
@@ -38,6 +39,7 @@
     flex-direction: column;
     align-items: center;    
     width: 50%;
+    position: relative;
 }
 #tutorialModel .textsTutorial p{
     text-align: justify;
@@ -51,14 +53,15 @@
     width: 50%;
     margin-top: 2rem;
 }
-#tutorialModel .watchVideo{
+#tutorialModel .linkButtons{
     transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
     width: fit-content;
     padding: .5rem 1rem;
     border: 1px solid #5279c0;
     border-radius: 2rem;
 }
-#tutorialModel .watchVideo span{
+
+#tutorialModel .linkButtons span{
     transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
     color: #5279c0;
     font-size: 1rem;
@@ -67,11 +70,21 @@
     text-align: center;
     text-transform: uppercase;
 }
-#tutorialModel .watchVideo:hover{
+#tutorialModel .linkButtons:hover{
     background-color: #5279c0;
 }
-#tutorialModel .watchVideo:hover .textWatchVideo{
+#tutorialModel .linkButtons:hover .textLinkButtons{
     color: #fff;
+}
+
+#tutorialModel .getStarted{
+    border-color: #5279c0;
+    background-color: #5279c0;
+
+}
+#tutorialModel .getStarted span{
+    color: #fff;
+
 }
 
 #modelsCards{
@@ -81,14 +94,13 @@
     justify-content: center;
     overflow: hidden;
     margin: 0;
-    position: relative;
     background-color: #fff;
-    /* background-color: #5279c0; */
+    background-color: #5279c0;
 }
 .container {
     display: flex;
     width: 90vw;
-    height:90%;
+    height:80%;
 }
 
 .panel {
@@ -147,31 +159,11 @@
 
 #chooseModel{
     position: absolute;
-    top: -40px; /* Sobe o elemento para ficar acima dos cards */
-    left: 20px;
-    height: 110%;
-    width: 200px;
-    z-index: 10;
-    pointer-events: none; /* Torna o elemento puramente decorativo */
+    bottom: 0; /* Sobe o elemento para ficar acima dos cards */
+    left: -95%;
+    display: flex;
 }
 /* ----------------------------------------------- */
-.path-vert {
-    stroke: #4db66d; /* Garante a cor verde */
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-}  
-.animate-path-vert {
-    animation: draw1 3s ease-out forwards;
-}
-@keyframes draw1 {
-    from {
-        stroke-dashoffset: 1000;
-    }
-    to {    
-        stroke-dasharray: 1000;
-        stroke-dashoffset: 0;
-    }
-}
 #painel-welcome button{
     display: inline-block;
     cursor: pointer;
@@ -186,11 +178,14 @@
 }
 .learn-more {
     width: 15rem;
-    height: auto;
+    height: 3rem; /* Alinha perfeitamente com a altura do círculo interno evitando cortes */
     position: absolute;
+    top: 0; /* Garante o alinhamento no topo da linha sobre o circulo decorativo */
     left: 1.5rem;
     margin-top: 1.3rem;
-    cursor: default; /* Remove o ponteiro de clique */
+    cursor: default;
+    pointer-events: auto; /* Permite interações mesmo dentro do container decorativo */
+    overflow: visible;
 }
 .learn-more .circle {
     transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
@@ -201,6 +196,7 @@
     height: 3rem;
     background: #4db66d;
     border-radius: 1.625rem;
+    box-shadow: -50px 0px 0px 10px #fff, 15px 0px 0px 10px #fff;;
 }
 .learn-more .circle .icon {
     transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
@@ -230,19 +226,21 @@
     transform: rotate(45deg);
 }
 
-.learn-more:hover .circle {
+.learn-more .circle,
+.learn-more.pseudo-hover .circle {
     width: 100%;
   } 
-.learn-more:hover .circle .icon.arrow {
+.learn-more .circle .icon.arrow {
     transform: translate(1rem, 0);
     border-top-color:#fff;
     border-right-color:#fff;
 }
-.learn-more:hover .icon.arrow::before{
+.learn-more .icon.arrow::before{
     border-top-color:#fff;
     border-right-color:#fff;
 }
-.learn-more:hover .button-text {
+.learn-more .button-text,
+.learn-more.pseudo-hover .button-text {
     color: #fff;
 }  
 .button-text {
@@ -259,10 +257,4 @@
     font-weight: 700;
     text-align: center;
     text-transform: uppercase;
-}
-#videoTutorial video{
-    margin-top: 2rem;
-    width: 55%;
-    height: 70%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
 }

@@ -26,8 +26,8 @@
                 <p id="first-paragraph">Welcome to
                 <p class="typewriter"><b>Topic</b><b>Generation</b></p>
                 </p>
-                <p id="buttons"><a class="btn-welcome" href="upload_files.html" role="button">START</a><a id="btnTutorial"
-                        class="btn-welcome" href="#" role="button">TUTORIAL</a></p>
+                <p id="buttons"><a class="btn-welcome" href="upload_files.html" role="button">START</a><a
+                        id="btnTutorial" class="btn-welcome" href="#" role="button">TUTORIAL</a></p>
             </div>
             <div id="tutorialModel">
                 <div id="textInformation">
@@ -50,36 +50,30 @@
                             based on similar focus and social media users by similar post content.
                         </p>
                         <div class="buttonsTutorial">
-                            <a href="upload_files.html" class="watchVideo">
-                                <span class="textWatchVideo">get started</span>
+                            <a href="upload_files.html" class="linkButtons getStarted">
+                                <span class="textLinkButtons">get started</span>
                             </a>
-                            <button class="watchVideo">
-                                <span class="textWatchVideo">Learn more</span>
+                            <button class="linkButtons">
+                                <span class="textLinkButtons">Learn more</span>
+                            </button>
+                        </div>
+                        <div id="chooseModel">
+                            <button class="learn-more">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">choose your model</span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <div id="modelsCards">
-                    <div id="chooseModel">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" xml:space="preserve">
-                            <circle cx="50" cy="50" r="10" fill="transparent" stroke="#4db66d" stroke-width="3" />
-                            <line id="line-path-vert" class="path-vert" fill="#4db66d" x1="50" y1="60" x2="50" y2="100%"
-                                stroke="#4db66d" stroke-width="2" />
-                        </svg>
-                        <button id="lineToCards" class="learn-more">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">choose your model</span>
-                        </button>
-                    </div>
                     <div class="container">
                         <div class="panel active">
                             <h3 class="panel-title">LSA</h3>
                             <!-- <p>Latent Semantic Analysis (LSA) is a technique in natural language processing that uses singular value decomposition (SVD) to identify patterns in the relationships between terms and documents. It helps in understanding the underlying semantic structure of a corpus by reducing the dimensionality of the term-document matrix.</p> -->
                         </div>
-                        <div class="panel" >
+                        <div class="panel">
                             <h3 class="panel-title">LDA</h3>
                         </div>
                         <div class="panel">
@@ -92,20 +86,21 @@
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script>
-        const panels = document.querySelectorAll('.panel');
+<script>
+    const panels = document.querySelectorAll('.panel');
 
-        panels.forEach(panel => {
-            panel.addEventListener('click', () => {
-                removeActiveClasses();
-                panel.classList.add('active');
-            });
+    panels.forEach(panel => {
+        panel.addEventListener('click', () => {
+            removeActiveClasses();
+            panel.classList.add('active');
         });
+    });
 
-        function removeActiveClasses () {
-            panels.forEach(panel => {
-                panel.classList.remove('active');
-            })
-        }
-    </script>
+    function removeActiveClasses() {
+        panels.forEach(panel => {
+            panel.classList.remove('active');
+        })
+    }
+</script>
+
 </html>
