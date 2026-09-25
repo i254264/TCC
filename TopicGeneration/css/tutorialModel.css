@@ -52,6 +52,7 @@
     justify-content: space-evenly;
     width: 50%;
     margin-top: 2rem;
+    gap: 1rem;
 }
 #tutorialModel .linkButtons{
     transition: all 0.25s cubic-bezier(0.65, 0, 0.076, 1);
@@ -159,9 +160,23 @@
 
 #chooseModel{
     position: absolute;
-    bottom: 0; /* Sobe o elemento para ficar acima dos cards */
-    left: -95%;
+    bottom: -20%; /* Sobe o elemento para ficar acima dos cards */
+    left: -93%;
     display: flex;
+}
+#chooseModel .static-blue-btn {
+    background-color: #5279c0;
+    color: #fff;
+    padding: .5rem 1rem;
+    border: 1px solid #5279c0;
+    border-radius: 2rem;
+    font-family: mukta;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: default;
+    outline: none;
+    box-shadow: -50px 0px 0px 10px #fff, 15px 0px 0px 10px #fff;
 }
 /* ----------------------------------------------- */
 #painel-welcome button{
@@ -182,7 +197,6 @@
     position: absolute;
     top: 0; /* Garante o alinhamento no topo da linha sobre o circulo decorativo */
     left: 1.5rem;
-    margin-top: 1.3rem;
     cursor: default;
     pointer-events: auto; /* Permite interações mesmo dentro do container decorativo */
     overflow: visible;
@@ -196,7 +210,6 @@
     height: 3rem;
     background: #4db66d;
     border-radius: 1.625rem;
-    box-shadow: -50px 0px 0px 10px #fff, 15px 0px 0px 10px #fff;;
 }
 .learn-more .circle .icon {
     transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
