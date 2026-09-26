@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/estilo_esqueleto.css">
     <link rel="stylesheet" href="css/welcome.css">
     <link rel="stylesheet" href="css/tutorialModel.css">
+    <link rel="stylesheet" href="css/modelCardsTutorial.css">
     <!-------------------------------------->
     <script type="text/javascript" src="js/cards_model.js"></script>
     <script type="text/javascript" src="js/transition_pages.js"></script>
@@ -67,16 +68,7 @@
                 </div>
                 <div id="modelsCards">
                     <div class="container">
-                        <div class="panel active">
-                            <h3 class="panel-title">LSA</h3>
-                            <!-- <p>Latent Semantic Analysis (LSA) is a technique in natural language processing that uses singular value decomposition (SVD) to identify patterns in the relationships between terms and documents. It helps in understanding the underlying semantic structure of a corpus by reducing the dimensionality of the term-document matrix.</p> -->
-                        </div>
-                        <div class="panel">
-                            <h3 class="panel-title">LDA</h3>
-                        </div>
-                        <div class="panel">
-                            <h3 class="panel-title">W2C</h3>
-                        </div>
+                        <!-- Os cards dos modelos são injetados dinamicamente via cards_model.js -->
                     </div>
                 </div>
             </div>
@@ -84,21 +76,4 @@
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-    const panels = document.querySelectorAll('.panel');
-
-    panels.forEach(panel => {
-        panel.addEventListener('click', () => {
-            removeActiveClasses();
-            panel.classList.add('active');
-        });
-    });
-
-    function removeActiveClasses() {
-        panels.forEach(panel => {
-            panel.classList.remove('active');
-        })
-    }
-</script>
-
 </html>

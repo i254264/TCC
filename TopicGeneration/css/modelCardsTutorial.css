@@ -1,0 +1,168 @@
+/* --- ESTILIZAÇÃO E CENTRALIZAÇÃO DO CONTEÚDO DOS CARDS --- */
+
+.panel-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 25px 40px;
+    gap: 30px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease-in;
+}
+
+.panel.active .panel-content {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 300ms ease-in 400ms;
+}
+
+.panel-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+}
+
+.panel-text h2 {
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    font-family: mukta, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.panel-text p {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-family: roboto-light, sans-serif;
+    text-align: justify;
+    opacity: 1 !important;
+}
+
+.panel-chart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+}
+
+/* --- GRÁFICO DE ANÉIS (LSA) --- */
+.ring-chart {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 100%;
+}
+.small.ring-chart {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+}
+.ring-chart .ring-fill {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    border-radius: 100%;
+    box-sizing: border-box;
+}
+.ring-chart .circle .mask,
+.ring-chart .circle .fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    backface-visibility: hidden;
+    transition: transform 1s cubic-bezier(0.65, 0, 0.076, 1);
+    transform: rotate(0deg);
+}
+.ring-chart .circle .mask {
+    clip: rect(0, 140px, 140px, 70px);
+}
+.ring-chart .circle .fill {
+    clip: rect(0, 70px, 140px, 0);
+    background-color: #fff;
+}
+.small.ring-chart .circle .mask {
+    clip: rect(0, 100px, 100px, 50px);
+}
+.small.ring-chart .circle .fill {
+    clip: rect(0, 50px, 100px, 0);
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.panel.active .ring-chart[data-progress="80"] > .circle .mask.full,
+.panel.active .ring-chart[data-progress="80"] > .circle .fill { transform: rotate(144deg); }
+.panel.active .ring-chart[data-progress="80"] > .circle .fix { transform: rotate(288deg); }
+
+.panel.active .ring-chart[data-progress="60"] > .circle .mask.full,
+.panel.active .ring-chart[data-progress="60"] > .circle .fill { transform: rotate(108deg); }
+.panel.active .ring-chart[data-progress="60"] > .circle .fix { transform: rotate(216deg); }
+
+/* --- GRÁFICO DE COLUNAS (LDA) --- */
+.column-chart {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 130px;
+    height: 110px;
+    gap: 8px;
+}
+.column-chart .column {
+    width: calc(25% - 6px);
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: height 0.8s cubic-bezier(0.65, 0, 0.076, 1);
+    border-radius: 4px 4px 0 0;
+}
+.column-chart .column:nth-child(1) { background-color: rgba(255, 255, 255, 0.4); }
+.column-chart .column:nth-child(2) { background-color: rgba(255, 255, 255, 0.6); }
+.column-chart .column:nth-child(3) { background-color: rgba(255, 255, 255, 0.8); }
+.column-chart .column:nth-child(4) { background-color: #fff; }
+
+.panel.active .column-chart .column[data-progress="60"] { height: 60%; }
+.panel.active .column-chart .column[data-progress="80"] { height: 80%; }
+.panel.active .column-chart .column[data-progress="50"] { height: 50%; }
+.panel.active .column-chart .column[data-progress="90"] { height: 90%; }
+
+/* --- GRÁFICO DE BARRAS (W2V) --- */
+.bar-chart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 130px;
+    height: 110px;
+    gap: 8px;
+}
+.bar-chart .bar {
+    height: calc(25% - 6px);
+    width: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: width 0.8s cubic-bezier(0.65, 0, 0.076, 1);
+    border-radius: 0 4px 4px 0;
+}
+.bar-chart .bar:nth-child(1) { background-color: rgba(255, 255, 255, 0.4); }
+.bar-chart .bar:nth-child(2) { background-color: rgba(255, 255, 255, 0.6); }
+.bar-chart .bar:nth-child(3) { background-color: rgba(255, 255, 255, 0.8); }
+.bar-chart .bar:nth-child(4) { background-color: #fff; }
+
+.panel.active .bar-chart .bar[data-progress="70"] { width: 70%; }
+.panel.active .bar-chart .bar[data-progress="90"] { width: 90%; }
+.panel.active .bar-chart .bar[data-progress="50"] { width: 50%; }
+.panel.active .bar-chart .bar[data-progress="80"] { width: 80%; }
