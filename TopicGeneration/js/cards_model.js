@@ -76,6 +76,7 @@ function literalString(){
                     <div class="panel-chart">
                         ${model.chartHtml}
                     </div>
+                    <a class="btn-card" href="#" role="button">Read More</a>
                 </div>
             </div>
         `;

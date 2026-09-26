@@ -137,6 +137,33 @@
     flex-shrink: 0;
 }
 
+.btn-card {
+    position: absolute;
+    bottom: 2rem;
+    left: 2.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    margin: 8vh 0 0 0vw;
+    width: 150px;
+    height: 30px;
+    font-size: 1rem;
+    border: solid .5px #0a0a0a;
+    color: #0a0a0a;
+}
+
+.btn-card:hover{
+    border: 1px solid rgb(255, 255, 68);
+    box-shadow: 0 10px 100px -20px rgb(255, 255, 68);
+    background-color: transparent;
+    box-shadow: 0 10px 30px rgba(255, 255, 68, 0.01);
+    font-weight: 100;
+    color: #fff;
+    transform: translateY(-1px);
+    transition: transform 200ms ease-in-out;
+}
+
 /* --- GRÁFICO DE ANÉIS (LSA) --- */
 .ring-chart {
     position: relative;
