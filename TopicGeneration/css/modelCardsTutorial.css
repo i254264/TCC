@@ -1,5 +1,75 @@
 /* --- ESTILIZAÇÃO E CENTRALIZAÇÃO DO CONTEÚDO DOS CARDS --- */
 
+#modelsCards{
+    grid-area: modelsCards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    background-color: #fff;
+    background-color: #5279c0;
+}
+.container {
+    display: flex;
+    width: 90vw;
+    height:80%;
+}
+
+.panel {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    border-radius: 25px;
+    color: #2e4946;
+    cursor: pointer;
+    flex: 0.5;
+    margin: 0px 10px;
+    position: relative;
+    transition: flex 700ms ease-in;
+    background-color: #f8f8f8c5;
+    box-shadow: inset 0 -5px 45px rgba(100,100,100,0.2), 0 1px 1px rgba(255,255,255,0.2);
+
+}
+
+.panel .panel-title{
+    font-size: 24px;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    margin: 0;
+}
+
+.panel p{
+    opacity: 0;
+}
+
+.panel.active {
+    left: 0;
+    flex: 5;
+    background-color: #4db66d;
+    transition: all 0.65s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+.panel.active .panel-title {
+    opacity: 0;
+}
+
+.panel.active p {
+    opacity: 1;
+    transition: opacity 300ms ease-in 400ms;
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 100vw;
+    }
+    .panel:nth-of-type(4), .panel:nth-of-type(4) {
+        display: none;
+    }
+}
+
 .panel-content {
     display: flex;
     align-items: center;
@@ -10,6 +80,7 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 300ms ease-in;
+    box-sizing: border-box;
 }
 
 .panel.active .panel-content {
@@ -24,25 +95,37 @@
     flex-direction: column;
     justify-content: center;
     color: #fff;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .panel-text h2 {
-    font-size: 2.2rem;
-    margin: 0 0 10px 0;
-    font-family: mukta, sans-serif;
-    font-weight: 700;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 4rem;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
     text-transform: uppercase;
     text-align: left;
+    line-height: 1.1;
 }
 
 .panel-text p {
     font-size: 1.05rem;
     line-height: 1.5;
     margin: 0;
+    margin-top: 2.1rem;
     color: rgba(255, 255, 255, 0.95) !important;
     font-family: roboto-light, sans-serif;
     text-align: justify;
     opacity: 1 !important;
+}
+
+.panel.active .panel-title {
+    opacity: 0;
 }
 
 .panel-chart {
