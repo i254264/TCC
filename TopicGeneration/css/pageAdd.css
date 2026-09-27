@@ -63,20 +63,6 @@ padding: 0;
     background-color: rgba(77, 182, 172, 0.7);
     box-sizing: content-box !important; /* Permite que o padding seja somado aos 30px da imagem */
 }
-#help_button{
-    position: fixed;
-    width: 70px;
-    bottom: 2rem;
-    right: 4rem;
-    transform: scale(1);
-    transform-origin: center;
-    will-change: opacity, transform, top;
-    transition: opacity .2s ease, transform .2s ease, top .2s ease;
-    cursor:pointer;
-}
-#help_button:hover{
-    transform: scale(1.1);
-}
 
 .typewriter{
     height: fit-content;

@@ -350,12 +350,12 @@
 
 @keyframes particles {
   0% {
-    transform: translateZ(0, 0);
+    transform: translate(0, 0);
     opacity: 1;
   }
 
   100% {
-    transform: translate(190px, 50px);
+    transform: translate(125px, 45px); /* Ajustado para o tamanho estimado do botão (largura + 5px, altura + 5px) */
     opacity: 0;
   }
 }
@@ -400,4 +400,139 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+/* ---------------------------------------- */
+/* HELP TOOLTIP & PARTICLE EFFECT BUTTON    */
+/* ---------------------------------------- */
+.help-tooltip-container {
+  position: fixed;
+  bottom: 50px; /* Posiciona o botão um pouco mais acima na tela */
+  right: 60px;
+  z-index: 10000;
+  display: inline-block;
+  animation: floating 3s ease-in-out infinite;
+}
+
+/* Pausa a animação de flutuação ao passar o mouse */
+.help-tooltip-container:hover {
+  animation-play-state: paused;
+}
+
+.help-btn-custom {
+  position: relative;
+  background: linear-gradient(135deg, #4db6ac, #3ea197);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: auto;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.help-btn-custom::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  border-radius: 30px;
+  box-shadow: 0 0 20px #FF7730;
+  opacity: 1;
+  pointer-events: none;
+  width: 5px;
+  height: 5px;
+  background: #FF7730;
+  animation: particles 2s infinite linear; /* Executa a animação diagonal contínua */
+}
+
+.help-btn-custom:hover,
+.help-btn-custom:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.help-tooltip-box {
+  position: absolute;
+  bottom: 100%;
+  margin-bottom: 15px;
+  top: auto;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px); /* Começa levemente deslocado para efeito de subida */
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  color: #1f2937;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(229, 231, 235, 1);
+  z-index: 10001;
+}
+
+/* Tooltip arrow */
+.help-tooltip-box::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #ffffff transparent transparent transparent;
+}
+
+.help-tooltip-container:hover .help-tooltip-box,
+.help-btn-custom:focus + .help-tooltip-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0); /* Sobe suavemente e para exatamente em cima do botão */
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 10px rgba(77, 182, 172, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(77, 182, 172, 0.7);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(77, 182, 172, 0.5);
+  }
+}
+
+.help-tooltip-box strong {
+  animation: glow 2s infinite;
+  font-weight: 600;
+}
+
+.help-tooltip-box i {
+  margin-right: 6px;
+  color: #4db6ac;
+}
+
+@media (max-width: 768px) {
+  .help-tooltip-box {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+
+  .help-btn-custom {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
 }
