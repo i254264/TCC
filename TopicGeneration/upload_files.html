@@ -78,16 +78,37 @@
             Need Help?
           </button>
           <div role="tooltip" id="help-tooltip" class="help-tooltip-box">
-            <i>💡</i><strong>Get assistance</strong> with your questions!
+            <i>💡</i><strong>Get assistance</strong> uploading your documents!
           </div>
         </div>
     </div>
 </body>
 <div class="pop-up">
     <div class="box-popUp">
-        <button>x</button>
-        <div>Como usar?</div>
-        <p>Watch the following video to understand how to use Topic Generation.</p>
+        <button class="close-popUp" aria-label="Close">×</button>
+        <div class="popUp-title">Upload & File Management Guide</div>
+        <div class="popUp-content">
+            <p>Welcome to <strong>Topic Generation</strong>! Here is a quick guide on how to navigate this tool and manage your dataset uploads:</p>
+            
+            <div class="popUp-section">
+                <h3>Sections Overview</h3>
+                <ul>
+                    <li><strong>Add files:</strong> This screen! Upload your textual datasets or bibliographic records to load them into the system.</li>
+                    <li><strong>All files:</strong> View, search, and explore all records currently loaded into the active database.</li>
+                    <li><strong>Topic modeling:</strong> Configure, train, and visualize NLP algorithms (LDA, LSA, Word2Vec) using the uploaded abstracts.</li>
+                </ul>
+            </div>
+            
+            <div class="popUp-section">
+                <h3>Upload Rules & Guidelines</h3>
+                <ul>
+                    <li><strong>Allowed Formats:</strong> We support <code>.csv</code> (Comma-Separated Values), <code>.bib</code> (BibTeX), and <code>.ris</code> (Research Information Systems) files.</li>
+                    <li><strong>Data Extraction:</strong> For <code>.bib</code> and <code>.ris</code> files, the system automatically extracts and maps the <em>Title</em>, <em>Year</em>, and <em>Abstract</em> fields.</li>
+                    <li><strong>Column Selection:</strong> If uploading a <code>.csv</code> with multiple columns, you will be prompted to select the primary column containing the text to be analyzed.</li>
+                    <li><strong>Existing Database Handling:</strong> If the database already contains data, you can choose to <strong>Continue</strong> (to append and merge the new data) or <strong>Delete</strong> (to overwrite and clear the previous database).</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 </html>
