@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       function fadeIn() {
         $(".pop-up").style.opacity = '0';
-        $(".pop-up").style.display = 'flex';
+        $(".pop-up").style.display = 'block';
         var opacity = 0;
         var interval = setInterval(function () {
           if (opacity >= 1) {
