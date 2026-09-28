@@ -386,3 +386,44 @@
         padding-right: 18px;
     }
 }
+
+/* ============================================
+   SCROLLABILITY AND LAYOUT FIXES
+   ============================================ */
+html {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important; /* Oculta a barra no Firefox */
+    -ms-overflow-style: none !important; /* Oculta a barra no IE e Edge */
+}
+html::-webkit-scrollbar {
+    display: none !important; /* Oculta a barra no Chrome, Safari e Opera */
+    width: 0 !important;
+    height: 0 !important;
+}
+
+body {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important; /* Libera a rolagem vertical de forma invisível */
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+#main {
+    height: auto !important;
+    min-height: calc(100vh - 80px) !important; /* Mantém o alinhamento e centralização originais */
+}
+
+/* Aplica o alinhamento ao topo APENAS quando o container de gráficos estiver visível (ativo) */
+#main:has(#w2v-viz-container:not([style*="none"])) {
+    align-items: start !important;
+    padding-top: 10.5rem !important; /* Espaço ampliado para comportar o alerta acima do card sem cobrir o título */
+    padding-bottom: 40px; /* Garante que haja um espaço de respiro ao rolar até o fim */
+}
