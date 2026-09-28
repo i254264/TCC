@@ -409,7 +409,6 @@
   position: fixed;
   bottom: 50px; /* Posiciona o botão um pouco mais acima na tela */
   right: 60px;
-  z-index: 10000;
   display: inline-block;
   animation: floating 3s ease-in-out infinite;
 }
