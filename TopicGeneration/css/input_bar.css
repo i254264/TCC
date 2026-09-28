@@ -469,13 +469,16 @@
   top: auto;
   left: 50%;
   transform: translateX(-50%) translateY(10px); /* Começa levemente deslocado para efeito de subida */
-  padding: 12px 20px;
+  padding: 12px 8px;
   background: linear-gradient(135deg, #ffffff, #f8f9fa);
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   color: #1f2937;
   font-size: 14px;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.6;
+  text-align: center;
+  min-width: 200px;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -521,8 +524,13 @@
 }
 
 .help-tooltip-box i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #FF7730;
+  border-radius: 50%;
   margin-right: 6px;
-  color: #4db6ac;
+  vertical-align: middle;
 }
 
 @media (max-width: 768px) {
