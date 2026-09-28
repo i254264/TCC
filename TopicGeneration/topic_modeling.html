@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/button_alert.css">
     <!-- Chart.js para o gráfico de dispersão -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/charts_topic_modeling.css">
     <!-------------------------------------->
 </head>
 
@@ -77,17 +78,17 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="lsa-topics">topics</label>
-                                    <input id="lsa-topics" name="topics" type="number" required/>
+                                    <input id="lsa-topics" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lsa-words">words </label>
-                                    <input id="lsa-words" name="words" type="number" required/>
+                                    <input id="lsa-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lsa-interaction">interaction </label>
-                                    <input id="lsa-interaction" name="interaction" type="number" required/>
+                                    <input id="lsa-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
@@ -128,17 +129,17 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="lda-topics">topics </label>
-                                    <input id="lda-topics" name="topics" type="number" required/>
+                                    <input id="lda-topics" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lda-words">words </label>
-                                    <input id="lda-words" name="words" type="number" required/>
+                                    <input id="lda-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lda-interaction">interaction </label>
-                                    <input id="lda-interaction" name="interaction" type="number" required/>
+                                    <input id="lda-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
@@ -179,17 +180,17 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="w2v-clusters">clusters</label>
-                                    <input id="w2v-clusters" name="topics" type="number" required/>
+                                    <input id="w2v-clusters" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="w2v-words">words </label>
-                                    <input id="w2v-words" name="words" type="number" required/>
+                                    <input id="w2v-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="w2v-interaction">epochs </label>
-                                    <input id="w2v-interaction" name="interaction" type="number" required/>
+                                    <input id="w2v-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate model" />
@@ -200,24 +201,32 @@
             </article>
         </div>
 
-        <!-- Container para o gráfico de dispersão (Scatter Plot) -->
-        <div id="w2v-viz-container" style="display:none; margin: 50px auto; max-width: 1200px; padding: 25px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-            <h2 style="color: #5279c0; text-align: center; font-family: mukta; margin-bottom: 20px;">Word2Vec Semantic Clusters (t-SNE)</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                <div style="flex: 2; min-width: 300px; position: relative; height: 600px;">
+        <!-- Container Unificado de Visualização de Resultados -->
+        <div id="w2v-viz-container" style="display:none;">
+            <h2 id="viz-title">Word2Vec Semantic Clusters (t-SNE)</h2>
+            
+            <!-- Área W2V: Gráfico de Dispersão e Lista Lateral -->
+            <div id="w2v-chart-area">
+                <div class="w2v-chart-wrapper">
                     <canvas id="w2vChart"></canvas>
                 </div>
-                <div id="w2v-clusters-list" style="flex: 1; min-width: 250px; max-height: 600px; overflow-y: auto; padding: 10px; background: #fcfcfc; border-radius: 8px; border: 1px solid #eee; font-family: mukta;">
+                <div id="w2v-clusters-list">
                     <!-- A lista de palavras por grupo será injetada aqui -->
                 </div>
             </div>
-            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 15px;">
+
+            <!-- Área LDA / LSA: Tabela Visual com Cards e Barras de Progresso -->
+            <div id="topic-groups-area" style="display: none;"></div>
+
+            <p id="viz-footer-text">
                 Hover over the points to see the keywords. Proximity represents semantic similarity.
             </p>
         </div>
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Script dedicado para controle de gráficos e visualização de resultados (LSA, LDA, W2V) -->
+<script src="js/charts_topic_modeling.js"></script>
     <script>
         // Função para buscar o total de registros do banco e atualizar os badges
         function atualizarContagemArquivos() {
@@ -339,9 +348,11 @@
                         document.body.removeChild(link);
                     }
 
-                    // Se for Word2Vec, renderiza o gráfico de dispersão
+                    // Renderiza a visualização correspondente ao modelo executado
                     if (type === 'w2v') {
                         renderW2VChart();
+                    } else {
+                        renderTopicGroups(type, data);
                     }
                 },
                 error: function (xhr) {
@@ -355,113 +366,6 @@
                 }
             });
         });
-
-        let w2vChartInstance = null;
-        function renderW2VChart() {
-            // Timestamp para evitar cache do JSON
-            fetch("exportExcel/word2vec_viz.json?t=" + new Date().getTime())
-                .then(response => response.json())
-                .then(data => {
-                    $("#w2v-viz-container").fadeIn(800);
-                    const ctx = document.getElementById('w2vChart').getContext('2d');
-                    
-                    if (w2vChartInstance) {
-                        w2vChartInstance.destroy();
-                    }
-
-                    // Paleta de cores para os clusters
-                    const clusterColors = [
-                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
-                        '#FF9F40', '#8AC926', '#1982C4', '#6A4C93', '#F15BB5'
-                    ];
-
-                    // Limpa e prepara a lista lateral
-                    const $listContainer = $("#w2v-clusters-list");
-                    $listContainer.html('<h3 style="margin-top:0; border-bottom: 2px solid #5279c0; padding-bottom: 5px;">Group Keywords</h3>');
-
-                    // Agrupa os pontos por cluster para criar a legenda
-                    const datasets = [];
-                    const wordsByCluster = {};
-
-                    data.forEach(item => {
-                        const clusterId = item.cluster;
-                        
-                        // Agrupa palavras para a lista lateral
-                        if (!wordsByCluster[clusterId]) {
-                            wordsByCluster[clusterId] = [];
-                        }
-                        wordsByCluster[clusterId].push(item.word);
-
-                        // Prepara dados para o gráfico
-                        let ds = datasets.find(d => d.label === 'Group ' + clusterId);
-                        if (!ds) {
-                            ds = {
-                                label: 'Group ' + item.cluster,
-                                data: [],
-                                backgroundColor: clusterColors[item.cluster % clusterColors.length],
-                                pointRadius: 6,
-                                pointHoverRadius: 10
-                            };
-                            datasets.push(ds);
-                        }
-                        ds.data.push({
-                            x: item.x,
-                            y: item.y,
-                            word: item.word
-                        });
-                    });
-
-                    // Injeta as palavras na lista lateral
-                    Object.keys(wordsByCluster).sort().forEach(clusterId => {
-                        const color = clusterColors[clusterId % clusterColors.length];
-                        const wordsList = wordsByCluster[clusterId].join(', ');
-                        
-                        $listContainer.append(`
-                            <div style="margin-bottom: 15px; padding: 8px; border-left: 4px solid ${color}; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                                <strong style="color: ${color}; display: block; margin-bottom: 4px;">Group ${clusterId}</strong>
-                                <span style="font-size: 0.85rem; color: #444; line-height: 1.4;">
-                                    ${wordsList}
-                                </span>
-                            </div>
-                        `);
-                    });
-
-                    w2vChartInstance = new Chart(ctx, {
-                        type: 'scatter',
-                        data: { datasets: datasets },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { position: 'right' },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            return ` Word: ${context.raw.word} (Group ${context.datasetIndex})`;
-                                        }
-                                    }
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    grid: { color: '#f5f5f5' },
-                                    title: { display: true, text: 'Semantic dimension X' }
-                                },
-                                y: {
-                                    grid: { color: '#f5f5f5' },
-                                    title: { display: true, text: 'Semantic dimension Y' }
-                                }
-                            }
-                        }
-                    });
-                    
-                    // Scroll suave para mostrar o gráfico após carregar
-                    $('html, body').animate({
-                        scrollTop: $("#w2v-viz-container").offset().top - 30
-                    }, 1000);
-                })
-                .catch(err => console.error("Erro ao carregar visualização W2V:", err));
-        }
 
         // Executa a busca assim que a página carrega
         atualizarContagemArquivos();
