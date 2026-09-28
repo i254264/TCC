@@ -5,7 +5,7 @@
   --paper: #fafafa;
   --card: #ffffff;
   --bad: #c94a3f;
-  --good: #1f8b5a;
+  --good: #4db6ac;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -111,14 +111,14 @@ html {
 #popUP{
   position: absolute;
   top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
+  height: 60vh;
   max-width: 720px;
   background: #1a1a1a;
-  /* background:#fafafa; */
   border-radius: 32px;
-  padding: 32px 32px 28px;
+  padding: 32px 32px 0px;
 }
 
 /* Header row: icon + title on the left, expand button on the right */
@@ -198,8 +198,9 @@ html {
   border: none;
   background: transparent;
   color: #b3b3b8;
-  font-size: 17px;
-  font-weight: 500;
+  font-family: mukta;
+  text-transform: uppercase;
+  font-weight: bold;
   padding: 14px 0;
   border-radius: 999px;
   cursor: pointer;
@@ -214,7 +215,7 @@ html {
 
 .tab.is-active {
   background: #3c3c41;
-  color: #ffffff;
+  color: #f1f1f1;
 }
 
 .tab:focus-visible {
@@ -294,6 +295,14 @@ html {
 
 .current .dot {
   background: var(--good);
+}
+
+.current .current_page_span{
+    font-size: 14px;
+    background: rgb(77, 182, 172);
+    border-radius: 99px;
+    color: #fff;
+    padding: 0.2rem 0.5rem;
 }
 
 .pane-body {
