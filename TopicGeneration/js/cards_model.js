@@ -7,7 +7,7 @@ function literalString(){
         {
             titulo: 'LSA',
             link: 'https://radimrehurek.com/gensim/models/lsimodel.html',
-            texto: 'Latent Semantic Analysis is a natural language processing method that uncovers relationships between terms and documents. By using Singular Value Decomposition (SVD), it simplifies complex document matrices to identify latent concepts and semantic patterns.',
+            texto: 'Implemented via Gensim\'s LsiModel, Latent Semantic Analysis uncovers hidden semantic relationships between terms and documents through Singular Value Decomposition (SVD) on vector matrices.',
             chartHtml: `
                 <div class="ring-chart" data-progress="80">
                     <div class="circle">
@@ -38,7 +38,7 @@ function literalString(){
         {
             titulo: 'LDA',
             link: 'https://radimrehurek.com/gensim/models/ldamodel.html',
-            texto: 'Latent Dirichlet Allocation is a generative statistical model that allows sets of observations to be explained by unobserved groups. In text modeling, it assumes each document is a mixture of topics, and each topic is a mixture of words, enabling unsupervised topic discovery.',
+            texto: 'Implemented via Gensim\'s LdaModel, Latent Dirichlet Allocation is an unsupervised generative probabilistic model that assumes each document is a mixture of topics and each topic is a mixture of words.',
             chartHtml: `
                 <div class="column-chart">
                     <div class="column" data-progress="60"></div>
@@ -51,7 +51,7 @@ function literalString(){
         {
             titulo: 'W2V',
             link: 'https://radimrehurek.com/gensim/models/word2vec.html',
-            texto: 'Word2Vec is a group of related models used to produce word embeddings. These shallow, two-layer neural networks are trained to reconstruct linguistic contexts of words, mapping them into a multi-dimensional vector space where semantically similar words are placed close to each other.',
+            texto: 'Implemented via Gensim\'s Word2Vec model, this neural architecture learns dense word embeddings from context windows, placing semantically related words close together in vector space.',
             chartHtml: `
                 <div class="bar-chart">
                     <div class="bar" data-progress="70"></div>

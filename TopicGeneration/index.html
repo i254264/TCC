@@ -36,19 +36,66 @@
                         <spam style="font-family: 'Roboto', sans-serif; font-size: 4rem;">Topic Modeling?</spam>
                     </p>
                     <div class="textsTutorial">
-                        <p>
-                            Nowadays, when majorities of literature in every sphere of life, become digitized and stored
-                            electronically in the databases, through digital libraries or social networking databases.
-                            Researcher needs powerful automatic tools to read this data and understand underlying themes
-                            of data like human beings. Topic modeling is a technique comes with group of algorithms that
-                            reveal, discover and annotate thematic structure in collection of documents.
-                            <br>Topic modeling is a popular statistical tool for extracting latent variables from large
-                            datasets. It is particularly well suited for use with text data; however, it has also been
-                            used for analyzing bioinformatics data, social data, and environmental data. This analysis
-                            can help with organization of large-scale datasets for more convenient access; a few
-                            examples of these applications is structuring databases of journals and articles into groups
-                            based on similar focus and social media users by similar post content.
-                        </p>
+                        <div class="tutorial-slider">
+                            <div class="tutorial-slides">
+                                <div class="tutorial-slide">
+                                    <span class="slide-badge">Overview</span>
+                                    <p>
+                                        Nowadays, vast amounts of literature across academic, corporate, and social fields are digitized and stored electronically. Topic modeling provides unsupervised statistical algorithms that automatically reveal, discover, and organize latent thematic structures in large document collections without requiring manual human labeling or annotation.
+                                    </p>
+                                    <p>
+                                        This platform is powered by <strong>Gensim</strong>, a specialized Python library engineered for scalable natural language processing and semantic modeling. To understand how unstructured text is transformed into meaningful topics, Gensim structures its entire workflow around four core concepts: <em>Documents</em>, <em>Corpora</em>, <em>Vectors</em>, and <em>Models</em>.
+                                    </p>
+                                </div>
+                                <div class="tutorial-slide">
+                                    <span class="slide-badge">Gensim Core Concepts</span>
+                                    <div class="concepts-grid">
+                                        <div class="concept-item">
+                                            <strong>Document:</strong> Any text sequence (e.g., an article title or abstract).
+                                        </div>
+                                        <div class="concept-item">
+                                            <strong>Corpus:</strong> A collection of documents used as input to train unsupervised models.
+                                        </div>
+                                        <div class="concept-item">
+                                            <strong>Vector:</strong> Mathematical representation of text in a numerical vector space (e.g., Bag-of-Words).
+                                        </div>
+                                        <div class="concept-item">
+                                            <strong>Model:</strong> Gensim algorithms transforming document vectors to discover latent themes.
+                                        </div>
+                                    </div>
+                                    <p class="concepts-summary">
+                                        <strong>In summary:</strong> Raw <em>documents</em> are assembled into a <em>corpus</em>, mapped into mathematical <em>vectors</em>, and then transformed by <em>models</em> (like LDA, LSA, and Word2Vec) to reveal latent topics, highlight word associations, and reduce statistical noise across large corpora.
+                                    </p>
+                                </div>
+                                <div class="tutorial-slide">
+                                    <span class="slide-badge">Topics & Applications</span>
+                                    <p>
+                                        In this Topic Modeling platform, you can analyze collections of text to discover overarching themes and hidden connections:
+                                    </p>
+                                    <div class="concepts-grid">
+                                        <div class="concept-item">
+                                            <strong>Upload Research Files:</strong> Add your reference files (<code>.bib</code>, <code>.ris</code>, or <code>.csv</code>) to automatically extract titles, publication years, and abstracts.
+                                        </div>
+                                        <div class="concept-item">
+                                            <strong>Explore Key Themes:</strong> Identify main research topics and recurring keywords without reading hundreds of articles manually.
+                                        </div>
+                                    </div>
+                                    <p class="concepts-summary">
+                                        Import your bibliography, select an algorithm (LSA, LDA, or Word2Vec), and explore thematic cards, word weights, and interactive 2D cluster projections.
+                                        Ready to analyze your data? Click <strong>Get Started</strong> below to upload your files and generate your first model!
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="slider-controls">
+                                <button type="button" class="slider-arrow prev-slide" aria-label="Previous slide">&#10094;</button>
+                                <div class="slider-dots">
+                                    <span class="slider-dot active" data-slide="0"></span>
+                                    <span class="slider-dot" data-slide="1"></span>
+                                    <span class="slider-dot" data-slide="2"></span>
+                                </div>
+                                <button type="button" class="slider-arrow next-slide" aria-label="Next slide">&#10095;</button>
+                            </div>
+                        </div>
                         <div class="buttonsTutorial">
                             <a href="upload_files.html" class="learn-more" style="display: inline-block; position: relative;">
                                 <span class="circle" aria-hidden="true">
@@ -80,9 +127,29 @@ window.addEventListener("DOMContentLoaded", function(){
     let panel = document.getElementById('tutorialModel');
     let btnTutorial = document.getElementById('btnTutorial');
     
-    btnTutorial.onclick = () => {
-        panel.style.transform = `translateY(0)`;
+    if (btnTutorial && panel) {
+        btnTutorial.onclick = () => {
+            panel.style.transform = `translateY(0)`;
+        };
     }
+
+    // Controle do Slider de conceitos do Gensim
+    const slides = document.querySelector('.tutorial-slides');
+    const dots = document.querySelectorAll('.slider-dot');
+    const prevBtn = document.querySelector('.prev-slide');
+    const nextBtn = document.querySelector('.next-slide');
+    let currentSlide = 0;
+    const totalSlides = dots.length;
+
+    function goToSlide(index) {
+        currentSlide = (index + totalSlides) % totalSlides;
+        if (slides) slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentSlide));
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+    dots.forEach((dot, idx) => dot.addEventListener('click', () => goToSlide(idx)));
 });
 </script>
 </html>
