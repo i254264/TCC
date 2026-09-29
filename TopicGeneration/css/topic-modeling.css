@@ -436,6 +436,21 @@ body::-webkit-scrollbar {
 /* ============================================
    POPUP GUIDE CUSTOM STYLES (LSA / LDA / W2V)
    ============================================ */
+#popUP,
+.popup-container,
+.tab-content {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE e Edge legado */
+    overflow-y: auto;
+}
+
+#popUP::-webkit-scrollbar,
+.popup-container::-webkit-scrollbar,
+.tab-content::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari e Opera */
+    width: 0 !important;
+}
+
 .guide-box {
     text-align: left;
     padding: 6px 4px 12px;

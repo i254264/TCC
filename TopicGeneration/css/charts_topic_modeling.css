@@ -12,11 +12,45 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+.viz-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
 #viz-title {
     color: #5279c0;
-    text-align: center;
-    font-family: mukta;
-    margin-bottom: 20px;
+    font-family: 'Mukta', sans-serif;
+    margin: 0;
+    font-size: 1.55rem;
+}
+
+.buttonDownload {
+    padding: 10px 18px;
+    border: none;
+    color: rgb(16, 52, 170);
+    cursor: pointer;
+    background-color: rgb(190, 219, 253);
+    border-radius: 7px;
+    font-weight: bold !important;
+    transition: 0.3s;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 13px;
+    box-shadow: rgba(150, 143, 143, 0.2) 0px 2px 8px 0px;
+}
+
+.buttonDownload:hover {
+    background-color: rgb(164, 206, 253);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.saveicon {
+    width: 17px;
 }
 
 #viz-footer-text {

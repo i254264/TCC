@@ -204,7 +204,15 @@
 
         <!-- Container Unificado de Visualização de Resultados -->
         <div id="w2v-viz-container" style="display:none;">
-            <h2 id="viz-title">Word2Vec Semantic Clusters (t-SNE)</h2>
+            <div class="viz-header-row">
+                <h2 id="viz-title">Word2Vec Semantic Clusters (t-SNE)</h2>
+                <button class="buttonDownload" id="btn-download-excel" type="button">
+                    <svg class="saveicon" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" stroke-linejoin="round" stroke-linecap="round"></path>
+                    </svg>
+                    download
+                </button>
+            </div>
             
             <!-- Área W2V: Gráfico de Dispersão e Lista Lateral -->
             <div id="w2v-chart-area">
@@ -267,18 +275,19 @@
             <div id="tab-lsa" class="tab-content is-active" role="tabpanel">
                 <div class="guide-box">
                     <h4 class="guide-title">What is it?</h4>
-                    <p class="guide-desc"><strong>LSA</strong> reads all your documents to find words that frequently appear together. It connects these words to form hidden themes, helping you discover the main subjects covered in your files.</p>
+                    <p class="guide-desc"><strong>LSA</strong> reads all your documents to find words that frequently appear together. It connects these words to form hidden themes, helping you discover the main subjects covered in your files. It achieves this through matrix factorization (SVD) to identify latent patterns.</p>
 
                     <h4 class="guide-title">Parameters</h4>
                     <ul class="guide-param-list">
                         <li><code>topics</code>: How many different themes or subjects you want to discover.</li>
                         <li><code>words</code>: How many keywords to show inside each theme.</li>
                         <li><code>interaction</code>: How many calculation passes the model makes (higher values are slower but can be more precise).</li>
-                        <li><code>clean / lemmatize</code>: Removes common words like "the", "at", "is", and simplifies word endings (e.g., converts "running" to "run").</li>
+                        <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
+                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
-                    <p class="guide-desc">Cards appear below showing each theme with progress bars that indicate how strongly each word belongs to that theme. An <code>lsa_results.xlsx</code> Excel sheet is also automatically downloaded.</p>
+                    <p class="guide-desc">Interactive topic cards appear below with progress bars indicating the weight and relevance of each word. You can download the generated <code>lsa_results.xlsx</code> spreadsheet by clicking the download button next to the title.</p>
                 </div>
             </div>
 
@@ -286,18 +295,19 @@
             <div id="tab-lda" class="tab-content" role="tabpanel">
                 <div class="guide-box">
                     <h4 class="guide-title">What is it?</h4>
-                    <p class="guide-desc"><strong>LDA</strong> treats each document like a recipe made of several topics. It estimates which words belong to each topic based on how often they share the same documents.</p>
+                    <p class="guide-desc"><strong>LDA</strong> reads all your documents to find words that frequently appear together. It connects these words to form hidden themes, helping you discover the main subjects covered in your files. Unlike LSA, it uses a probabilistic model, assuming documents are mixtures of multiple topics.</p>
 
                     <h4 class="guide-title">Parameters</h4>
                     <ul class="guide-param-list">
-                        <li><code>topics</code>: How many topics you want to separate your files into.</li>
-                        <li><code>words</code>: The most relevant keywords to display for each topic.</li>
-                        <li><code>interaction</code>: How many times the algorithm re-reads your entire text collection during learning.</li>
-                        <li><code>clean / lemmatize</code>: Filters out trivial words and standardizes verbs and plurals to make topics cleaner.</li>
+                        <li><code>topics</code>: How many different themes or subjects you want to discover.</li>
+                        <li><code>words</code>: How many keywords to show inside each theme.</li>
+                        <li><code>interaction</code>: How many calculation passes the model makes (higher values are slower but can be more precise).</li>
+                        <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
+                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
-                    <p class="guide-desc">Topic cards showing your keywords with bars indicating their importance in each topic. A spreadsheet file named <code>lda_results.xlsx</code> is also downloaded directly to your computer.</p>
+                    <p class="guide-desc">Interactive topic cards appear below with progress bars indicating the weight and relevance of each word. You can download the generated <code>lda_results.xlsx</code> spreadsheet by clicking the download button next to the title.</p>
                 </div>
             </div>
 
@@ -312,11 +322,12 @@
                         <li><code>clusters</code>: How many color groups or word categories to create.</li>
                         <li><code>words</code>: How many top words to highlight for each group in the side list.</li>
                         <li><code>epochs</code>: How many learning cycles the neural network runs through your texts.</li>
-                        <li><code>clean / lemmatize</code>: Removes filler words and unifies different forms of words into their base form.</li>
+                        <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
+                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
-                    <p class="guide-desc">An interactive 2D dot chart where each point is a word; closer points mean closer meanings. A side list groups them by color, and a <code>w2v_results.xlsx</code> file is generated for you.</p>
+                    <p class="guide-desc">An interactive 2D scatter plot where each point is a word (closer points mean closer meanings), alongside color-coded cluster cards. The <code>w2v_results.xlsx</code> spreadsheet is ready to download whenever you want via the download button.</p>
                 </div>
             </div>
         </div>
@@ -431,19 +442,17 @@
                     $btn.prop("disabled", false).css("opacity", "1");
                     $container.html(`
                         <div class="alert alert--success">
-                            <p> <strong>Success!</strong> Process completed. Downloading Excel...</p>
+                            <p> <strong>Success!</strong> Process completed. Check the results below.</p>
                         </div>
                     `);
 
                     if (data.status === "success") {
                         // Extrai apenas o nome do arquivo do caminho absoluto retornado pelo Python
                         const fileName = data.file.split(/[\\/]/).pop();
-                        let link = document.createElement('a');
-                        link.href = "exportExcel/" + fileName;
-                        link.download = type + '_results.xlsx';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                        $("#btn-download-excel")
+                            .data("href", "exportExcel/" + fileName)
+                            .data("download", type + '_results.xlsx')
+                            .show();
                     }
 
                     // Renderiza a visualização correspondente ao modelo executado
@@ -463,6 +472,20 @@
                     console.error(xhr.responseText);
                 }
             });
+        });
+
+        // Ação do botão de download do Excel
+        $("#btn-download-excel").on("click", function() {
+            const fileHref = $(this).data("href");
+            const fileDownload = $(this).data("download") || 'results.xlsx';
+            if (fileHref) {
+                let link = document.createElement('a');
+                link.href = fileHref;
+                link.download = fileDownload;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         });
 
         // Executa a busca assim que a página carrega
