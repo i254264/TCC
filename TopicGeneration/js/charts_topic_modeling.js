@@ -35,20 +35,46 @@ function renderW2VChart() {
 
             // Limpa e prepara a lista lateral
             const $listContainer = $("#w2v-clusters-list");
-            $listContainer.html('<h3 class="w2v-clusters-header">Group Keywords</h3>');
+            $listContainer.html('<h3 class="w2v-clusters-header">Cluster Keywords</h3>');
+
+            // Suporte para o novo formato com top_words ou formato legado em array
+            const points = Array.isArray(data) ? data : (data.points || []);
+            const topWordsData = (!Array.isArray(data) && data.top_words) ? data.top_words : null;
+            const maxWordsLimit = parseInt($("#w2v-words").val()) || 5;
 
             // Agrupa os pontos por cluster para criar a legenda
             const datasets = [];
             const wordsByCluster = {};
 
-            data.forEach(item => {
+            // Inicializa as palavras dos grupos caso já venham filtradas do backend
+            if (topWordsData) {
+                Object.keys(topWordsData).forEach(cId => {
+                    wordsByCluster[cId] = topWordsData[cId];
+                });
+            }
+
+            points.forEach(item => {
                 const clusterId = item.cluster;
                 
-                // Agrupa palavras para a lista lateral
-                if (!wordsByCluster[clusterId]) {
-                    wordsByCluster[clusterId] = [];
+                // Fallback para caso legado: filtra apenas as mais relevantes
+                if (!topWordsData) {
+                    if (!wordsByCluster[clusterId]) {
+                        wordsByCluster[clusterId] = [];
+                    }
+                    if (item.is_top) {
+                        if (!wordsByCluster[clusterId].includes(item.word)) {
+                            wordsByCluster[clusterId].push(item.word);
+                        }
+                    } else if (item.weight !== undefined) {
+                        if (!wordsByCluster[clusterId].some(w => w.word === item.word)) {
+                            wordsByCluster[clusterId].push({ word: item.word, weight: item.weight });
+                        }
+                    } else {
+                        if (!wordsByCluster[clusterId].includes(item.word)) {
+                            wordsByCluster[clusterId].push(item.word);
+                        }
+                    }
                 }
-                wordsByCluster[clusterId].push(item.word);
 
                 // Prepara dados para o gráfico
                 let ds = datasets.find(d => d.label === 'Group ' + clusterId);
@@ -69,17 +95,35 @@ function renderW2VChart() {
                 });
             });
 
-            // Injeta as palavras na lista lateral
-            Object.keys(wordsByCluster).sort().forEach(clusterId => {
+            // Limita a exibição às N palavras configuradas caso esteja no modo fallback
+            if (!topWordsData) {
+                Object.keys(wordsByCluster).forEach(clusterId => {
+                    const list = wordsByCluster[clusterId];
+                    if (list.length && typeof list[0] === 'object') {
+                        list.sort((a, b) => b.weight - a.weight);
+                        wordsByCluster[clusterId] = list.slice(0, maxWordsLimit).map(x => x.word);
+                    } else {
+                        wordsByCluster[clusterId] = list.slice(0, maxWordsLimit);
+                    }
+                });
+            }
+
+            // Injeta as palavras na lista lateral estilizadas em cards padronizados
+            Object.keys(wordsByCluster).sort((a, b) => Number(a) - Number(b)).forEach(clusterId => {
                 const color = clusterColors[clusterId % clusterColors.length];
-                const wordsList = wordsByCluster[clusterId].join(', ');
+                const words = wordsByCluster[clusterId];
+                const wordsPillsHtml = words.map(w => `<span class="w2v-word-pill">${w}</span>`).join('');
                 
                 $listContainer.append(`
-                    <div class="w2v-cluster-item" style="border-left-color: ${color};">
-                        <strong class="w2v-cluster-item-title" style="color: ${color};">Group ${clusterId}</strong>
-                        <span class="w2v-cluster-item-words">
-                            ${wordsList}
-                        </span>
+                    <div class="w2v-cluster-card" style="border-left: 4px solid ${color};">
+                        <div class="w2v-card-header">
+                            <span class="w2v-cluster-name">
+                                <span class="cluster-indicator" style="background-color: ${color};"></span>
+                                Group ${clusterId}
+                            </span>
+                            <span class="topic-badge" style="background-color: ${color}20; color: ${color};">${words.length} words</span>
+                        </div>
+                        <div class="w2v-words-container">${wordsPillsHtml}</div>
                     </div>
                 `);
             });

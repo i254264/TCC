@@ -111,7 +111,9 @@ O Python realiza uma conexão local ao banco de dados MySQL, identifica dinamica
 *   **Redução de Dimensionalidade (t-SNE):** Para viabilizar a visualização em uma tela 2D comum, o algoritmo **t-SNE (t-Distributed Stochastic Neighbor Embedding)** reduz os vetores de 100 dimensões para apenas 2 coordenadas cartesianas $(x, y)$.
 *   **Saída de Dados:**
     *   `word2vec.xlsx`: Tabela de agrupamento das palavras com maior relevância/frequência interna de cada cluster.
-    *   `word2vec_viz.json`: Estrutura JSON com o mapeamento completo das palavras, suas respectivas coordenadas reduzidas $x$ e $y$, e o identificador do cluster ao qual pertencem.
+    *   `word2vec_viz.json`: Estrutura JSON estruturada contendo:
+        *   `points`: Lista de todas as palavras com coordenadas $(x, y)$, cluster atribuído, peso/frequência (`weight`) e indicador booleano (`is_top`).
+        *   `top_words`: Dicionário com as top $N$ palavras mais representativas de cada cluster (limitadas pelo parâmetro `words` informado pelo usuário).
 
 ---
 
@@ -124,6 +126,6 @@ A exibição dos dados pós-processamento ocorre dentro do arquivo `topic_modeli
 *   **Visualização Word2Vec:** Renders um gráfico interativo de dispersão (*Scatter Plot*) utilizando a biblioteca **Chart.js** alimentado pelas coordenadas geradas pelo t-SNE.
     *   Cada ponto no gráfico representa uma palavra.
     *   Os pontos são coloridos automaticamente de acordo com o agrupamento de clusters do K-Means.
-    *   Uma lista lateral dinâmica é construída para que o usuário possa ler de forma agrupada as palavras de cada cluster sem a necessidade de passar o mouse em cada ponto individualmente.
+    *   Uma lista lateral dinâmica com **Cards de Cluster** individuais, contendo tags estilizadas (*word pills*), contadores de palavras e indicadores visuais de cor correspondentes a cada grupo, respeitando a quantidade máxima de palavras solicitada.
 ---
 Documento desenvolvido e estruturado como especificação de software para o projeto de TCC.
