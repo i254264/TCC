@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="css/modelCardsTutorial.css">
     <!-------------------------------------->
     <script type="text/javascript" src="js/cards_model.js"></script>
-    <script type="text/javascript" src="js/transition_pages.js"></script>
     <title>Home</title>
 </head>
 
@@ -58,7 +57,7 @@
                                 <span class="button-text">get started</span>
                             </a>
                             <button class="linkButtons">
-                                <span class="textLinkButtons">Learn more</span>
+                                <span class="textLinkButtons" href="https://radimrehurek.com/gensim/auto_examples/core/run_core_concepts.html#sphx-glr-auto-examples-core-run-core-concepts-py">Learn more</span>
                             </button>
                         </div>
                         <div id="chooseModel">
@@ -76,4 +75,14 @@
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+window.addEventListener("DOMContentLoaded", function(){
+    let panel = document.getElementById('tutorialModel');
+    let btnTutorial = document.getElementById('btnTutorial');
+    
+    btnTutorial.onclick = () => {
+        panel.style.transform = `translateY(0)`;
+    }
+});
+</script>
 </html>

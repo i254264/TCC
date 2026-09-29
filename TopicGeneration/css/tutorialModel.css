@@ -1,6 +1,6 @@
 #tutorialModel{
     transition: transform .8s cubic-bezier(0.77, 0, 0.175, 1);
-    /* transform: translateY(100%); */
+    transform: translateY(100%);
     position: absolute;
     width: 100%;
     height: 100%;
