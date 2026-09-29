@@ -6,6 +6,7 @@ function literalString(){
     const models = [
         {
             titulo: 'LSA',
+            link: 'https://radimrehurek.com/gensim/models/lsimodel.html',
             texto: 'Latent Semantic Analysis is a natural language processing method that uncovers relationships between terms and documents. By using Singular Value Decomposition (SVD), it simplifies complex document matrices to identify latent concepts and semantic patterns.',
             chartHtml: `
                 <div class="ring-chart" data-progress="80">
@@ -36,6 +37,7 @@ function literalString(){
         },
         {
             titulo: 'LDA',
+            link: 'https://radimrehurek.com/gensim/models/ldamodel.html',
             texto: 'Latent Dirichlet Allocation is a generative statistical model that allows sets of observations to be explained by unobserved groups. In text modeling, it assumes each document is a mixture of topics, and each topic is a mixture of words, enabling unsupervised topic discovery.',
             chartHtml: `
                 <div class="column-chart">
@@ -48,6 +50,7 @@ function literalString(){
         },
         {
             titulo: 'W2V',
+            link: 'https://radimrehurek.com/gensim/models/word2vec.html',
             texto: 'Word2Vec is a group of related models used to produce word embeddings. These shallow, two-layer neural networks are trained to reconstruct linguistic contexts of words, mapping them into a multi-dimensional vector space where semantically similar words are placed close to each other.',
             chartHtml: `
                 <div class="bar-chart">
@@ -76,7 +79,7 @@ function literalString(){
                     <div class="panel-chart">
                         ${model.chartHtml}
                     </div>
-                    <a class="btn-card" href="#" role="button">Read More</a>
+                    <a class="btn-card" href="${model.link}" target="_blank" rel="noopener noreferrer" role="button">Read More</a>
                 </div>
             </div>
         `;
@@ -88,6 +91,14 @@ function literalString(){
         panel.addEventListener('click', () => {
             panels.forEach(p => p.classList.remove('active'));
             panel.classList.add('active');
+        });
+    });
+
+    // Evita conflito do clique no botão com a seleção do card pai
+    const readMoreBtns = container.querySelectorAll('.btn-card');
+    readMoreBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
         });
     });
 }
