@@ -91,6 +91,13 @@
     color: #5279c0;
     font-weight: 700;
 }
+
+.tutorial-slide p #hintGetStart {
+    color: #3e9759;
+    font-family: mukta;
+    font-weight: 700;
+    text-transform: uppercase;
+}
 .tutorial-slide p em {
     font-style: normal;
     font-weight: 600;
@@ -124,9 +131,8 @@
     font-family: monospace;
 }
 .tutorial-slide .concepts-summary {
-    margin-top: 0.55rem;
+    margin-top: 1rem !important;
     margin-bottom: 0;
-    font-size: 0.96rem;
     line-height: 1.35;
     color: #475569;
 }
