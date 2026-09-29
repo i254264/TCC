@@ -18,6 +18,7 @@
     <!-- Chart.js para o gráfico de dispersão -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/charts_topic_modeling.css">
+    <script type="text/javascript" src="js/popUp.js"></script>
     <!-------------------------------------->
 </head>
 
@@ -221,6 +222,103 @@
             <p id="viz-footer-text">
                 Hover over the points to see the keywords. Proximity represents semantic similarity.
             </p>
+        </div>
+
+        <!-- Botão Flutuante Need Help? -->
+        <div class="help-tooltip-container">
+          <button id="help_button" aria-describedby="help-tooltip" class="help-btn-custom">
+            Need Help?
+          </button>
+          <div role="tooltip" id="help-tooltip" class="help-tooltip-box">
+            <i></i><strong>How to use?</strong><br>Get quick assistance
+          </div>
+        </div>
+    </div>
+
+    <!-- Overlay escurecido de fundo para a modal -->
+    <div id="popup-overlay" class="popup-overlay"></div>
+
+    <!-- PopUp Guia do Usuário -->
+    <div id="popUP" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+        <div class="popup-container">
+            <div class="popUP-header">
+                <div class="title-group">
+                    <span class="icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4db6ac" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 8a3.5 3.5 0 0 1 3.5 -3.5h1a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1 -2 3a3 3 0 0 0 -2 3" />
+                            <path d="M12 19v.01" />
+                        </svg>
+                    </span>
+                    <div class="title-text">
+                        <h1 id="popup-title">Modeling <span>Guide</span></h1>
+                        <p class="subtitle">A beginner-friendly guide to choosing a model, setting options, and understanding results.</p>
+                    </div>
+                </div>
+                <button id="close_popup" class="close-card" aria-label="Close guide">×</button>
+            </div>
+            
+            <div class="tabs" role="tablist">
+                <button class="tab is-active" data-tab="lsa" role="tab" aria-selected="true">LSA</button>
+                <button class="tab" data-tab="lda" role="tab" aria-selected="false">LDA</button>
+                <button class="tab" data-tab="w2v" role="tab" aria-selected="false">W2V</button>
+            </div>
+
+            <!-- Aba LSA -->
+            <div id="tab-lsa" class="tab-content is-active" role="tabpanel">
+                <div class="guide-box">
+                    <h4 class="guide-title">What is it?</h4>
+                    <p class="guide-desc"><strong>LSA</strong> reads all your documents to find words that frequently appear together. It connects these words to form hidden themes, helping you discover the main subjects covered in your files.</p>
+
+                    <h4 class="guide-title">Parameters</h4>
+                    <ul class="guide-param-list">
+                        <li><code>topics</code>: How many different themes or subjects you want to discover.</li>
+                        <li><code>words</code>: How many keywords to show inside each theme.</li>
+                        <li><code>interaction</code>: How many calculation passes the model makes (higher values are slower but can be more precise).</li>
+                        <li><code>clean / lemmatize</code>: Removes common words like "the", "at", "is", and simplifies word endings (e.g., converts "running" to "run").</li>
+                    </ul>
+
+                    <h4 class="guide-title">Outputs & Visualization</h4>
+                    <p class="guide-desc">Cards appear below showing each theme with progress bars that indicate how strongly each word belongs to that theme. An <code>lsa_results.xlsx</code> Excel sheet is also automatically downloaded.</p>
+                </div>
+            </div>
+
+            <!-- Aba LDA -->
+            <div id="tab-lda" class="tab-content" role="tabpanel">
+                <div class="guide-box">
+                    <h4 class="guide-title">What is it?</h4>
+                    <p class="guide-desc"><strong>LDA</strong> treats each document like a recipe made of several topics. It estimates which words belong to each topic based on how often they share the same documents.</p>
+
+                    <h4 class="guide-title">Parameters</h4>
+                    <ul class="guide-param-list">
+                        <li><code>topics</code>: How many topics you want to separate your files into.</li>
+                        <li><code>words</code>: The most relevant keywords to display for each topic.</li>
+                        <li><code>interaction</code>: How many times the algorithm re-reads your entire text collection during learning.</li>
+                        <li><code>clean / lemmatize</code>: Filters out trivial words and standardizes verbs and plurals to make topics cleaner.</li>
+                    </ul>
+
+                    <h4 class="guide-title">Outputs & Visualization</h4>
+                    <p class="guide-desc">Topic cards showing your keywords with bars indicating their importance in each topic. A spreadsheet file named <code>lda_results.xlsx</code> is also downloaded directly to your computer.</p>
+                </div>
+            </div>
+
+            <!-- Aba W2V -->
+            <div id="tab-w2v" class="tab-content" role="tabpanel">
+                <div class="guide-box">
+                    <h4 class="guide-title">What is it?</h4>
+                    <p class="guide-desc"><strong>Word2Vec</strong> learns the meaning of words by looking at their neighboring words in sentences. Words used in similar situations are grouped together into visual color-coded clusters.</p>
+
+                    <h4 class="guide-title">Parameters</h4>
+                    <ul class="guide-param-list">
+                        <li><code>clusters</code>: How many color groups or word categories to create.</li>
+                        <li><code>words</code>: How many top words to highlight for each group in the side list.</li>
+                        <li><code>epochs</code>: How many learning cycles the neural network runs through your texts.</li>
+                        <li><code>clean / lemmatize</code>: Removes filler words and unifies different forms of words into their base form.</li>
+                    </ul>
+
+                    <h4 class="guide-title">Outputs & Visualization</h4>
+                    <p class="guide-desc">An interactive 2D dot chart where each point is a word; closer points mean closer meanings. A side list groups them by color, and a <code>w2v_results.xlsx</code> file is generated for you.</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
