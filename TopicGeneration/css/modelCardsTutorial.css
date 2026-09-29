@@ -5,10 +5,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
     margin: 0;
-    background-color: #fff;
+    margin-top: -1px;
     background-color: #5279c0;
+    position: relative;
 }
 .container {
     display: flex;
