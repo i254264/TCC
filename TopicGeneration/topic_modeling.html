@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="css/button_alert.css">
     <!-- Chart.js para o gráfico de dispersão -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/charts_topic_modeling.css">
+    <script type="text/javascript" src="js/popUp.js"></script>
     <!-------------------------------------->
 </head>
 
@@ -77,17 +79,17 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="lsa-topics">topics</label>
-                                    <input id="lsa-topics" name="topics" type="number" required/>
+                                    <input id="lsa-topics" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lsa-words">words </label>
-                                    <input id="lsa-words" name="words" type="number" required/>
+                                    <input id="lsa-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lsa-interaction">interaction </label>
-                                    <input id="lsa-interaction" name="interaction" type="number" required/>
+                                    <input id="lsa-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
@@ -128,17 +130,17 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="lda-topics">topics </label>
-                                    <input id="lda-topics" name="topics" type="number" required/>
+                                    <input id="lda-topics" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lda-words">words </label>
-                                    <input id="lda-words" name="words" type="number" required/>
+                                    <input id="lda-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lda-interaction">interaction </label>
-                                    <input id="lda-interaction" name="interaction" type="number" required/>
+                                    <input id="lda-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate topics" />
@@ -179,17 +181,17 @@
                             <div class="form-area">
                                 <div class="form-group">
                                     <label for="w2v-clusters">clusters</label>
-                                    <input id="w2v-clusters" name="topics" type="number" required/>
+                                    <input id="w2v-clusters" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="w2v-words">words </label>
-                                    <input id="w2v-words" name="words" type="number" required/>
+                                    <input id="w2v-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="w2v-interaction">epochs </label>
-                                    <input id="w2v-interaction" name="interaction" type="number" required/>
+                                    <input id="w2v-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
                                 <input class="generateTopics" type="submit" value="generate model" />
@@ -200,24 +202,140 @@
             </article>
         </div>
 
-        <!-- Container para o gráfico de dispersão (Scatter Plot) -->
-        <div id="w2v-viz-container" style="display:none; margin: 50px auto; max-width: 1200px; padding: 25px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-            <h2 style="color: #5279c0; text-align: center; font-family: mukta; margin-bottom: 20px;">Word2Vec Semantic Clusters (t-SNE)</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                <div style="flex: 2; min-width: 300px; position: relative; height: 600px;">
+        <!-- Container Unificado de Visualização de Resultados -->
+        <div id="w2v-viz-container" style="display:none;">
+            <div class="viz-header-row">
+                <h2 id="viz-title">Word2Vec Semantic Clusters (t-SNE)</h2>
+                <button class="buttonDownload" id="btn-download-excel" type="button">
+                    <svg class="saveicon" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" stroke-linejoin="round" stroke-linecap="round"></path>
+                    </svg>
+                    download
+                </button>
+            </div>
+            
+            <!-- Área W2V: Gráfico de Dispersão e Lista Lateral -->
+            <div id="w2v-chart-area">
+                <div class="w2v-chart-wrapper">
                     <canvas id="w2vChart"></canvas>
                 </div>
-                <div id="w2v-clusters-list" style="flex: 1; min-width: 250px; max-height: 600px; overflow-y: auto; padding: 10px; background: #fcfcfc; border-radius: 8px; border: 1px solid #eee; font-family: mukta;">
+                <div id="w2v-clusters-list">
                     <!-- A lista de palavras por grupo será injetada aqui -->
                 </div>
             </div>
-            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 15px;">
+
+            <!-- Área LDA / LSA: Tabela Visual com Cards e Barras de Progresso -->
+            <div id="topic-groups-area" style="display: none;"></div>
+
+            <p id="viz-footer-text">
                 Hover over the points to see the keywords. Proximity represents semantic similarity.
             </p>
+        </div>
+
+        <!-- Botão Flutuante Need Help? -->
+        <div class="help-tooltip-container">
+          <button id="help_button" aria-describedby="help-tooltip" class="help-btn-custom">
+            Need Help?
+          </button>
+          <div role="tooltip" id="help-tooltip" class="help-tooltip-box">
+            <i></i><strong>How to use?</strong><br>Get quick assistance
+          </div>
+        </div>
+    </div>
+
+    <!-- Overlay escurecido de fundo para a modal -->
+    <div id="popup-overlay" class="popup-overlay"></div>
+
+    <!-- PopUp Guia do Usuário -->
+    <div id="popUP" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+        <div class="popup-container">
+            <div class="popUP-header">
+                <div class="title-group">
+                    <span class="icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4db6ac" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 8a3.5 3.5 0 0 1 3.5 -3.5h1a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1 -2 3a3 3 0 0 0 -2 3" />
+                            <path d="M12 19v.01" />
+                        </svg>
+                    </span>
+                    <div class="title-text">
+                        <h1 id="popup-title">Modeling <span>Guide</span></h1>
+                        <p class="subtitle">A beginner-friendly guide to choosing a model, setting options, and understanding results.</p>
+                    </div>
+                </div>
+                <button id="close_popup" class="close-card" aria-label="Close guide">×</button>
+            </div>
+            
+            <div class="tabs" role="tablist">
+                <button class="tab is-active" data-tab="lsa" role="tab" aria-selected="true">LSA</button>
+                <button class="tab" data-tab="lda" role="tab" aria-selected="false">LDA</button>
+                <button class="tab" data-tab="w2v" role="tab" aria-selected="false">W2V</button>
+            </div>
+
+            <!-- Aba LSA -->
+            <div id="tab-lsa" class="tab-content is-active" role="tabpanel">
+                <div class="guide-box">
+                    <h4 class="guide-title">What is it?</h4>
+                    <p class="guide-desc"><strong>LSA</strong> reads all your documents to find words that frequently appear together. It connects these words to form hidden themes, helping you discover the main subjects covered in your files. It achieves this through matrix factorization (SVD) to identify latent patterns.</p>
+
+                    <h4 class="guide-title">Parameters</h4>
+                    <ul class="guide-param-list">
+                        <li><code>topics</code>: How many different themes or subjects you want to discover.</li>
+                        <li><code>words</code>: How many keywords to show inside each theme.</li>
+                        <li><code>interaction</code>: How many calculation passes the model makes (higher values are slower but can be more precise).</li>
+                        <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
+                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
+                    </ul>
+
+                    <h4 class="guide-title">Outputs & Visualization</h4>
+                    <p class="guide-desc">Interactive topic cards appear below with progress bars indicating the weight and relevance of each word. You can download the generated <code>lsa_results.xlsx</code> spreadsheet by clicking the download button next to the title.</p>
+                </div>
+            </div>
+
+            <!-- Aba LDA -->
+            <div id="tab-lda" class="tab-content" role="tabpanel">
+                <div class="guide-box">
+                    <h4 class="guide-title">What is it?</h4>
+                    <p class="guide-desc"><strong>LDA</strong> reads all your documents to find words that frequently appear together. It connects these words to form hidden themes, helping you discover the main subjects covered in your files. Unlike LSA, it uses a probabilistic model, assuming documents are mixtures of multiple topics.</p>
+
+                    <h4 class="guide-title">Parameters</h4>
+                    <ul class="guide-param-list">
+                        <li><code>topics</code>: How many different themes or subjects you want to discover.</li>
+                        <li><code>words</code>: How many keywords to show inside each theme.</li>
+                        <li><code>interaction</code>: How many calculation passes the model makes (higher values are slower but can be more precise).</li>
+                        <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
+                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
+                    </ul>
+
+                    <h4 class="guide-title">Outputs & Visualization</h4>
+                    <p class="guide-desc">Interactive topic cards appear below with progress bars indicating the weight and relevance of each word. You can download the generated <code>lda_results.xlsx</code> spreadsheet by clicking the download button next to the title.</p>
+                </div>
+            </div>
+
+            <!-- Aba W2V -->
+            <div id="tab-w2v" class="tab-content" role="tabpanel">
+                <div class="guide-box">
+                    <h4 class="guide-title">What is it?</h4>
+                    <p class="guide-desc"><strong>Word2Vec</strong> learns the meaning of words by looking at their neighboring words in sentences. Words used in similar situations are grouped together into visual color-coded clusters.</p>
+
+                    <h4 class="guide-title">Parameters</h4>
+                    <ul class="guide-param-list">
+                        <li><code>clusters</code>: How many color groups or word categories to create.</li>
+                        <li><code>words</code>: How many top words to highlight for each group in the side list.</li>
+                        <li><code>epochs</code>: How many learning cycles the neural network runs through your texts.</li>
+                        <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
+                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
+                    </ul>
+
+                    <h4 class="guide-title">Outputs & Visualization</h4>
+                    <p class="guide-desc">An interactive 2D scatter plot where each point is a word (closer points mean closer meanings), alongside color-coded cluster cards. The <code>w2v_results.xlsx</code> spreadsheet is ready to download whenever you want via the download button.</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Script dedicado para controle de gráficos e visualização de resultados (LSA, LDA, W2V) -->
+<script src="js/charts_topic_modeling.js"></script>
     <script>
         // Função para buscar o total de registros do banco e atualizar os badges
         function atualizarContagemArquivos() {
@@ -324,24 +442,24 @@
                     $btn.prop("disabled", false).css("opacity", "1");
                     $container.html(`
                         <div class="alert alert--success">
-                            <p> <strong>Success!</strong> Process completed. Downloading Excel...</p>
+                            <p> <strong>Success!</strong> Process completed. Check the results below.</p>
                         </div>
                     `);
 
                     if (data.status === "success") {
                         // Extrai apenas o nome do arquivo do caminho absoluto retornado pelo Python
                         const fileName = data.file.split(/[\\/]/).pop();
-                        let link = document.createElement('a');
-                        link.href = "exportExcel/" + fileName;
-                        link.download = type + '_results.xlsx';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                        $("#btn-download-excel")
+                            .data("href", "exportExcel/" + fileName)
+                            .data("download", type + '_results.xlsx')
+                            .show();
                     }
 
-                    // Se for Word2Vec, renderiza o gráfico de dispersão
+                    // Renderiza a visualização correspondente ao modelo executado
                     if (type === 'w2v') {
                         renderW2VChart();
+                    } else {
+                        renderTopicGroups(type, data);
                     }
                 },
                 error: function (xhr) {
@@ -356,112 +474,19 @@
             });
         });
 
-        let w2vChartInstance = null;
-        function renderW2VChart() {
-            // Timestamp para evitar cache do JSON
-            fetch("exportExcel/word2vec_viz.json?t=" + new Date().getTime())
-                .then(response => response.json())
-                .then(data => {
-                    $("#w2v-viz-container").fadeIn(800);
-                    const ctx = document.getElementById('w2vChart').getContext('2d');
-                    
-                    if (w2vChartInstance) {
-                        w2vChartInstance.destroy();
-                    }
-
-                    // Paleta de cores para os clusters
-                    const clusterColors = [
-                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
-                        '#FF9F40', '#8AC926', '#1982C4', '#6A4C93', '#F15BB5'
-                    ];
-
-                    // Limpa e prepara a lista lateral
-                    const $listContainer = $("#w2v-clusters-list");
-                    $listContainer.html('<h3 style="margin-top:0; border-bottom: 2px solid #5279c0; padding-bottom: 5px;">Group Keywords</h3>');
-
-                    // Agrupa os pontos por cluster para criar a legenda
-                    const datasets = [];
-                    const wordsByCluster = {};
-
-                    data.forEach(item => {
-                        const clusterId = item.cluster;
-                        
-                        // Agrupa palavras para a lista lateral
-                        if (!wordsByCluster[clusterId]) {
-                            wordsByCluster[clusterId] = [];
-                        }
-                        wordsByCluster[clusterId].push(item.word);
-
-                        // Prepara dados para o gráfico
-                        let ds = datasets.find(d => d.label === 'Group ' + clusterId);
-                        if (!ds) {
-                            ds = {
-                                label: 'Group ' + item.cluster,
-                                data: [],
-                                backgroundColor: clusterColors[item.cluster % clusterColors.length],
-                                pointRadius: 6,
-                                pointHoverRadius: 10
-                            };
-                            datasets.push(ds);
-                        }
-                        ds.data.push({
-                            x: item.x,
-                            y: item.y,
-                            word: item.word
-                        });
-                    });
-
-                    // Injeta as palavras na lista lateral
-                    Object.keys(wordsByCluster).sort().forEach(clusterId => {
-                        const color = clusterColors[clusterId % clusterColors.length];
-                        const wordsList = wordsByCluster[clusterId].join(', ');
-                        
-                        $listContainer.append(`
-                            <div style="margin-bottom: 15px; padding: 8px; border-left: 4px solid ${color}; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                                <strong style="color: ${color}; display: block; margin-bottom: 4px;">Group ${clusterId}</strong>
-                                <span style="font-size: 0.85rem; color: #444; line-height: 1.4;">
-                                    ${wordsList}
-                                </span>
-                            </div>
-                        `);
-                    });
-
-                    w2vChartInstance = new Chart(ctx, {
-                        type: 'scatter',
-                        data: { datasets: datasets },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { position: 'right' },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            return ` Word: ${context.raw.word} (Group ${context.datasetIndex})`;
-                                        }
-                                    }
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    grid: { color: '#f5f5f5' },
-                                    title: { display: true, text: 'Semantic dimension X' }
-                                },
-                                y: {
-                                    grid: { color: '#f5f5f5' },
-                                    title: { display: true, text: 'Semantic dimension Y' }
-                                }
-                            }
-                        }
-                    });
-                    
-                    // Scroll suave para mostrar o gráfico após carregar
-                    $('html, body').animate({
-                        scrollTop: $("#w2v-viz-container").offset().top - 30
-                    }, 1000);
-                })
-                .catch(err => console.error("Erro ao carregar visualização W2V:", err));
-        }
+        // Ação do botão de download do Excel
+        $("#btn-download-excel").on("click", function() {
+            const fileHref = $(this).data("href");
+            const fileDownload = $(this).data("download") || 'results.xlsx';
+            if (fileHref) {
+                let link = document.createElement('a');
+                link.href = fileHref;
+                link.download = fileDownload;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
 
         // Executa a busca assim que a página carrega
         atualizarContagemArquivos();

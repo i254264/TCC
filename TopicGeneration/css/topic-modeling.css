@@ -386,3 +386,121 @@
         padding-right: 18px;
     }
 }
+
+/* ============================================
+   SCROLLABILITY AND LAYOUT FIXES
+   ============================================ */
+html {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-y: auto !important;
+    scrollbar-width: none !important; /* Oculta a barra no Firefox */
+    -ms-overflow-style: none !important; /* Oculta a barra no IE e Edge */
+}
+html::-webkit-scrollbar {
+    display: none !important; /* Oculta a barra no Chrome, Safari e Opera */
+    width: 0 !important;
+    height: 0 !important;
+}
+
+body {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important; /* Libera a rolagem vertical de forma invisível */
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+#main {
+    height: auto !important;
+    min-height: calc(100vh - 80px) !important; /* Mantém o alinhamento e centralização originais */
+}
+
+/* Aplica o alinhamento ao topo APENAS quando o container de gráficos estiver visível (ativo) */
+#main:has(#w2v-viz-container:not([style*="none"])) {
+    align-items: start !important;
+    padding-top: 10.5rem !important; /* Espaço ampliado para comportar o alerta acima do card sem cobrir o título */
+    padding-bottom: 40px; /* Garante que haja um espaço de respiro ao rolar até o fim */
+}
+
+/* Garante que o botão Need Help flutuante fique sempre acima dos cards em perspectiva 3D */
+.help-tooltip-container {
+    z-index: 9999;
+}
+
+/* ============================================
+   POPUP GUIDE CUSTOM STYLES (LSA / LDA / W2V)
+   ============================================ */
+#popUP,
+.popup-container,
+.tab-content {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE e Edge legado */
+    overflow-y: auto;
+}
+
+#popUP::-webkit-scrollbar,
+.popup-container::-webkit-scrollbar,
+.tab-content::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari e Opera */
+    width: 0 !important;
+}
+
+.guide-box {
+    text-align: left;
+    padding: 6px 4px 12px;
+}
+
+.guide-title {
+    font-family: 'Mukta', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #274274;
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guide-title:first-child {
+    margin-top: 4px;
+}
+
+.guide-desc {
+    font-size: 0.93rem;
+    line-height: 1.55;
+    color: #475569;
+    margin: 0 0 10px;
+    text-align: left;
+}
+
+.guide-param-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.guide-param-list li {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.45;
+}
+
+.guide-param-list code {
+    background: #e2e8f0;
+    color: #1e293b;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}

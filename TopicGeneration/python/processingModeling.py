@@ -181,6 +181,7 @@ try:
         vectors_2d = tsne.fit_transform(vectors)
 
         data = []
+        top_words_dict = {}
         for i in range(int(topics)):
             # Identifica palavras pertencentes ao cluster i
             indices = np.where(kmeans.labels_ == i)[0]
@@ -194,6 +195,7 @@ try:
                 weighted.append((w, count))
             
             weighted.sort(key=lambda x: x[1], reverse=True)
+            top_words_dict[i] = [w for w, _ in weighted[:int(words)]]
             
             for word_val, weight_val in weighted[:int(words)]:
                 data.append([i, word_val, weight_val])
@@ -201,16 +203,24 @@ try:
         # Gerar JSON para o Scatter Plot
         viz_data = []
         for idx, word in enumerate(words_list):
+            c_id = int(kmeans.labels_[idx])
+            token_id = dictionary.token2id.get(word)
+            count = dictionary.cfs.get(token_id, 0) if token_id is not None else 0
             viz_data.append({
                 "word": word,
                 "x": float(vectors_2d[idx][0]),
                 "y": float(vectors_2d[idx][1]),
-                "cluster": int(kmeans.labels_[idx])
+                "cluster": c_id,
+                "weight": count,
+                "is_top": word in top_words_dict.get(c_id, [])
             })
         
         viz_path = os.path.join(export_dir, json_file)
         with open(viz_path, 'w') as f:
-            json.dump(viz_data, f)
+            json.dump({
+                "points": viz_data,
+                "top_words": top_words_dict
+            }, f)
 
         # model_flag para indicar que o processamento manual foi feito
         model = True

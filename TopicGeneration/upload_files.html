@@ -73,14 +73,85 @@
             </div>
         </div>
         
-        <img id="help_button" src="img/help5_2.png" alt="all files">
+        <div class="help-tooltip-container">
+          <button id="help_button" aria-describedby="help-tooltip" class="help-btn-custom">
+            Need Help?
+          </button>
+          <div role="tooltip" id="help-tooltip" class="help-tooltip-box">
+          <i></i><strong>How to use?</strong><br>Get quick assistance
+          </div>
+        </div>
     </div>
+
+    <!-- Overlay escurecido de fundo para a modal -->
+    <div id="popup-overlay" class="popup-overlay"></div>
+
+    <!-- PopUp Guia do Usuário -->
+    <div id="popUP" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+        <div class="popup-container">
+            <div class="popUP-header">
+                <div class="title-group">
+                    <span class="icon" aria-hidden="true">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4db6ac" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 8a3.5 3.5 0 0 1 3.5 -3.5h1a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1 -2 3a3 3 0 0 0 -2 3" />
+                            <path d="M12 19v.01" />
+                        </svg>
+                    </span>
+                    <div class="title-text">
+                        <h1 id="popup-title">User <span>Guide</span></h1>
+                        <p class="subtitle">Welcome to Topic Generation. Learn about the platform and upload guidelines.</p>
+                    </div>
+                </div>
+                <button id="close_popup" class="close-card" aria-label="Close guide">×</button>
+            </div>
+            
+            <div class="tabs" role="tablist">
+                <button class="tab is-active" data-tab="about" role="tab" aria-selected="true">About</button>
+                <button class="tab" data-tab="rules" role="tab" aria-selected="false">Upload Rules</button>
+            </div>
+
+            <div id="tab-about" class="tab-content is-active" role="tabpanel">
+                <p><strong>Topic Generation</strong> is a platform designed to discover latent themes and semantic patterns in large collections of textual documents using Natural Language Processing (NLP) and statistical topic modeling algorithms (LDA, LSA, and Word2Vec).</p>
+                <p class="section-lead-text">Explore the application modules below:</p>
+                
+                <div class="list">
+                    <div class="pane current">
+                        <div class="item_list">
+                            <span class="dot"></span>Add files &mdash; <span class="current_page_span">current page</span>
+                        </div>
+                        <div class="pane-body">
+                            <p>Upload your files. If using a CSV, choose the column containing the main document text.</p>
+                        </div>
+                    </div>
+                    <a href="all_files.html" class="pane">
+                        <div class="item_list">
+                            <span class="dot"></span>All files
+                        </div>
+                        <div class="pane-body">
+                            <p>Inspect all imported documents, perform keyword searches and check full text contents.</p>
+                        </div>
+                    </a>
+                    <a href="topic_modeling.html" class="pane">
+                        <div class="item_list">
+                            <span class="dot"></span>Topic modeling
+                        </div>
+                        <div class="pane-body">
+                            <p>Configure parameters for LDA, LSA or Word2Vec, run the models and analyze the charts.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div id="tab-rules" class="tab-content" role="tabpanel">
+                <ul class="rules-list">
+                    <li><strong>Allowed Formats:</strong> We support <code>.csv</code> (Comma-Separated Values), <code>.bib</code> (BibTeX), and <code>.ris</code> (Research Information Systems) files containing bibliographic references and texts.</li>
+                    <li><strong>Data Extraction:</strong> For <code>.bib</code> and <code>.ris</code> files, the system automatically extracts and maps the <em>Title</em>, <em>Year</em>, and <em>Abstract</em> fields.</li>
+                    <li><strong>Column Selection:</strong> If uploading a <code>.csv</code> with multiple columns, you will be prompted to select the primary column containing the text to be analyzed.</li>
+                    <li><strong>Existing Database Handling:</strong> If the database already contains data, you can choose to <strong>Continue</strong> (to append and merge the new data) or <strong>Delete</strong> (to overwrite and clear the previous database).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </body>
-<div class="pop-up">
-    <div class="box-popUp">
-        <button>x</button>
-        <div>Como usar?</div>
-        <p>Watch the following video to understand how to use Topic Generation.</p>
-    </div>
-</div>
 </html>
