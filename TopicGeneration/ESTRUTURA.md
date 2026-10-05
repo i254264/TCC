@@ -97,6 +97,19 @@ O Python realiza uma conexão local ao banco de dados MySQL, identifica dinamica
 
 ## 4. Algoritmos de Modelagem e Estrutura de Saída
 
+Embora todos os modelos sejam executados através da biblioteca *Gensim*, há uma distinção conceitual e matemática relevante entre eles:
+
+* **LSA e LDA (Modelagem de Tópicos baseada em Bag-of-Words):** Atuam a nível de documento, desconsiderando a ordem sequencial das palavras e avaliando matrizes de coocorrência termo-documento (`doc2bow`). Ambos extraem distribuições de tópicos de maneira nativa.
+* **Word2Vec (Representação Vetorial e Semântica de Janela Local):** Atua a nível de sentença/sequência textual, preservando a vizinhança local através de uma janela deslizante (`window`). O Word2Vec não gera tópicos por si só, gerando unicamente vetores densos em x=⎛⎝⎜⎜⎜⎜⎜⎜⎜x1⋮xi⋮xd⎞⎠⎟⎟⎟⎟⎟⎟⎟ para cada termo; logo, depende de algoritmos auxiliares de agrupamento (*clustering*) para sintetizar temas.
+
+| Característica | LSA (Latent Semantic Analysis) | LDA (Latent Dirichlet Allocation) | Word2Vec (Continuous Bag-of-Words) |
+| :--- | :--- | :--- | :--- |
+| **Paradigma** | Álgebra Linear / Fatoração Matricial | Estatística Bayesiana Probabilística | Redes Neurais Rasas / Otimização por Gradiente |
+| **Mecanismo Central** | Decomposição em Valores Singulares (**SVD**) sobre matriz termo-documento. | Inferência Variacional com distribuições *a priori* de **Dirichlet**. | Treinamento de rede neural de 2 camadas com amostragem negativa (**Negative Sampling**). |
+| **Escopo de Contexto** | Global (Coocorrência ao nível de documento). | Global (Distribuições probabilísticas no documento). | Local (Janela de palavras vizinhas deslizante). |
+| **Saída Original** | Coordenadas contínuas em espaço latente reduzido. | Probabilidade do termo pertencer a cada tópico. | Vetor denso de números reais ($\mathbb{R}^{100}$). |
+| **Identificação de Tópicos**| Nativa (`model.show_topics()`). | Nativa (`model.show_topics()`). | Dependente de pipeline externo (**K-Means**). |
+
 ### A. Latent Dirichlet Allocation (LDA)
 *   **Funcionamento:** É um modelo probabilístico generativo baseado na premissa de que cada documento é uma mistura de vários tópicos e cada tópico é uma distribuição probabilística sobre palavras.
 *   **Saída de Dados:** Gera um arquivo Excel chamado `lda.xlsx` contendo as colunas `[topic, word, weight]`, onde `weight` indica a probabilidade matemática da palavra pertencer àquele tópico.
@@ -105,9 +118,25 @@ O Python realiza uma conexão local ao banco de dados MySQL, identifica dinamica
 *   **Funcionamento:** Utiliza a Decomposição em Valores Singulares (SVD) sobre uma matriz de termos-documentos para identificar padrões nas relações entre termos, reduzindo a dimensionalidade e encontrando conceitos latentes no texto.
 *   **Saída de Dados:** Gera o arquivo `lsa.xlsx` contendo as relações de tópicos extraídas.
 
-### C. Word2Vec (Semântica Vetorial)
-*   **Funcionamento:** Redes neurais de duas camadas treinam vetores contínuos de palavras. Palavras que compartilham contextos semelhantes na base de dados original são posicionadas próximas no espaço vetorial multidimensional.
-*   **Agrupamento (K-Means):** Como o Word2Vec gera apenas vetores contínuos e não tópicos diretos, o script Python aplica o algoritmo **K-Means Clustering** sobre os vetores gerados para agrupar as palavras semanticamente mais próximas em clusters (simulando "tópicos" conceituais).
+### C. Word2Vec e Pipeline de Agrupamento
+*   **Funcionamento e Configuração do Modelo (`gensim.models.Word2Vec`):**
+    O modelo é parametrizado com as seguintes propriedades explícitas e arquiteturais:
+    *   `sentences=array_df`: Coleção sequencial de sentenças e tokens pré-processados.
+    *   `vector_size=100`: Cada palavra do vocabulário é mapeada em um vetor denso de 100 dimensões.
+    *   `window=5`: Alcance máximo de contexto para predição (5 termos à esquerda e 5 à direita).
+    *   `min_count=1`: Mantém todas as palavras que aparecem ao menos uma vez, preservando vocabulários raros presentes no corpus.
+    *   `workers=3`: Execução multithreaded para aceleração via rotinas em Cython.
+    *   `epochs=interaction`: Número de passadas completas de otimização sobre a base de textos.
+    *   **Padrões Implícitos da Gensim Ativos:**
+        *   *Arquitetura CBOW (`sg=0`)*: Utiliza o Continuous Bag-of-Words, prevendo a palavra central com base na média dos vetores das palavras vizinhas (`cbow_mean=1`).
+        *   *Negative Sampling (`hs=0`, `negative=5`)*: Aplica amostragem de ruído (5 amostras negativas por etapa) para aproximação eficiente da função de perda logística, dispensando a complexidade da Hierarchical Softmax.
+        *   *Taxa de Aprendizado Linear*: Varia de `alpha=0.025` decaindo até `min_alpha=0.0001`.
+*   **Uso de `KeyedVectors`:**
+    Após o treinamento, o script descarta as camadas internas do modelo e retém apenas as propriedades estruturais de `model.wv`:
+    *   `model.wv.vectors`: Matriz NumPy $(V \times 100)$ com os embeddings das palavras treinadas.
+    *   `model.wv.index_to_key`: Mapeamento de índices para os termos de volta em string.
+*   **Agrupamento Temático (K-Means):**
+    Como o Word2Vec projeta apenas posições relativas entre palavras, o algoritmo `KMeans` do Scikit-Learn é aplicado sobre a matriz de vetores $(V \times 100)$. Ele divide as palavras em $K$ grupos (clusters) homólogos aos tópicos do LDA/LSA, medindo a proximidade por distância Euclidiana no hiperespaço semântico.
 *   **Redução de Dimensionalidade (t-SNE):** Para viabilizar a visualização em uma tela 2D comum, o algoritmo **t-SNE (t-Distributed Stochastic Neighbor Embedding)** reduz os vetores de 100 dimensões para apenas 2 coordenadas cartesianas $(x, y)$.
 *   **Saída de Dados:**
     *   `word2vec.xlsx`: Tabela de agrupamento das palavras com maior relevância/frequência interna de cada cluster.
