@@ -221,6 +221,19 @@ function renderTopicGroups(type, responseData) {
             // Captura o maior peso absoluto para escala matemática de 0 a 100%
             const maxWeight = Math.max(...words.map(w => Math.abs(w.weight)), 0.00001);
 
+            // Obtém a palavra-chave mais importante (com maior peso no tópico)
+            const leadWord = words.length > 0 ? words[0].word : '';
+            let titleLabel = '';
+
+            // Uniformiza os títulos sem numeração, destacando o termo principal
+            const keywordMatch = String(tId).match(/(?:keyword|seed|word)\s*(\d+)?\s*:\s*['"]?([^'"]+)['"]?/i);
+            if (keywordMatch) {
+                const keyWord = keywordMatch[2];
+                titleLabel = `Group Keyword: "${keyWord}"`;
+            } else {
+                titleLabel = leadWord ? `Group Keyword: "${leadWord}"` : 'Group Keyword';
+            }
+
             let wordsHtml = '';
             words.forEach(w => {
                 const percent = Math.min(Math.round((Math.abs(w.weight) / maxWeight) * 100), 100);
@@ -242,7 +255,7 @@ function renderTopicGroups(type, responseData) {
             const cardHtml = `
                 <div class="topic-card">
                     <h3>
-                        <span>Topic ${tId}</span>
+                        <span>${titleLabel}</span>
                         <span class="topic-badge">${words.length} words</span>
                     </h3>
                     <ul class="topic-words-list">

@@ -83,12 +83,12 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="lsa-words">words </label>
+                                    <label for="lsa-words">words</label>
                                     <input id="lsa-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="lsa-interaction">interaction </label>
+                                    <label for="lsa-interaction">interaction</label>
                                     <input id="lsa-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
@@ -129,17 +129,17 @@
 
                             <div class="form-area">
                                 <div class="form-group">
-                                    <label for="lda-topics">topics </label>
+                                    <label for="lda-topics">topics</label>
                                     <input id="lda-topics" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="lda-words">words </label>
+                                    <label for="lda-words">words</label>
                                     <input id="lda-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="lda-interaction">interaction </label>
+                                    <label for="lda-interaction">interaction</label>
                                     <input id="lda-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
@@ -180,21 +180,21 @@
 
                             <div class="form-area">
                                 <div class="form-group">
-                                    <label for="w2v-clusters">clusters</label>
+                                    <label for="w2v-clusters">key terms</label>
                                     <input id="w2v-clusters" name="topics" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="w2v-words">words </label>
+                                    <label for="w2v-words">words</label>
                                     <input id="w2v-words" name="words" type="number" min="1" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="w2v-interaction">epochs </label>
+                                    <label for="w2v-interaction">interaction</label>
                                     <input id="w2v-interaction" name="interaction" type="number" min="1" required/>
                                 </div>
 
-                                <input class="generateTopics" type="submit" value="generate model" />
+                                <input class="generateTopics" type="submit" value="generate topics" />
                             </div>
                         </form>
                     </div>
@@ -287,7 +287,12 @@
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
-                    <p class="guide-desc">Interactive topic cards appear below with progress bars indicating the weight and relevance of each word. You can download the generated <code>lsa_results.xlsx</code> spreadsheet by clicking the download button next to the title.</p>
+                    <p class="guide-desc">Interactive cards are generated below, each representing a topic group led by its main term (<code>Group Keyword: "..."</code>).</p>
+                    <ul class="guide-param-list">
+                        <li><code>Numerical Value</code>: <strong>Strength Score</strong> — Measures how strongly this word is tied to the topic. Higher scores mean the word plays a bigger role in defining that theme.</li>
+                        <li><code>Percentage (%)</code>: <strong>Relative Relevance</strong> — Compares each word's importance against the group keyword (100%). A 50% score means the term is half as strong as the leader.</li>
+                        <li><code>Spreadsheet Export</code>: Download containing the complete breakdown of topics and word scores.</li>
+                    </ul>
                 </div>
             </div>
 
@@ -307,7 +312,12 @@
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
-                    <p class="guide-desc">Interactive topic cards appear below with progress bars indicating the weight and relevance of each word. You can download the generated <code>lda_results.xlsx</code> spreadsheet by clicking the download button next to the title.</p>
+                    <p class="guide-desc">Interactive cards are generated below, each representing a topic group led by its main term (<code>Group Keyword: "..."</code>).</p>
+                    <ul class="guide-param-list">
+                        <li><code>Numerical Value</code>: <strong>Topic Probability</strong> — The mathematical chance of this word appearing whenever this topic is discussed across your documents.</li>
+                        <li><code>Percentage (%)</code>: <strong>Relative Frequency</strong> — Shows how often this word occurs compared to the group keyword (100%).</li>
+                        <li><code>Spreadsheet Export</code>: Download containing the topic distributions for further analysis.</li>
+                    </ul>
                 </div>
             </div>
 
@@ -315,19 +325,25 @@
             <div id="tab-w2v" class="tab-content" role="tabpanel">
                 <div class="guide-box">
                     <h4 class="guide-title">What is it?</h4>
-                    <p class="guide-desc"><strong>Word2Vec</strong> learns the meaning of words by looking at their neighboring words in sentences. Words used in similar situations are grouped together into visual color-coded clusters.</p>
+                    <p class="guide-desc"><strong>Word2Vec</strong> maps words into a continuous vector space based on their surrounding contexts in sentences (CBOW architecture). Rather than generating document topics, it captures word-to-word semantic affinity through cosine similarity in a 100-dimensional space.</p>
 
                     <h4 class="guide-title">Parameters</h4>
                     <ul class="guide-param-list">
-                        <li><code>clusters</code>: How many color groups or word categories to create.</li>
-                        <li><code>words</code>: How many top words to highlight for each group in the side list.</li>
-                        <li><code>epochs</code>: How many learning cycles the neural network runs through your texts.</li>
+                        <li><code>key terms</code>: How many core vocabulary words to select as base reference terms for semantic exploration.</li>
+                        <li><code>words</code>: How many of the most contextually similar terms to retrieve for each key term.</li>
+                        <li><code>interaction</code>: How many training passes the model runs through your texts (higher values are slower but can be more precise).</li>
                         <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
                         <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
-                    <p class="guide-desc">An interactive 2D scatter plot where each point is a word (closer points mean closer meanings), alongside color-coded cluster cards. The <code>w2v_results.xlsx</code> spreadsheet is ready to download whenever you want via the download button.</p>
+                    <p class="guide-desc">Interactive cards are generated below, each representing a semantic group led by its base term (<code>Group Keyword: "..."</code>).</p>
+                    <ul class="guide-param-list">
+                        <li><code>Group Keyword</code>: The base word shown at the top with a score of 1.0000 (100%), acting as the reference point for the group.</li>
+                        <li><code>Numerical Value</code>: <strong>Context Similarity (0.0 to 1.0)</strong> — Measures how often two words appear in the same kinds of sentences. Scores close to 1.0 indicate high contextual affinity.</li>
+                        <li><code>Percentage (%)</code>: <strong>Semantic Closeness</strong> — Direct percentage of connection with the group keyword.</li>
+                        <li><code>Spreadsheet Export</code>: Download containing all vocabulary relationships found.</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -455,12 +471,8 @@
                             .show();
                     }
 
-                    // Renderiza a visualização correspondente ao modelo executado
-                    if (type === 'w2v') {
-                        renderW2VChart();
-                    } else {
-                        renderTopicGroups(type, data);
-                    }
+                    // Todos os modelos (LDA, LSA, W2V) passam a usar a mesma visualização intuitiva de cards
+                    renderTopicGroups(type, data);
                 },
                 error: function (xhr) {
                     $btn.prop("disabled", false).css("opacity", "1");

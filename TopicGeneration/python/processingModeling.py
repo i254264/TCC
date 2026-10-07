@@ -10,9 +10,6 @@ from gensim import corpora
 from gensim.models import Word2Vec
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
-from sklearn.cluster import KMeans
-import numpy as np
-from sklearn.manifold import TSNE
 import json
 import mysql.connector
 from mysql.connector import Error
@@ -153,76 +150,32 @@ try:
     elif(typeModeling == '3'):
         # Tipo Word2Vec
         excel_file = "word2vec.xlsx"
-        json_file = "word2vec_viz.json"
         # Word2Vec treina sobre a lista de tokens (array_df)
+        # min_count=2 evita palavras que aparecem apenas 1 vez (sem contexto semântico confiável)
         model_w2v = Word2Vec(sentences=array_df, 
                              vector_size=100, 
                              window=5, 
-                             min_count=1, 
+                             min_count=2, 
                              workers=3, 
                              epochs=int(interaction))
         
-        # Extraímos os vetores e as palavras
-        vectors = model_w2v.wv.vectors
-        words_list = model_w2v.wv.index_to_key
-
-        # Garantir que a pasta de exportação existe antes de salvar o JSON
         base_dir = os.path.dirname(os.path.abspath(__file__))
         export_dir = os.path.join(base_dir, "..", "exportExcel")
         if not os.path.exists(export_dir): os.makedirs(export_dir)
         
-        # Agrupamos as palavras em 'topics' clusters para simular tópicos
-        kmeans = KMeans(n_clusters=int(topics), random_state=100, n_init=5)
-        kmeans.fit(vectors)
-        
-        # Redução de dimensionalidade para visualização (t-SNE)
-        # Reduzimos de 100 dimensões para 2 (x, y)
-        tsne = TSNE(n_components=2, random_state=100, perplexity=min(30, len(words_list)-1))
-        vectors_2d = tsne.fit_transform(vectors)
+        # Seleciona as palavras mais frequentes do vocabulário para servirem como palavras-chave centrais
+        vocab_words = sorted(model_w2v.wv.index_to_key, key=lambda w: model_w2v.wv.get_vecattr(w, "count"), reverse=True)
+        num_keys = min(int(topics), len(vocab_words))
+        num_similar = int(words)
+        key_words = vocab_words[:num_keys]
 
         data = []
-        top_words_dict = {}
-        for i in range(int(topics)):
-            # Identifica palavras pertencentes ao cluster i
-            indices = np.where(kmeans.labels_ == i)[0]
-            cluster_words = [words_list[idx] for idx in indices]
-            
-            # Ordena palavras do cluster por frequência global para dar o "weight"
-            weighted = []
-            for w in cluster_words:
-                token_id = dictionary.token2id.get(w)
-                count = dictionary.cfs.get(token_id, 0) if token_id is not None else 0
-                weighted.append((w, count))
-            
-            weighted.sort(key=lambda x: x[1], reverse=True)
-            top_words_dict[i] = [w for w, _ in weighted[:int(words)]]
-            
-            for word_val, weight_val in weighted[:int(words)]:
-                data.append([i, word_val, weight_val])
-        
-        # Gerar JSON para o Scatter Plot
-        viz_data = []
-        for idx, word in enumerate(words_list):
-            c_id = int(kmeans.labels_[idx])
-            token_id = dictionary.token2id.get(word)
-            count = dictionary.cfs.get(token_id, 0) if token_id is not None else 0
-            viz_data.append({
-                "word": word,
-                "x": float(vectors_2d[idx][0]),
-                "y": float(vectors_2d[idx][1]),
-                "cluster": c_id,
-                "weight": count,
-                "is_top": word in top_words_dict.get(c_id, [])
-            })
-        
-        viz_path = os.path.join(export_dir, json_file)
-        with open(viz_path, 'w') as f:
-            json.dump({
-                "points": viz_data,
-                "top_words": top_words_dict
-            }, f)
+        for idx, key_term in enumerate(key_words):
+            similar_words = model_w2v.wv.most_similar(key_term, topn=num_similar)
+            for sim_word, score in similar_words:
+                # Formato compatível com a tabela de exportação e os cards visuais
+                data.append([f"Keyword {idx}: '{key_term}'", sim_word, round(float(score), 4)])
 
-        # model_flag para indicar que o processamento manual foi feito
         model = True
 
     if model and typeModeling in ['1', '2']:
@@ -236,11 +189,17 @@ try:
 
     if data:
         df_export = pd.DataFrame(data, columns=["topic", "word", "weight"])
-        # Ajuste para caminho relativo ao script
-        if typeModeling != '3': # Pasta já criada no bloco Word2Vec se necessário
-            base_dir = os.path.dirname(os.path.abspath(__file__))
-            export_dir = os.path.join(base_dir, "..", "exportExcel")
-            if not os.path.exists(export_dir): os.makedirs(export_dir)
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        export_dir = os.path.join(base_dir, "..", "exportExcel")
+        if not os.path.exists(export_dir): os.makedirs(export_dir)
+
+        # Gera o JSON de visualização para todos os modelos (LDA, LSA e W2V)
+        viz_filenames = {'1': 'lda_viz.json', '2': 'lsa_viz.json', '3': 'w2v_viz.json'}
+        viz_name = viz_filenames.get(typeModeling, "viz.json")
+        viz_path = os.path.join(export_dir, viz_name)
+        
+        with open(viz_path, 'w') as f:
+            json.dump([{"topic": row[0], "word": row[1], "weight": float(row[2])} for row in data], f)
 
         output_path = os.path.join(export_dir, excel_file)
         

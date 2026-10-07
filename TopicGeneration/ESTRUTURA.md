@@ -72,9 +72,9 @@ Quando o usuário decide gerar o modelo na tela de `topic_modeling.html`, o form
 ### Parâmetros de Entrada
 *   **Clean Corpus (Limpeza):** Flag (0 ou 1) para aplicar filtros de ruído textual.
 *   **Lemmatize Corpus (Lematização):** Flag (0 ou 1) para reduzir palavras à sua forma raiz baseada na classe gramatical.
-*   **Topics/Clusters:** Quantidade desejada de tópicos ou clusters a serem gerados.
+*   **Topics/Key Terms:** Quantidade de tópicos desejados (LDA/LSA) ou termos-chave centrais de exploração (Word2Vec).
 *   **Words:** Quantidade de palavras-chave extraídas por tópico para o relatório.
-*   **Interaction/Epochs:** Quantidade de iterações/passadas que o modelo executará durante o treino.
+*   **Interaction:** Quantidade de iterações/passadas que o modelo executará durante o treino (mapeado para `passes` no LDA, `power_iters` no LSA e `epochs` no Word2Vec).
 *   **Type of Modeling:** Inteiro identificador do modelo:
     *   `1` = Latent Dirichlet Allocation (LDA)
     *   `2` = Latent Semantic Analysis (LSA)
@@ -100,15 +100,15 @@ O Python realiza uma conexão local ao banco de dados MySQL, identifica dinamica
 Embora todos os modelos sejam executados através da biblioteca *Gensim*, há uma distinção conceitual e matemática relevante entre eles:
 
 * **LSA e LDA (Modelagem de Tópicos baseada em Bag-of-Words):** Atuam a nível de documento, desconsiderando a ordem sequencial das palavras e avaliando matrizes de coocorrência termo-documento (`doc2bow`). Ambos extraem distribuições de tópicos de maneira nativa.
-* **Word2Vec (Representação Vetorial e Semântica de Janela Local):** Atua a nível de sentença/sequência textual, preservando a vizinhança local através de uma janela deslizante (`window`). O Word2Vec não gera tópicos por si só, gerando unicamente vetores densos em x=⎛⎝⎜⎜⎜⎜⎜⎜⎜x1⋮xi⋮xd⎞⎠⎟⎟⎟⎟⎟⎟⎟ para cada termo; logo, depende de algoritmos auxiliares de agrupamento (*clustering*) para sintetizar temas.
+* **Word2Vec (Representação Vetorial e Semântica de Janela Local):** Atua a nível de sentença/sequência textual, preservando a vizinhança local através de uma janela deslizante (`window`). O Word2Vec aprende vetores densos em $\mathbb{R}^{100}$ para cada termo, viabilizando a análise de relações e vizinhança semântica através do cálculo direto da **similaridade de cosseno** entre as palavras.
 
 | Característica | LSA (Latent Semantic Analysis) | LDA (Latent Dirichlet Allocation) | Word2Vec (Continuous Bag-of-Words) |
 | :--- | :--- | :--- | :--- |
 | **Paradigma** | Álgebra Linear / Fatoração Matricial | Estatística Bayesiana Probabilística | Redes Neurais Rasas / Otimização por Gradiente |
 | **Mecanismo Central** | Decomposição em Valores Singulares (**SVD**) sobre matriz termo-documento. | Inferência Variacional com distribuições *a priori* de **Dirichlet**. | Treinamento de rede neural de 2 camadas com amostragem negativa (**Negative Sampling**). |
 | **Escopo de Contexto** | Global (Coocorrência ao nível de documento). | Global (Distribuições probabilísticas no documento). | Local (Janela de palavras vizinhas deslizante). |
-| **Saída Original** | Coordenadas contínuas em espaço latente reduzido. | Probabilidade do termo pertencer a cada tópico. | Vetor denso de números reais ($\mathbb{R}^{100}$). |
-| **Identificação de Tópicos**| Nativa (`model.show_topics()`). | Nativa (`model.show_topics()`). | Dependente de pipeline externo (**K-Means**). |
+| **Saída Original** | Coordenadas contínuas em espaço latente reduzido. | Probabilidade do termo pertencer a cada tópico. | Vetor denso de números reais ($\mathbb{R}^{100}$) e similaridade de cosseno. |
+| **Identificação de Tópicos / Relações**| Nativa (`model.show_topics()`). | Nativa (`model.show_topics()`). | Exploração semântica por palavras-chave centrais (`model.wv.most_similar()`). |
 
 ### A. Latent Dirichlet Allocation (LDA)
 *   **Funcionamento:** É um modelo probabilístico generativo baseado na premissa de que cada documento é uma mistura de vários tópicos e cada tópico é uma distribuição probabilística sobre palavras.
@@ -118,13 +118,13 @@ Embora todos os modelos sejam executados através da biblioteca *Gensim*, há um
 *   **Funcionamento:** Utiliza a Decomposição em Valores Singulares (SVD) sobre uma matriz de termos-documentos para identificar padrões nas relações entre termos, reduzindo a dimensionalidade e encontrando conceitos latentes no texto.
 *   **Saída de Dados:** Gera o arquivo `lsa.xlsx` contendo as relações de tópicos extraídas.
 
-### C. Word2Vec e Pipeline de Agrupamento
+### C. Word2Vec e Exploração Semântica por Similaridade de Cosseno
 *   **Funcionamento e Configuração do Modelo (`gensim.models.Word2Vec`):**
     O modelo é parametrizado com as seguintes propriedades explícitas e arquiteturais:
     *   `sentences=array_df`: Coleção sequencial de sentenças e tokens pré-processados.
     *   `vector_size=100`: Cada palavra do vocabulário é mapeada em um vetor denso de 100 dimensões.
     *   `window=5`: Alcance máximo de contexto para predição (5 termos à esquerda e 5 à direita).
-    *   `min_count=1`: Mantém todas as palavras que aparecem ao menos uma vez, preservando vocabulários raros presentes no corpus.
+    *   `min_count=2`: Descarta termos de ocorrência única (hapax legomena), eliminando ruídos e garantindo que apenas palavras com contexto semântico mínimo sejam incorporadas aos vetores.
     *   `workers=3`: Execução multithreaded para aceleração via rotinas em Cython.
     *   `epochs=interaction`: Número de passadas completas de otimização sobre a base de textos.
     *   **Padrões Implícitos da Gensim Ativos:**
@@ -132,17 +132,13 @@ Embora todos os modelos sejam executados através da biblioteca *Gensim*, há um
         *   *Negative Sampling (`hs=0`, `negative=5`)*: Aplica amostragem de ruído (5 amostras negativas por etapa) para aproximação eficiente da função de perda logística, dispensando a complexidade da Hierarchical Softmax.
         *   *Taxa de Aprendizado Linear*: Varia de `alpha=0.025` decaindo até `min_alpha=0.0001`.
 *   **Uso de `KeyedVectors`:**
-    Após o treinamento, o script descarta as camadas internas do modelo e retém apenas as propriedades estruturais de `model.wv`:
-    *   `model.wv.vectors`: Matriz NumPy $(V \times 100)$ com os embeddings das palavras treinadas.
-    *   `model.wv.index_to_key`: Mapeamento de índices para os termos de volta em string.
-*   **Agrupamento Temático (K-Means):**
-    Como o Word2Vec projeta apenas posições relativas entre palavras, o algoritmo `KMeans` do Scikit-Learn é aplicado sobre a matriz de vetores $(V \times 100)$. Ele divide as palavras em $K$ grupos (clusters) homólogos aos tópicos do LDA/LSA, medindo a proximidade por distância Euclidiana no hiperespaço semântico.
-*   **Redução de Dimensionalidade (t-SNE):** Para viabilizar a visualização em uma tela 2D comum, o algoritmo **t-SNE (t-Distributed Stochastic Neighbor Embedding)** reduz os vetores de 100 dimensões para apenas 2 coordenadas cartesianas $(x, y)$.
+    Após o treinamento, o script extrai diretamente as relações vetoriais através de `model.wv`:
+    *   **Seleção de Palavras-Chave Centrais (*Key Terms*):** O vocabulário é ordenado pela contagem total de ocorrências (`model.wv.get_vecattr(w, "count")`), selecionando as $N$ palavras mais frequentes como referências do corpus.
+    *   **Similaridade de Cosseno e Inclusão da Palavra Central:** A função nativa `model.wv.most_similar(key_term)` da biblioteca Gensim calcula a distância angular apenas entre o termo semente e as *demais* palavras do vocabulário, excluindo a própria palavra de consulta. Para garantir a paridade com LDA/LSA (onde a palavra líder faz parte da lista do card) e evitar distorção de escala relativa, o sistema inclui a própria palavra-chave no topo do grupo com peso unitário (`1.0000` / 100%) e busca os $N - 1$ vizinhos semânticos mais próximos por cosseno no espaço $\mathbb{R}^{100}$:
+        $$\cos(\theta) = \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\| \|\mathbf{v}\|}$$
 *   **Saída de Dados:**
-    *   `word2vec.xlsx`: Tabela de agrupamento das palavras com maior relevância/frequência interna de cada cluster.
-    *   `word2vec_viz.json`: Estrutura JSON estruturada contendo:
-        *   `points`: Lista de todas as palavras com coordenadas $(x, y)$, cluster atribuído, peso/frequência (`weight`) e indicador booleano (`is_top`).
-        *   `top_words`: Dicionário com as top $N$ palavras mais representativas de cada cluster (limitadas pelo parâmetro `words` informado pelo usuário).
+    *   `word2vec.xlsx`: Planilha contendo `[topic, word, weight]`, onde a coluna `topic` identifica o grupo temático (`Keyword 0: 'termo'`), `word` é o termo (iniciando pela própria palavra semente e seguida dos vizinhos correlatos) e `weight` é o score de similaridade de cosseno (de 0.0000 a 1.0000).
+    *   `w2v_viz.json`: Estrutura JSON serializada contendo a mesma tríade `[topic, word, weight]`, permitindo a padronização completa de renderização no frontend.
 
 ---
 
@@ -150,11 +146,36 @@ Embora todos os modelos sejam executados através da biblioteca *Gensim*, há um
 
 A exibição dos dados pós-processamento ocorre dentro do arquivo `topic_modeling.html` usando estilos avançados do `topic-modeling.css` e manipulação do DOM através do `charts_topic_modeling.js`.
 
-### Renderização por Modelo
-*   **Visualização LDA e LSA:** Apresenta os tópicos em formato de **Cards Individuais**. Para cada palavra-chave do tópico, é desenhada uma barra de progresso horizontal dinamicamente cuja largura representa o peso estatístico do termo naquele conceito.
-*   **Visualização Word2Vec:** Renders um gráfico interativo de dispersão (*Scatter Plot*) utilizando a biblioteca **Chart.js** alimentado pelas coordenadas geradas pelo t-SNE.
-    *   Cada ponto no gráfico representa uma palavra.
-    *   Os pontos são coloridos automaticamente de acordo com o agrupamento de clusters do K-Means.
-    *   Uma lista lateral dinâmica com **Cards de Cluster** individuais, contendo tags estilizadas (*word pills*), contadores de palavras e indicadores visuais de cor correspondentes a cada grupo, respeitando a quantidade máxima de palavras solicitada.
+### Visualização Padronizada em Cards e Barras de Relevância
+Todos os modelos utilizam uma renderização unificada (`renderTopicGroups`), garantindo coerência visual e facilidade de comparação didática:
+*   **Título Unificado dos Cards:** Todos os agrupamentos são identificados pelo cabeçalho `Group Keyword: "..."`, eliminando índices numéricos (`Topic 0`, `Keyword 1`) para evitar falsa hierarquia ou ordenação prioritária entre os agrupamentos.
+*   **LDA e LSA:** O título do card destaca o termo com maior probabilidade/peso estatístico. A lista interna exibe os termos e barras proporcionais de relevância no espaço latente.
+*   **Word2Vec:** O título destaca a palavra semente (*Seed Word*). O primeiro item da lista do card é a própria semente com similaridade de 100% (`1.0000`), servindo como âncora de referência percentual direta para as palavras contextualmente correlatas que a sucedem.
+*   **Exportação:** Em qualquer um dos três modelos, o botão de download dinâmico disponibiliza o arquivo Excel correspondente gerado pelo processamento em Python.
+
+### Significado Teórico dos Pesos Brutos e Percentuais nos Cards
+No frontend (`charts_topic_modeling.js`), as barras de progresso calculam a proporção relativa em relação ao termo de maior magnitude do card:
+$$\text{percentual} = \frac{|\text{peso da palavra}|}{\text{maior peso do grupo}} \times 100$$
+
+A interpretação conceitual dos números varia conforme o modelo matemático:
+1. **LDA (Latent Dirichlet Allocation):**
+   * **Peso Bruto (`weight`):** Probabilidade condicional $P(w \mid z)$ de ocorrência da palavra dado o tópico.
+   * **Porcentagem:** Expressividade e dominância relativa da palavra em relação ao termo principal do tópico (100%).
+2. **LSA (Latent Semantic Analysis):**
+   * **Peso Bruto (`weight`):** Carga ou projeção estatística no vetor singular latente resultante do SVD.
+   * **Porcentagem:** Força de contribuição relativa da palavra para a definição daquele conceito latente em relação à palavra âncora.
+3. **Word2Vec (W2V):**
+   * **Peso Bruto (`weight`):** Score de similaridade de cosseno ($\cos\theta \in [-1.0, 1.0]$) entre o vetor da palavra vizinha e a palavra semente central (que possui similaridade `1.0000`).
+   * **Porcentagem:** Grau direto de afinidade semântica e proximidade contextual no espaço vetorial contínuo em relação à palavra-chave central.
+
+### Guia Interativo de Apoio ao Usuário (*Modeling Guide*)
+Para democratizar a análise e permitir que pesquisadores sem formação aprofundada em Álgebra Linear ou Estatística Bayesiana interpretem os modelos, a interface integra um modal de auxílio em abas (`#popUP`):
+* **Abas Contextuais:** Divisão dedicada entre LSA, LDA e Word2Vec com explicações didáticas dos algoritmos.
+* **Glossário Didático de Parâmetros:** Tradução prática do impacto de parâmetros como número de tópicos/termos-chave, passadas de treinamento (*interaction*), limpeza (*clean corpus*) e lematização (*lemmatize corpus*).
+* **Interpretação Descomplicada das Saídas:**
+  * **LSA:** O valor numérico é apresentado como *Strength Score* (força de ancoragem do termo no tema).
+  * **LDA:** O valor numérico é interpretado como *Topic Probability* (chance de ocorrência na discussão temática).
+  * **Word2Vec:** O valor numérico é traduzido como *Context Similarity* (grau de coocorrência em frases com mesmo sentido).
+  * **Porcentagem (%):** Apresentada universalmente como a proporção direta em relação à palavra âncora do grupo (`Group Keyword`, fixada em 100%).
 ---
 Documento desenvolvido e estruturado como especificação de software para o projeto de TCC.

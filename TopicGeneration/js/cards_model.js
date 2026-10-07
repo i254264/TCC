@@ -51,7 +51,7 @@ function literalString(){
         {
             titulo: 'W2V',
             link: 'https://radimrehurek.com/gensim/models/word2vec.html',
-            texto: 'Implemented via Gensim\'s Word2Vec model, this neural architecture learns dense word embeddings from context windows, placing semantically related words close together in vector space.',
+            texto: 'Implemented via Gensim\'s Word2Vec model, this neural architecture learns dense word embeddings from context windows, computing cosine similarity to uncover semantic relationships around key terms.',
             chartHtml: `
                 <div class="bar-chart">
                     <div class="bar" data-progress="70"></div>

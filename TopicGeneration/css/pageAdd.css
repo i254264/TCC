@@ -322,6 +322,11 @@ padding: 0;
   font-size: 0.86rem;
 }
 
+/* Normaliza o tamanho da fonte das tags strong nas listas do guia */
+.guide-param-list strong {
+  font-size: 1em !important;
+}
+
 .list {
   display: flex;
   flex-direction: column;
