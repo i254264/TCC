@@ -16,8 +16,8 @@ try {
             $sqlSelect = "ALTER TABLE $tableName DROP COLUMN $column;";
             $conn->query($sqlSelect);
         };
-        //troca nome da coluna que ficou para 'col'. Não trocar esse nome pois é usado no python
-        $sqlSelect = "ALTER TABLE $tableName CHANGE $columnDrop col VARCHAR(255) NOT NULL;";
+        // troca nome da coluna que ficou para 'col'. Não trocar esse nome pois é usado no python
+        $sqlSelect = "ALTER TABLE `$tableName` CHANGE `$columnDrop` `col` TEXT NOT NULL;";
         $conn->query($sqlSelect);
         $messages[] = "Colunas auxiliar dropadas com sucesso!";
     }

@@ -21,7 +21,7 @@ O pipeline de ingestão de dados foi projetado para ser flexível e tolerante a 
 Antes do funcionamento do sistema, é necessária a existência de um banco de dados MySQL com o nome de `topicgeneration`. Esse banco de dados precisa conter as seguintes tabelas estruturais de suporte:
 
 1. **`tabela_topicgeneration`**: Tabela principal para armazenamento definitivo dos metadados textuais extraídos que serão submetidos aos algoritmos de modelagem de tópicos.
-2. **`auxiliar`**: Tabela auxiliar temporária para fins de manipulação, filtragem e transição de colunas textuais.
+2. **`auxiliar`**: Tabela auxiliar temporária para fins de manipulação, filtragem e transição de colunas textuais (criada e recriada dinamicamente pelo script `test.php` durante uploads de CSV).
 
 As queries SQL para a criação da base de dados e suas tabelas estruturais são apresentadas a seguir:
 
@@ -55,11 +55,11 @@ CREATE TABLE IF NOT EXISTS `auxiliar` (
 3.  **Verificação de Estado do Banco de Dados (`BDexist.php`):**
     *   O PHP verifica se a tabela principal (`tabela_topicgeneration`) já possui registros.
     *   Caso positivo, o sistema entra em estado de **Aviso (Warning)** e pergunta ao usuário no frontend se deseja **Continuar** (concatenar os dados) ou **Deletar** (limpar a base e criar uma nova).
-4.  **Criação Dinâmica de Colunas (`createDB.php`):**
-    *   O primeiro arquivo do upload é aberto temporariamente para leitura do cabeçalho.
-    *   Os nomes das colunas são sanitizados (remoção de caracteres especiais, aspas e substituição de espaços por sublinhados `_`).
-    *   Uma instrução SQL `CREATE TABLE IF NOT EXISTS` é executada dinamicamente, gerando as colunas correspondentes no banco de dados.
-5.  **Otimização de Transação em Lote:**
+4.  **Processamento por Tipo de Arquivo (`test.php`, `processBib.php`, `processRis.php`):**
+    *   **BibTeX (`processBib.php`) & RIS (`processRis.php`):** As referências bibliográficas têm seus campos (*title*, *year*, *abstract*) extraídos e inseridos diretamente na tabela `tabela_topicgeneration`, preenchendo automaticamente a coluna `col`.
+    *   **CSV (`test.php`):** Os nomes de colunas do cabeçalho são sanitizados e uma tabela `auxiliar` é criada dinamicamente com tipos `TEXT` para receber todos os dados brutos.
+    *   **Seleção de Coluna Textual (`dropColumns.php` e `copyColumns.php`):** Quando o CSV possui múltiplas colunas, a interface solicita ao usuário a seleção da coluna textual a ser analisada. O PHP remove as demais colunas da tabela `auxiliar`, renomeia o campo selecionado para `col` e migra os dados para `tabela_topicgeneration`.
+5.  **Otimização de Transação em Lote no CSV:**
     *   Para garantir alta performance ao processar grandes volumes de dados (milhares de linhas), o arquivo PHP inicia uma transação no banco de dados (`$conn->beginTransaction()`).
     *   O parser realiza a leitura sequencial das linhas e executa inserções em lote, realizando o **Commit a cada 1.000 registros gravados**. Isso otimiza o uso de memória e evita gargalos de I/O no MySQL.
 

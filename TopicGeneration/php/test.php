@@ -1,14 +1,24 @@
 <?php
 include_once('conexaoDB.php');
-// $fileName = 'D:\Documents\Unicamp\IC\datasets\Tweets.csv';
 $tableName = 'auxiliar';
 
-$diretorio = "filesSent/";
-// Obtém uma lista de todos os arquivos no diretório
-$arquivos = glob($diretorio . "*");
+if (!function_exists('sanitizeHeaderColumn')) {
+    function sanitizeHeaderColumn($str) {
+        $str = preg_replace('/[^\w\s-]/u', '', (string)$str);
+        $str = preg_replace('/[\s-]+/', '_', trim($str));
+        return $str !== '' ? $str : 'col_' . uniqid();
+    }
+}
 
-// Verifica se algum arquivo foi encontrado
-if ($arquivos !== false) {
+$arquivos = array();
+if (isset($fileToProcess) && file_exists($fileToProcess)) {
+    $arquivos[] = $fileToProcess;
+} else {
+    $diretorio = "filesSent/";
+    $arquivos = glob($diretorio . "*.csv") ?: array();
+}
+
+if (!empty($arquivos)) {
     foreach ($arquivos as $fileName) {
         if (file_exists($fileName)) {
             // Verifica a conexão com o banco de dados
@@ -32,20 +42,16 @@ if ($arquivos !== false) {
                 if ($fileNameOpen !== FALSE) {
                     // Lê a primeira linha do arquivo (cabeçalho)
                     $header = fgetcsv($fileNameOpen);
-                    if ($header !== FALSE) {
-                        // Sanatiza o cabeçalho e troca espaços por _
-                        $header = array_map('sanitize', $header);
-                        $header = array_map(function ($word) {
-                            // Substitui espaços por underscores e remove aspas simples
-                            return str_replace([" ", "'"], ["_", ""], $word);
-                        }, $header);
+                    if ($header !== FALSE && !empty($header)) {
+                        // Sanitiza os nomes das colunas
+                        $header = array_map('sanitizeHeaderColumn', $header);
 
                         // Irá criar as colunas da tabela
                         try {
-                            $sqlTable = "CREATE TABLE IF NOT EXISTS $tableName (";
-                            $sqlTable .= "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,";
+                            $sqlTable = "CREATE TABLE `$tableName` (";
+                            $sqlTable .= "`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, ";
                             foreach ($header as $columnName) {
-                                $sqlTable .= "`$columnName` VARCHAR(255), ";
+                                $sqlTable .= "`$columnName` TEXT NULL, ";
                             }
                             $sqlTable = rtrim($sqlTable, ", ") . ");";
                             $conn->exec($sqlTable);
@@ -97,7 +103,7 @@ if ($arquivos !== false) {
                         } catch (PDOException $e) {
                             // Se ocorrer um erro ao preparar a consulta, faz rollback da transação
                             $conn->rollback();
-                            $messageError[] = "Transaction insertion failed: " . $e->getMessage();
+                            $messagesError[] = "Transaction insertion failed: " . $e->getMessage();
                             $respostaAjax = 0;
                         }
                     } else {

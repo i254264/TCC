@@ -35,9 +35,12 @@ if ($BDjaCriado === '1') {
 
 if($BDjaCriado === '3') {
     // Se clicou em Delete (3), limpamos os dados existentes antes de processar o novo upload
-    include_once('dropColumns.php');
-    include_once('copyColumns.php');
-    $respostaAjax = 1;
+    try {
+        $conn->exec("TRUNCATE TABLE tabela_topicgeneration");
+        $messages[] = "Dados anteriores excluídos com sucesso!";
+    } catch (PDOException $e) {
+        $messagesError[] = "Erro ao limpar dados anteriores: " . $e->getMessage();
+    }
 }
 
 // Se não estamos no estado de "Aviso" (1), processamos os arquivos para os casos 0 (novo), 2 (continue) e 3 (delete)
@@ -53,22 +56,40 @@ if ($BDjaCriado !== '1') {
             mkdir($destinoArquivo, 0777, true);
         }
 
+        $extensoesPermitidas = array('csv', 'bib', 'ris');
+
         // Loop através de cada arquivo enviado
         foreach ($files['tmp_name'] as $key => $tmp_name) {
             $nomeArquivo = $files['name'][$key];
+            $extensao = strtolower(pathinfo($nomeArquivo, PATHINFO_EXTENSION));
+
+            // Validação estrita do tipo de arquivo permitido
+            if (!in_array($extensao, $extensoesPermitidas)) {
+                $messagesError[] = "Formato inválido ($nomeArquivo). Apenas arquivos .csv, .bib ou .ris são permitidos.";
+                $respostaAjax = 0;
+                continue;
+            }
 
             // Move o arquivo para o diretório de destino
             if (move_uploaded_file($tmp_name, $destinoArquivo . $nomeArquivo)) {
-                $extensao = pathinfo($nomeArquivo, PATHINFO_EXTENSION);
                 if ($extensao === 'bib') {
                     $fileToProcess = $destinoArquivo . $nomeArquivo;
                     include('processBib.php');
                     $messages[] = "Arquivo BibTeX processado: $nomeArquivo";
-                    $respostaAjax = 1; 
-                } else {
+                    if (empty($messagesError)) {
+                        $respostaAjax = 1;
+                    }
+                } elseif ($extensao === 'ris') {
+                    $fileToProcess = $destinoArquivo . $nomeArquivo;
+                    include('processRis.php');
+                    if (empty($messagesError)) {
+                        $respostaAjax = 1;
+                    }
+                } elseif ($extensao === 'csv') {
                     $messages[] = "SUCESSO ao salvar os arquivos";
                     $respostaAjax = 2;
-                    include_once('test.php');
+                    $fileToProcess = $destinoArquivo . $nomeArquivo;
+                    include('test.php');
                 }
             } else {
                 $messagesError[] = "Error when saving files";
@@ -81,7 +102,7 @@ if ($BDjaCriado !== '1') {
     }
 }
 
-if ($BDjaCriado === '0' && $columnDrop != 'null' && $columnDrop !== null) {
+if ($columnDrop !== 'null' && $columnDrop !== null && in_array($BDjaCriado, array('0', '2', '3'), true)) {
     include_once('dropColumns.php');
     include_once('copyColumns.php');
 }
