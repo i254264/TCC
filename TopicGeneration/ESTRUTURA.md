@@ -81,7 +81,7 @@ Quando o usuário decide gerar o modelo na tela de `topic_modeling.html`, o form
     *   `3` = Word2Vec (W2V)
 
 ### Pipeline de PLN no Python
-O Python realiza uma conexão local ao banco de dados MySQL, identifica dinamicamente a primeira coluna diferente de `id` (sem validação explícita de tipo de dado) e extrai os registros em modo streaming (linha a linha) para economizar memória RAM.
+O Python realiza uma conexão local ao banco de dados MySQL e lê explicitamente a coluna `col` de `tabela_topicgeneration`, que contém o texto preparado para a modelagem. Os registros são extraídos em modo streaming (linha a linha) para economizar memória RAM.
 
 1.  **Limpeza de Texto (`Document_Cleansing`):**
     *   Conversão para caixa baixa (*lowercase*).

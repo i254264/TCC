@@ -57,19 +57,9 @@ array_df = []
 
 if connection.is_connected():
     cursor = connection.cursor()
-    
-    # Identifica dinamicamente a primeira coluna que não seja 'id'
-    cursor.execute("SHOW COLUMNS FROM tabela_topicgeneration")
-    columns = [row[0] for row in cursor.fetchall() if row[0].lower() != 'id']
-    
-    if not columns:
-        print("Erro: Nenhuma coluna de dados encontrada.")
-        sys.exit(1)
-    
-    target_col = columns[0] 
-    
-    # EXECUTAR A QUERY SEM FETCHALL (Streaming)
-    cursor.execute(f"SELECT `{target_col}` FROM tabela_topicgeneration")
+
+    # A coluna `col` contém o texto selecionado para a modelagem.
+    cursor.execute("SELECT `col` FROM tabela_topicgeneration")
     
     # Iterar sobre o cursor economiza memória, pois não carrega tudo de uma vez
     for (text_content,) in cursor:
