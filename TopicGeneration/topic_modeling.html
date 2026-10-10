@@ -281,17 +281,17 @@
                     <ul class="guide-param-list">
                         <li><code>topics</code>: How many different themes or subjects you want to discover.</li>
                         <li><code>words</code>: How many keywords to show inside each theme.</li>
-                        <li><code>interaction</code>: How many calculation passes the model makes (higher values are slower but can be more precise).</li>
+                        <li><code>interaction</code>: Number of calculation iterations used to approximate the latent components. Higher values may increase processing time and improve the numerical approximation.</li>
                         <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
-                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
+                        <li><code>lemmatize corpus</code>: Converts words to their base forms using their grammatical roles, for example, “running” to “run” and “universities” to “university”.</li>
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
                     <p class="guide-desc">Interactive cards are generated below, each representing a topic group led by its main term (<code>Group Keyword: "..."</code>).</p>
                     <ul class="guide-param-list">
-                        <li><code>Numerical Value</code>: <strong>Term Contribution</strong> — Shows the word's projection onto the latent component. The sign indicates direction along that component.</li>
+                        <li><code>Numerical Value</code>: <strong>Term Contribution</strong> — Shows the word's projection onto the latent component. The sign indicates direction along that component. Larger absolute values indicate stronger contributions; a negative sign does not mean a weaker contribution.</li>
                         <li><code>Bar</code>: Compares the absolute weight of each word with the largest absolute weight in the card. The bar shows magnitude regardless of the weight's sign.</li>
-                        <li><code>Spreadsheet Export</code>: Download containing the complete breakdown of topics and word scores.</li>
+                        <li><code>Spreadsheet Export</code>: Download containing the selected terms and their weights for each topic.</li>
                     </ul>
                 </div>
             </div>
@@ -306,17 +306,17 @@
                     <ul class="guide-param-list">
                         <li><code>topics</code>: How many different themes or subjects you want to discover.</li>
                         <li><code>words</code>: How many keywords to show inside each theme.</li>
-                        <li><code>interaction</code>: How many calculation passes the model makes (higher values are slower but can be more precise).</li>
+                        <li><code>interaction</code>: Number of training passes over the corpus. Higher values increase processing time but do not guarantee more interpretable topics.</li>
                         <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
-                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
+                        <li><code>lemmatize corpus</code>: Converts words to their base forms using their grammatical roles, for example, “running” to “run” and “universities” to “university”.</li>
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
                     <p class="guide-desc">Interactive cards are generated below, each representing a topic group led by its main term (<code>Group Keyword: "..."</code>).</p>
                     <ul class="guide-param-list">
-                        <li><code>Numerical Value</code>: <strong>Topic Probability</strong> — The mathematical chance of this word appearing whenever this topic is discussed across your documents.</li>
+                        <li><code>Numerical Value</code>: <strong>Topic Probability</strong> — The probability assigned to each word within the topic by the trained model.</li>
                         <li><code>Bar</code>: Compares each word's probability with the highest probability in the card; the highest value fills the bar.</li>
-                        <li><code>Spreadsheet Export</code>: Download containing the topic distributions for further analysis.</li>
+                        <li><code>Spreadsheet Export</code>: Download containing the selected terms and their weights for each topic.</li>
                     </ul>
                 </div>
             </div>
@@ -329,20 +329,20 @@
 
                     <h4 class="guide-title">Parameters</h4>
                     <ul class="guide-param-list">
-                        <li><code>key terms</code>: How many core vocabulary words to select as base reference terms for semantic exploration.</li>
+                        <li><code>key terms</code>: How many of the most frequent words in the trained vocabulary to select as reference terms.</li>
                         <li><code>words</code>: How many of the most contextually similar terms to retrieve for each key term.</li>
-                        <li><code>interaction</code>: How many training passes the model runs through your texts (higher values are slower but can be more precise).</li>
+                        <li><code>interaction</code>: Number of training passes over the corpus. Higher values increase processing time but do not guarantee more meaningful word relationships.</li>
                         <li><code>clean corpus</code>: Removes common words like "the", "at", "is", as well as numbers and special characters.</li>
-                        <li><code>lemmatize corpus</code>: Simplifies word endings to their root grammatical form (e.g., converts "running" to "run").</li>
+                        <li><code>lemmatize corpus</code>: Converts words to their base forms using their grammatical roles, for example, “running” to “run” and “universities” to “university”.</li>
                     </ul>
 
                     <h4 class="guide-title">Outputs & Visualization</h4>
                     <p class="guide-desc">Interactive cards are generated below, each representing a semantic group led by its base term (<code>Group Keyword: "..."</code>).</p>
                     <ul class="guide-param-list">
                         <li><code>Group Keyword</code>: The base word used as the reference for the related terms in the group.</li>
-                        <li><code>Numerical Value</code>: <strong>Context Similarity (-1.0 to 1.0)</strong> — The cosine similarity between the word vectors. Scores closer to 1 indicate more similar directions; negative scores indicate vectors more than 90° apart.</li>
+                        <li><code>Numerical Value</code>: <strong>Context Similarity (-1.0 to 1.0)</strong> — Compares each word's vector with the reference word's vector. Values closer to 1 indicate greater vector similarity in the trained corpus.</li>
                         <li><code>Bar</code>: Shows positive similarity on a fixed 0-to-1 scale; zero and negative scores have no filled bar.</li>
-                        <li><code>Spreadsheet Export</code>: Download containing all vocabulary relationships found.</li>
+                        <li><code>Spreadsheet Export</code>: Download containing the retrieved neighbors and their cosine similarity scores for each reference word.</li>
                     </ul>
                 </div>
             </div>
