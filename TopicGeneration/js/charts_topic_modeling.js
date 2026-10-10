@@ -8,22 +8,25 @@
  * Processa e desenha os cards de tópicos dinâmicos para LDA, LSA e Word2Vec.
  */
 function renderTopicGroups(type, responseData) {
+    const modelType = type.toLowerCase();
+    const isW2V = modelType === 'w2v';
+
     $("#w2v-viz-container").fadeIn(800);
     $("#w2v-chart-area").hide();
     $("#topic-groups-area").show().html('<p class="viz-status-loading">Loading topic groups...</p>');
     
     // Atualiza cabeçalhos dinamicamente
-    const titleText = type.toLowerCase() === 'w2v'
+    const titleText = isW2V
         ? "W2V Word Similarity & Keyword Weights"
         : type.toUpperCase() + " Topic Groups & Keyword Weights";
     $("#viz-title").text(titleText);
     
     const footerDescriptions = {
-        'lda': "Topic Probability: values represent conditional probability P(w|z). Bars indicate relative proportion to the top topic term.",
-        'lsa': "Strength Score: values represent latent projections (with sign). Bars indicate relative magnitude (|w|) to the highest loading term.",
-        'w2v': "Context Similarity: values show cosine similarity between each word and the card keyword. Higher values indicate greater vector similarity in the trained corpus. Bars use a fixed scale from 0 to 1."
+        'lda': "Topic Probability: values indicate the probability of each word given the topic. Bars compare these probabilities within each card, with the highest value shown as a full bar.",
+        'lsa': "Term Contribution: values indicate each word's projection onto the latent component; signs distinguish opposite directions. Bars compare absolute contribution strength within each card.",
+        'w2v': "Context Similarity: values indicate cosine similarity between each word and the card keyword. Bars show positive similarity on a fixed scale from 0 to 1."
     };
-    $("#viz-footer-text").text(footerDescriptions[type.toLowerCase()] || "Visualization of terms and their respective weights.");
+    $("#viz-footer-text").text(footerDescriptions[modelType] || "Visualization of terms and their respective weights.");
 
     function drawGroups(topicsList) {
         const $container = $("#topic-groups-area");
@@ -62,8 +65,7 @@ function renderTopicGroups(type, responseData) {
         Object.keys(grouped).forEach(tId => {
             const words = grouped[tId];
             
-            const isW2V = type.toLowerCase() === 'w2v';
-            const isLSA = type.toLowerCase() === 'lsa';
+            const isLSA = modelType === 'lsa';
 
             // Ordenação adequada a cada método:
             // LSA: magnitude absoluta |w| (força no componente)
@@ -97,29 +99,28 @@ function renderTopicGroups(type, responseData) {
 
             let wordsHtml = '';
             words.forEach(w => {
-                let percent = 0;
+                let barWidth = 0;
                 if (isLSA) {
                     // LSA: magnitude relativa ao termo de maior carga
-                    percent = Math.min(Math.round((Math.abs(w.weight) / maxRef) * 100), 100);
+                    barWidth = Math.min((Math.abs(w.weight) / maxRef) * 100, 100);
                 } else if (isW2V) {
                     // Word2Vec: escala fixa para o score de cosseno positivo
-                    percent = Math.max(0, Math.min(w.weight, 1)) * 100;
+                    barWidth = Math.max(0, Math.min(w.weight, 1)) * 100;
                 } else {
                     // LDA: proporção relativa em relação à maior probabilidade
-                    percent = Math.min(Math.round((w.weight / maxRef) * 100), 100);
+                    barWidth = Math.min((w.weight / maxRef) * 100, 100);
                 }
 
                 const displayWeight = w.weight.toFixed(4);
-                const displayPercent = isW2V ? percent.toFixed(1) : percent;
 
                 wordsHtml += `
                     <li class="topic-word-item">
                         <div class="topic-word-info">
                             <span class="topic-word-name">${w.word}</span>
-                            <span class="topic-word-weight">${displayWeight} (${displayPercent}%)</span>
+                            <span class="topic-word-weight">${displayWeight}</span>
                         </div>
                         <div class="topic-progress-bg">
-                            <div class="topic-progress-bar" style="width: 0%;" data-percent="${percent}"></div>
+                            <div class="topic-progress-bar" style="width: 0%;" data-percent="${barWidth}"></div>
                         </div>
                     </li>
                 `;

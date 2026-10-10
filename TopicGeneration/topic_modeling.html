@@ -289,8 +289,8 @@
                     <h4 class="guide-title">Outputs & Visualization</h4>
                     <p class="guide-desc">Interactive cards are generated below, each representing a topic group led by its main term (<code>Group Keyword: "..."</code>).</p>
                     <ul class="guide-param-list">
-                        <li><code>Numerical Value</code>: <strong>Strength Score</strong> — Measures how strongly this word is tied to the topic. Higher scores mean the word plays a bigger role in defining that theme.</li>
-                        <li><code>Percentage (%)</code>: <strong>Relative Relevance</strong> — Compares each word's importance against the group keyword (100%). A 50% score means the term is half as strong as the leader.</li>
+                        <li><code>Numerical Value</code>: <strong>Term Contribution</strong> — Shows the word's projection onto the latent component. The sign indicates direction along that component.</li>
+                        <li><code>Bar</code>: Compares the absolute weight of each word with the largest absolute weight in the card. The bar shows magnitude regardless of the weight's sign.</li>
                         <li><code>Spreadsheet Export</code>: Download containing the complete breakdown of topics and word scores.</li>
                     </ul>
                 </div>
@@ -315,7 +315,7 @@
                     <p class="guide-desc">Interactive cards are generated below, each representing a topic group led by its main term (<code>Group Keyword: "..."</code>).</p>
                     <ul class="guide-param-list">
                         <li><code>Numerical Value</code>: <strong>Topic Probability</strong> — The mathematical chance of this word appearing whenever this topic is discussed across your documents.</li>
-                        <li><code>Percentage (%)</code>: <strong>Relative Frequency</strong> — Shows how often this word occurs compared to the group keyword (100%).</li>
+                        <li><code>Bar</code>: Compares each word's probability with the highest probability in the card; the highest value fills the bar.</li>
                         <li><code>Spreadsheet Export</code>: Download containing the topic distributions for further analysis.</li>
                     </ul>
                 </div>
@@ -341,7 +341,7 @@
                     <ul class="guide-param-list">
                         <li><code>Group Keyword</code>: The base word used as the reference for the related terms in the group.</li>
                         <li><code>Numerical Value</code>: <strong>Context Similarity (-1.0 to 1.0)</strong> — The cosine similarity between the word vectors. Scores closer to 1 indicate more similar directions; negative scores indicate vectors more than 90° apart.</li>
-                        <li><code>Percentage (%)</code>: <strong>Fixed Visual Scale</strong> — Positive scores are shown on a fixed 0-to-1 scale. This is a visual representation of the cosine score, not a percentage of semantic equivalence; zero and negative scores have no filled bar.</li>
+                        <li><code>Bar</code>: Shows positive similarity on a fixed 0-to-1 scale; zero and negative scores have no filled bar.</li>
                         <li><code>Spreadsheet Export</code>: Download containing all vocabulary relationships found.</li>
                     </ul>
                 </div>

@@ -175,6 +175,6 @@ Para democratizar a análise e permitir que pesquisadores sem formação aprofun
   * **LSA:** O valor numérico é apresentado como *Strength Score* (força de ancoragem do termo no tema).
   * **LDA:** O valor numérico é interpretado como *Topic Probability* (chance de ocorrência na discussão temática).
   * **Word2Vec:** O valor numérico é traduzido como *Context Similarity* (similaridade entre os vetores aprendidos a partir dos contextos das palavras).
-  * **Porcentagem (%):** No LDA e LSA, apresentada como magnitude relativa em relação ao termo de maior valor exibido no grupo (normalizado em 100%). No Word2Vec, a barra usa uma escala fixa de 0 a 1 para scores positivos; não é normalizada pelo vizinho mais similar do grupo.
+  * **Barra:** Cada modelo mantém uma representação própria: no LSA, compara a magnitude absoluta dos pesos no cartão; no LDA, compara as probabilidades com a maior do cartão; no Word2Vec, mostra scores positivos em escala fixa de 0 a 1. As barras são identificações visuais próprias de cada método e não devem ser comparadas entre modelos.
 ---
 Documento desenvolvido e estruturado como especificação de software para o projeto de TCC.
