@@ -21,7 +21,7 @@ function renderTopicGroups(type, responseData) {
     const footerDescriptions = {
         'lda': "Topic Probability: values represent conditional probability P(w|z). Bars indicate relative proportion to the top topic term.",
         'lsa': "Strength Score: values represent latent projections (with sign). Bars indicate relative magnitude (|w|) to the highest loading term.",
-        'w2v': "Context Similarity: values represent cosine similarity to the card keyword. Bars show positive similarity relative to the highest score displayed; non-positive values receive zero bar."
+        'w2v': "Context Similarity: values show cosine similarity between each word and the card keyword. Higher values indicate greater vector similarity in the trained corpus. Bars use a fixed scale from 0 to 1."
     };
     $("#viz-footer-text").text(footerDescriptions[type.toLowerCase()] || "Visualization of terms and their respective weights.");
 
@@ -74,12 +74,10 @@ function renderTopicGroups(type, responseData) {
                 words.sort((a, b) => b.weight - a.weight);
             }
 
-            // Referência de escala máxima para a barra de 100%
+            // Referência de escala relativa para LSA e LDA
             let maxRef = 0.00001;
             if (isLSA) {
                 maxRef = Math.max(...words.map(w => Math.abs(w.weight)), 0.00001);
-            } else if (isW2V) {
-                maxRef = Math.max(...words.map(w => w.weight), 0.00001);
             } else {
                 maxRef = Math.max(...words.map(w => w.weight), 0.00001);
             }
@@ -104,20 +102,21 @@ function renderTopicGroups(type, responseData) {
                     // LSA: magnitude relativa ao termo de maior carga
                     percent = Math.min(Math.round((Math.abs(w.weight) / maxRef) * 100), 100);
                 } else if (isW2V) {
-                    // Word2Vec: se cosseno for negativo, a barra não pontua positivamente
-                    percent = w.weight > 0 ? Math.min(Math.round((w.weight / maxRef) * 100), 100) : 0;
+                    // Word2Vec: escala fixa para o score de cosseno positivo
+                    percent = Math.max(0, Math.min(w.weight, 1)) * 100;
                 } else {
                     // LDA: proporção relativa em relação à maior probabilidade
                     percent = Math.min(Math.round((w.weight / maxRef) * 100), 100);
                 }
 
                 const displayWeight = w.weight.toFixed(4);
+                const displayPercent = isW2V ? percent.toFixed(1) : percent;
 
                 wordsHtml += `
                     <li class="topic-word-item">
                         <div class="topic-word-info">
                             <span class="topic-word-name">${w.word}</span>
-                            <span class="topic-word-weight">${displayWeight} (${percent}%)</span>
+                            <span class="topic-word-weight">${displayWeight} (${displayPercent}%)</span>
                         </div>
                         <div class="topic-progress-bg">
                             <div class="topic-progress-bar" style="width: 0%;" data-percent="${percent}"></div>

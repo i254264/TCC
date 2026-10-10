@@ -339,9 +339,9 @@
                     <h4 class="guide-title">Outputs & Visualization</h4>
                     <p class="guide-desc">Interactive cards are generated below, each representing a semantic group led by its base term (<code>Group Keyword: "..."</code>).</p>
                     <ul class="guide-param-list">
-                        <li><code>Group Keyword</code>: The base word shown at the top with a score of 1.0000 (100%), acting as the reference point for the group.</li>
-                        <li><code>Numerical Value</code>: <strong>Context Similarity (0.0 to 1.0)</strong> — Measures how often two words appear in the same kinds of sentences. Scores close to 1.0 indicate high contextual affinity.</li>
-                        <li><code>Percentage (%)</code>: <strong>Semantic Closeness</strong> — Direct percentage of connection with the group keyword.</li>
+                        <li><code>Group Keyword</code>: The base word used as the reference for the related terms in the group.</li>
+                        <li><code>Numerical Value</code>: <strong>Context Similarity (-1.0 to 1.0)</strong> — The cosine similarity between the word vectors. Scores closer to 1 indicate more similar directions; negative scores indicate vectors more than 90° apart.</li>
+                        <li><code>Percentage (%)</code>: <strong>Fixed Visual Scale</strong> — Positive scores are shown on a fixed 0-to-1 scale. This is a visual representation of the cosine score, not a percentage of semantic equivalence; zero and negative scores have no filled bar.</li>
                         <li><code>Spreadsheet Export</code>: Download containing all vocabulary relationships found.</li>
                     </ul>
                 </div>

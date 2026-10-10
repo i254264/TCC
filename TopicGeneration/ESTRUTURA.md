@@ -165,7 +165,7 @@ No frontend (`charts_topic_modeling.js`), o valor numérico exibe o peso bruto c
    * **Ordenação e Barra:** Ordenado pela magnitude absoluta decrescente ($|w|$). A barra mede a magnitude relativa em relação ao termo de maior carga absoluta entre os termos exibidos ($\frac{|w_i|}{\max_j |w_j|} \times 100$).
 3. **Word2Vec (W2V):**
    * **Peso Bruto (`weight`):** Score de similaridade de cosseno ($\cos\theta \in [-1.0, 1.0]$) entre os vetores da palavra vizinha e da palavra semente.
-   * **Ordenação e Barra:** Ordenado pelo valor real decrescente do cosseno. A barra máxima corresponde ao maior resultado positivo entre os termos exibidos ($\frac{w_i}{\max_j w_j} \times 100$); valores não positivos recebem barra zerada ($0\%$). Caso todos os resultados retornados no grupo sejam negativos ou nulos, todas as barras permanecem em $0\%$.
+   * **Ordenação e Barra:** Ordenado pelo valor real decrescente do cosseno. A barra usa escala fixa de $0$ a $1$ ($\max(0, \min(w_i, 1)) \times 100$); scores nulos ou negativos recebem barra zerada ($0\%$). A porcentagem expressa a posição visual na escala do cosseno, não uma porcentagem de equivalência semântica.
 
 ### Guia Interativo de Apoio ao Usuário (*Modeling Guide*)
 Para democratizar a análise e permitir que pesquisadores sem formação aprofundada em Álgebra Linear ou Estatística Bayesiana interpretem os modelos, a interface integra um modal de auxílio em abas (`#popUP`):
@@ -175,6 +175,6 @@ Para democratizar a análise e permitir que pesquisadores sem formação aprofun
   * **LSA:** O valor numérico é apresentado como *Strength Score* (força de ancoragem do termo no tema).
   * **LDA:** O valor numérico é interpretado como *Topic Probability* (chance de ocorrência na discussão temática).
   * **Word2Vec:** O valor numérico é traduzido como *Context Similarity* (similaridade entre os vetores aprendidos a partir dos contextos das palavras).
-  * **Porcentagem (%):** Apresentada como magnitude relativa em relação ao termo de maior valor exibido no grupo (normalizado em 100%). No LDA e LSA, esse termo coincide com a palavra líder do componente; no Word2Vec, o título destaca a palavra semente consultada, enquanto a barra de 100% corresponde ao vizinho mais similar retornado.
+  * **Porcentagem (%):** No LDA e LSA, apresentada como magnitude relativa em relação ao termo de maior valor exibido no grupo (normalizado em 100%). No Word2Vec, a barra usa uma escala fixa de 0 a 1 para scores positivos; não é normalizada pelo vizinho mais similar do grupo.
 ---
 Documento desenvolvido e estruturado como especificação de software para o projeto de TCC.
