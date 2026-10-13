@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `auxiliar` (
     *   O PHP verifica se a tabela principal (`tabela_topicgeneration`) já possui registros.
     *   Caso positivo, o sistema entra em estado de **Aviso (Warning)** e pergunta ao usuário no frontend se deseja **Continuar** (concatenar os dados) ou **Deletar** (limpar a base e criar uma nova).
 4.  **Processamento por Tipo de Arquivo (`test.php`, `processBib.php`, `processRis.php`):**
-    *   **BibTeX (`processBib.php`) & RIS (`processRis.php`):** As referências bibliográficas têm seus campos (*title*, *year*, *abstract*) extraídos e inseridos diretamente na tabela `tabela_topicgeneration`, preenchendo automaticamente a coluna `col`.
+    *   **BibTeX (`processBib.php`) & RIS (`processRis.php`):** As referências bibliográficas têm seus campos (*title*, *year*, *abstract*) extraídos e inseridos diretamente na tabela `tabela_topicgeneration`. O resumo original é mantido em `abstract` para exibição; a coluna `col`, usada na modelagem, recebe o resumo quando preenchido ou o título quando o resumo está ausente.
     *   **CSV (`test.php`):** Os nomes de colunas do cabeçalho são sanitizados e uma tabela `auxiliar` é criada dinamicamente com tipos `TEXT` para receber todos os dados brutos.
     *   **Seleção de Coluna Textual (`dropColumns.php` e `copyColumns.php`):** Quando o CSV possui múltiplas colunas, a interface solicita ao usuário a seleção da coluna textual a ser analisada. O PHP remove as demais colunas da tabela `auxiliar`, renomeia o campo selecionado para `col` e migra os dados para `tabela_topicgeneration`.
 5.  **Otimização de Transação em Lote no CSV:**

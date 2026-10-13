@@ -39,8 +39,12 @@ if ($fileContent) {
         $abstract = extractField('abstract', $entry);
 
         if ($title || $abstract) {
-            // Salvamos o abstract em 'abstract' (exibição) e 'col' (para o Python)
-            $stmt->execute([$title, $year, $abstract, $abstract]);
+            // Usa o resumo na análise; quando ele está ausente, utiliza o título.
+            $colContent = ($abstract !== null && trim($abstract) !== '')
+                ? $abstract
+                : $title;
+
+            $stmt->execute([$title, $year, $abstract, $colContent]);
             $count++;
         }
     }
