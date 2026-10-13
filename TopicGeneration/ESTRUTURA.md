@@ -74,7 +74,7 @@ Quando o usuário decide gerar o modelo na tela de `topic_modeling.html`, o form
 *   **Lemmatize Corpus (Lematização):** Flag (0 ou 1) para reduzir palavras à sua forma raiz baseada na classe gramatical.
 *   **Topics/Key Terms:** Quantidade de tópicos desejados (LDA/LSA) ou termos-chave centrais de exploração (Word2Vec).
 *   **Words:** Quantidade de palavras-chave extraídas por tópico para o relatório.
-*   **Interaction:** Quantidade de iterações/passadas que o modelo executará durante o treino (mapeado para `passes` no LDA, `power_iters` no LSA e `epochs` no Word2Vec).
+*   **Interaction:** Controle específico de cada método: `passes` no LDA, `power_iters` no LSA e `epochs` no Word2Vec. O mesmo valor numérico representa operações diferentes em cada algoritmo.
 *   **Type of Modeling:** Inteiro identificador do modelo:
     *   `1` = Latent Dirichlet Allocation (LDA)
     *   `2` = Latent Semantic Analysis (LSA)
@@ -110,23 +110,28 @@ Embora todos os modelos sejam executados através da biblioteca *Gensim*, há um
 | **Saída Original** | Coordenadas contínuas em espaço latente reduzido. | Probabilidade do termo pertencer a cada tópico. | Vetor denso de números reais ($\mathbb{R}^{100}$) e similaridade de cosseno. |
 | **Identificação de Tópicos / Relações**| Nativa (`model.show_topics()`). | Nativa (`model.show_topics()`). | Exploração semântica por palavras-chave centrais (`model.wv.most_similar()`). |
 
+### Configuração dos algoritmos
+Os parâmetros internos que não são disponibilizados na interface foram mantidos, em sua maioria, nos valores padrão da versão do Gensim utilizada. Essa escolha adota a configuração de referência da biblioteca e concentra a experimentação nos controles apresentados ao usuário, sem otimizar os modelos para um corpus específico. Os valores padrão são um ponto de partida, não uma garantia de adequação ou de qualidade para todos os conjuntos de textos. O parâmetro `random_state=100` do LDA é uma escolha explícita do projeto; os demais parâmetros internos seguem os padrões da biblioteca, salvo os controles recebidos pela interface. A versão do Gensim deve ser registrada junto aos experimentos, pois os padrões podem variar entre versões.
+
 ### A. Latent Dirichlet Allocation (LDA)
 *   **Funcionamento:** É um modelo probabilístico generativo baseado na premissa de que cada documento é uma mistura de vários tópicos e cada tópico é uma distribuição probabilística sobre palavras.
+*   **Configuração:** A quantidade de tópicos e `passes` vêm da interface; `random_state=100` é fixado pelo projeto. Os demais parâmetros internos usam os valores padrão do Gensim.
 *   **Saída de Dados:** Gera um arquivo Excel chamado `lda.xlsx` contendo as colunas `[topic, word, weight]`, onde `weight` indica a probabilidade de ocorrência da palavra dado o tópico, $P(w \mid z)$.
 
 ### B. Latent Semantic Analysis (LSA)
 *   **Funcionamento:** Utiliza a Decomposição em Valores Singulares (SVD) sobre uma matriz de termos-documentos para identificar padrões nas relações entre termos, reduzindo a dimensionalidade e encontrando conceitos latentes no texto.
+*   **Configuração:** A quantidade de tópicos e `power_iters` vêm da interface; os demais parâmetros internos usam os valores padrão do Gensim.
 *   **Saída de Dados:** Gera o arquivo `lsa.xlsx` contendo as relações de tópicos extraídas.
 
 ### C. Word2Vec e Exploração Semântica por Similaridade de Cosseno
 *   **Funcionamento e Configuração do Modelo (`gensim.models.Word2Vec`):**
-    O modelo é parametrizado com as seguintes propriedades explícitas e arquiteturais:
+    A quantidade de épocas vem da interface. Os demais parâmetros internos usam os valores padrão do Gensim, incluindo:
     *   `sentences=array_df`: Coleção sequencial de sentenças e tokens pré-processados.
     *   `vector_size=100`: Cada palavra do vocabulário é mapeada em um vetor denso de 100 dimensões.
     *   `window=5`: Alcance máximo de contexto para predição (5 termos à esquerda e 5 à direita).
-    *   `min_count=2`: Descarta palavras com menos de duas ocorrências no corpus.
-    *   `workers=3`: Execução multithreaded para aceleração via rotinas em Cython.
-    *   `epochs=interaction`: Número de passadas completas de otimização sobre a base de textos.
+    *   `min_count=5`: Palavras com menos de cinco ocorrências no corpus não entram no vocabulário.
+    *   `workers=3`: Número padrão de unidades de execução do Gensim.
+    *   `epochs=interaction`: Número de passadas completas de otimização sobre a base de textos, informado pelo usuário.
     *   **Padrões Implícitos da Gensim Ativos:**
         *   *Arquitetura CBOW (`sg=0`)*: Utiliza o Continuous Bag-of-Words, prevendo a palavra central com base na média dos vetores das palavras vizinhas (`cbow_mean=1`).
         *   *Negative Sampling (`hs=0`, `negative=5`)*: Aplica amostragem de ruído (5 amostras negativas por etapa) para aproximação eficiente da função de perda logística, dispensando a complexidade da Hierarchical Softmax.

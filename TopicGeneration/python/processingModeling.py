@@ -108,6 +108,10 @@ def lemmatization(texts):
 if(lemma == '1'):
     array_df = lemmatization(array_df)
 
+if not any(array_df):
+    print("Erro: o corpus está vazio após o pré-processamento. Verifique os textos e as opções de limpeza.")
+    sys.exit(1)
+
 # corpora.Dictionary elimina palavras repitidas
 dictionary = corpora.Dictionary(array_df)
 # doc2bow é um método do Dictionary que converte uma lista em  BoW
@@ -123,10 +127,7 @@ try:
                                                 id2word=dictionary,
                                                 num_topics=int(topics),
                                                 random_state=100,
-                                                update_every=1,
-                                                chunksize=10,
-                                                passes=int(interaction),
-                                                alpha="auto"
+                                                passes=int(interaction)
                                                 )
     elif(typeModeling == '2'):
         # Tipo LSA (LSI)
@@ -140,14 +141,21 @@ try:
     elif(typeModeling == '3'):
         # Tipo Word2Vec
         excel_file = "word2vec.xlsx"
-        # Word2Vec treina sobre a lista de tokens (array_df)
-        # min_count=2 evita palavras que aparecem apenas 1 vez (sem contexto semântico confiável)
-        model_w2v = Word2Vec(sentences=array_df, 
-                             vector_size=100, 
-                             window=5, 
-                             min_count=2, 
-                             workers=3, 
-                             epochs=int(interaction))
+        model_w2v = Word2Vec()
+        model_w2v.build_vocab(array_df)
+        if len(model_w2v.wv) < 2:
+            print(
+                "Erro: o vocabulário do Word2Vec tem menos de duas palavras "
+                "após aplicar o min_count padrão do Gensim (5). "
+                "Adicione textos ou ocorrências para continuar."
+            )
+            sys.exit(1)
+
+        model_w2v.train(
+            array_df,
+            total_examples=model_w2v.corpus_count,
+            epochs=int(interaction)
+        )
         
         base_dir = os.path.dirname(os.path.abspath(__file__))
         export_dir = os.path.join(base_dir, "..", "exportExcel")
